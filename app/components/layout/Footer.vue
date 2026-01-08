@@ -43,12 +43,9 @@
 </template>
 
 <script setup lang="ts">
-const { getSiteContent } = useSiteContent()
-const content = ref<any>(null)
-
-onMounted(async () => {
-  content.value = await getSiteContent()
-})
+// Fetch content directly at top level
+const { data: siteContent } = await useFetch('/api/site-content.json')
+const content = computed(() => siteContent.value || null)
 </script>
 
 <style scoped>

@@ -1,0 +1,368 @@
+// Variables
+@use 'variables' as *;
+
+// Bootstrap - Import functions, variables, and mixins first
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/variables-dark';
+@import 'bootstrap/scss/maps';
+@import 'bootstrap/scss/mixins';
+
+// Bootstrap utilities
+@import 'bootstrap/scss/utilities';
+@import 'bootstrap/scss/utilities/api';
+
+// Custom Font Face
+@font-face {
+  font-family: 'Recoleta';
+  src: url('/fonts/Recoleta-Regular.woff2') format('woff2'),
+       url('/fonts/Recoleta-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Recoleta';
+  src: url('/fonts/Recoleta-Medium.woff2') format('woff2'),
+       url('/fonts/Recoleta-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Recoleta';
+  src: url('/fonts/Recoleta-SemiBold.woff2') format('woff2'),
+       url('/fonts/Recoleta-SemiBold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Recoleta';
+  src: url('/fonts/Recoleta-Bold.woff2') format('woff2'),
+       url('/fonts/Recoleta-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+// Base styles
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: $font-family-body;
+  color: $brand-dark;
+  line-height: 1.6;
+}
+
+// Typography
+.font-heading {
+  font-family: $font-family-heading;
+}
+
+.font-body {
+  font-family: $font-family-body;
+}
+
+// Brand Colors
+.text-brand-pink { color: $brand-pink; }
+.text-brand-lime { color: $brand-lime; }
+.text-brand-yellow { color: $brand-yellow; }
+.text-brand-blue { color: $brand-blue; }
+.text-brand-purple { color: $brand-purple; }
+.text-brand-dark { color: $brand-dark; }
+.text-brand-gray { color: $brand-gray; }
+
+.bg-brand-pink { background-color: $brand-pink; }
+.bg-brand-lime { background-color: $brand-lime; }
+.bg-brand-yellow { background-color: $brand-yellow; }
+.bg-brand-blue { background-color: $brand-blue; }
+.bg-brand-purple { background-color: $brand-purple; }
+.bg-brand-dark { background-color: $brand-dark; }
+.bg-brand-gray { background-color: $brand-gray; }
+
+// Organic Shadows
+.shadow-organic {
+  box-shadow: $shadow-organic;
+}
+
+.shadow-organic-sm {
+  box-shadow: $shadow-organic-sm;
+}
+
+.shadow-organic-lg {
+  box-shadow: $shadow-organic-lg;
+}
+
+.shadow-organic-hover {
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+
+  &:hover {
+    box-shadow: $shadow-organic-hover;
+    transform: translate(-2px, -2px);
+  }
+}
+
+// Organic Border
+.border-organic {
+  border: 2px solid $brand-dark;
+  border-radius: $border-radius-lg;
+}
+
+// Card Organic
+.card-organic {
+  border: 2px solid $brand-dark;
+  border-radius: $border-radius-lg;
+  padding: 2rem;
+  background: white;
+
+  &:hover {
+    box-shadow: $shadow-organic;
+  }
+}
+
+// Dashed Organic Border
+.dashed-organic {
+  border: 2px dashed $brand-dark;
+  border-radius: $border-radius-lg;
+}
+
+// Tags
+.tag-pink {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 2px solid $brand-dark;
+  background-color: $brand-pink;
+  color: white;
+  border-radius: 50px 10px 45px 10px / 10px 45px 10px 50px;
+}
+
+.tag-blue {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 2px solid $brand-dark;
+  background-color: $brand-blue;
+  color: $brand-dark;
+  border-radius: 50px 10px 45px 10px / 10px 45px 10px 50px;
+}
+
+.tag-yellow {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 2px solid $brand-dark;
+  background-color: $brand-yellow;
+  color: $brand-dark;
+  border-radius: 50px 10px 45px 10px / 10px 45px 10px 50px;
+}
+
+.tag-lime {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 2px solid $brand-dark;
+  background-color: $brand-lime;
+  color: $brand-dark;
+  border-radius: 50px 10px 45px 10px / 10px 45px 10px 50px;
+}
+
+// Buttons
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  font-weight: 700;
+  border: 2px solid $brand-dark;
+  background-color: $brand-pink;
+  color: white;
+  border-radius: $border-radius;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    background-color: darken($brand-pink, 10%);
+    box-shadow: $shadow-organic-sm;
+    transform: translate(-2px, -2px);
+  }
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  font-weight: 700;
+  border: 2px solid $brand-dark;
+  background-color: white;
+  color: $brand-dark;
+  border-radius: $border-radius;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    background-color: $brand-gray;
+    box-shadow: $shadow-organic-sm;
+    transform: translate(-2px, -2px);
+  }
+}
+
+.btn-lime {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  font-weight: 700;
+  border: 2px solid $brand-dark;
+  background-color: $brand-lime;
+  color: $brand-dark;
+  border-radius: $border-radius;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    background-color: darken($brand-lime, 10%);
+    box-shadow: $shadow-organic-sm;
+    transform: translate(-2px, -2px);
+  }
+}
+
+.btn-cta {
+  @extend .btn-primary;
+}
+
+// Input Organic
+.input-organic {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border: 2px solid $brand-dark;
+  border-radius: $border-radius;
+  font-family: $font-family-body;
+  font-size: 1rem;
+  background-color: white;
+  transition: box-shadow 0.3s ease;
+
+  &:focus {
+    outline: none;
+    box-shadow: $shadow-organic-sm;
+  }
+
+  &::placeholder {
+    color: rgba($brand-dark, 0.5);
+  }
+}
+
+.textarea-organic {
+  @extend .input-organic;
+  resize: vertical;
+  min-height: 120px;
+}
+
+// Animations
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes wiggle {
+  0%, 100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+}
+
+.animate-wiggle {
+  animation: wiggle 2s ease-in-out infinite;
+}
+
+// Page styles
+.page-hero {
+  padding: 6rem 0 4rem;
+  background: linear-gradient(135deg, $brand-pink 0%, darken($brand-pink, 15%) 100%);
+  color: white;
+  text-align: center;
+
+  h1 {
+    font-family: $font-family-heading;
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    font-size: 1.25rem;
+    opacity: 0.9;
+  }
+}
+
+.page-content {
+  padding: 4rem 0;
+}
+
+// Grid helpers
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+
+  @media (max-width: 968px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 576px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Container
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+// Utility classes
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

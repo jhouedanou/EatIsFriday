@@ -2,11 +2,11 @@
   <div v-if="isOpen" class="modal-overlay" @click="close">
     <div class="modal-content" @click.stop>
       <button class="close-btn" @click="close">&times;</button>
-      <div class="modal-header">
-        <h2>Get in Touch</h2>
-        <p>We'd love to hear from you!</p>
+      <div v-if="content" class="modal-header">
+        <h2>{{ content.title }}</h2>
+        <p>{{ content.subtitle }}</p>
       </div>
-      <ContactForm />
+      <FormsContactForm />
     </div>
   </div>
 </template>
@@ -17,6 +17,10 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits(['close'])
+
+// Fetch content directly at top level
+const { data: pagesContent } = await useFetch('/api/pages-content.json')
+const content = computed(() => pagesContent.value?.components?.contact_modal || null)
 
 const close = () => {
   emit('close')
@@ -32,7 +36,7 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .modal-overlay {
   position: fixed;
   top: 0;

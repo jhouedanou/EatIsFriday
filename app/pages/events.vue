@@ -1,9 +1,9 @@
 <template>
   <div class="events-page">
-    <section class="page-hero">
+    <section v-if="content" class="page-hero">
       <div class="container">
-        <h1>Food Events</h1>
-        <p>Discover and join our upcoming culinary events and celebrations</p>
+        <h1>{{ content.page_hero.title }}</h1>
+        <p>{{ content.page_hero.subtitle }}</p>
       </div>
     </section>
 
@@ -12,29 +12,35 @@
         <div v-if="events" class="grid grid-2">
           <EventCard v-for="event in events" :key="event.id" :event="event" />
         </div>
-        <div v-else class="loading">Loading events...</div>
+        <div v-else-if="content" class="loading">{{ content.loading_text }}</div>
       </div>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
+
 const { getEvents } = useEvents()
+const { getContentByPath } = usePageContent()
+
 const events = ref<any>(null)
+const content = ref<any>(null)
 
 onMounted(async () => {
+  content.value = await getContentByPath('events')
   events.value = await getEvents()
 })
 
-useHead({
-  title: 'Events - Eat Is Friday',
+useHead(() => ({
+  title: content.value?.seo?.title || 'Events - Eat Is Friday',
   meta: [
-    { name: 'description', content: 'Join our food festivals, tastings, and culinary celebrations. Discover upcoming events and book your spot.' }
+    { name: 'description', content: content.value?.seo?.meta_description || '' }
   ]
-})
+}))
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .loading {
   text-align: center;
   padding: 4rem 0;

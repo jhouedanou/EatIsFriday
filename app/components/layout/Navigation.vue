@@ -1,5 +1,5 @@
 <template>
-  <div class="mobile-nav">
+  <div v-if="content" class="mobile-nav">
     <button class="menu-toggle" @click="toggleMenu" aria-label="Toggle menu">
       <span :class="{ open: isOpen }"></span>
       <span :class="{ open: isOpen }"></span>
@@ -8,12 +8,12 @@
 
     <div :class="['nav-overlay', { open: isOpen }]">
       <div class="nav-content">
-        <NuxtLink to="/careers" @click="closeMenu">Careers</NuxtLink>
-        <NuxtLink to="/blog" @click="closeMenu">Blogs</NuxtLink>
-        <NuxtLink to="/about" @click="closeMenu">About</NuxtLink>
-        <NuxtLink to="/apply-activities" @click="closeMenu">Activities</NuxtLink>
-        <NuxtLink to="/events" @click="closeMenu">Our Events</NuxtLink>
-        <button class="btn-cta mobile-cta" @click="handleContactClick">Get in touch</button>
+        <NuxtLink to="/careers" @click="closeMenu">{{ content.nav_links.careers }}</NuxtLink>
+        <NuxtLink to="/blog" @click="closeMenu">{{ content.nav_links.blogs }}</NuxtLink>
+        <NuxtLink to="/about" @click="closeMenu">{{ content.nav_links.about }}</NuxtLink>
+        <NuxtLink to="/apply-activities" @click="closeMenu">{{ content.nav_links.activities }}</NuxtLink>
+        <NuxtLink to="/events" @click="closeMenu">{{ content.nav_links.events }}</NuxtLink>
+        <button class="btn-cta mobile-cta" @click="handleContactClick">{{ content.nav_links.get_in_touch }}</button>
       </div>
     </div>
   </div>
@@ -22,6 +22,10 @@
 <script setup lang="ts">
 const isOpen = ref(false)
 const emit = defineEmits(['open-contact'])
+
+// Fetch content directly at top level
+const { data: pagesContent } = await useFetch('/api/pages-content.json')
+const content = computed(() => pagesContent.value?.components?.header || null)
 
 const toggleMenu = () => {
   isOpen.value = !isOpen.value
@@ -43,7 +47,7 @@ const handleContactClick = () => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .menu-toggle {
   display: flex;
   flex-direction: column;

@@ -4,12 +4,12 @@
 
 <template>
   <div class="flex flex-col min-h-screen bg-brand-gray overflow-x-hidden">
-    <TheNavbar />
+    <LayoutHeader />
     
     <main class="flex-grow pt-20">
       <slot />
     </main>
 
-    <TheFooter />
+    <LayoutFooter />
   </div>
 </template>

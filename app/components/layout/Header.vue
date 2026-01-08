@@ -1,39 +1,43 @@
 <template>
-  <header class="header">
+  <header v-if="content" class="header">
     <div class="container header-grid">
       <!-- Left Navigation -->
-      <nav class="nav-left desktop-only">
-        <NuxtLink to="/careers" class="nav-link">Careers</NuxtLink>
-        <NuxtLink to="/blog" class="nav-link">Blogs</NuxtLink>
-        <button class="btn-cta" @click="openContactModal">Get in touch</button>
-      </nav>
 
+      <nav class="nav-right desktop-only">
+        <NuxtLink to="/about" class="nav-link">{{ content.nav_links.about }}</NuxtLink>
+        <NuxtLink to="/apply-activities" class="nav-link">{{ content.nav_links.activities }}</NuxtLink>
+        <NuxtLink to="/events" class="nav-link">{{ content.nav_links.events }}</NuxtLink>
+      </nav>
       <!-- Center Logo -->
       <div class="logo-container">
         <NuxtLink to="/" class="logo">
-          LOGO
+          {{ content.logo }}
         </NuxtLink>
       </div>
 
       <!-- Right Navigation -->
-      <nav class="nav-right desktop-only">
-        <NuxtLink to="/about" class="nav-link">About</NuxtLink>
-        <NuxtLink to="/apply-activities" class="nav-link">Activities</NuxtLink>
-        <NuxtLink to="/events" class="nav-link">Our Events</NuxtLink>
+      <nav class="nav-left desktop-only">
+        <NuxtLink to="/careers" class="nav-link">{{ content.nav_links.careers }}</NuxtLink>
+        <NuxtLink to="/blog" class="nav-link">{{ content.nav_links.blogs }}</NuxtLink>
+        <button class="btn-cta" @click="openContactModal">{{ content.nav_links.get_in_touch }}</button>
       </nav>
 
       <!-- Mobile Menu Toggle -->
       <div class="mobile-toggle">
-        <Navigation @open-contact="openContactModal" />
+        <LayoutNavigation @open-contact="openContactModal" />
       </div>
     </div>
 
-    <ContactModal :is-open="isContactModalOpen" @close="closeContactModal" />
+    <LayoutContactModal :is-open="isContactModalOpen" @close="closeContactModal" />
   </header>
 </template>
 
 <script setup lang="ts">
 const isContactModalOpen = ref(false)
+
+// Fetch content directly at top level
+const { data: pagesContent } = await useFetch('/api/pages-content.json')
+const content = computed(() => pagesContent.value?.components?.header || null)
 
 const openContactModal = () => {
   isContactModalOpen.value = true
@@ -44,34 +48,45 @@ const closeContactModal = () => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .header {
-  background: white;
   padding: 1.5rem 0;
   position: sticky;
   top: 0;
   z-index: 1000;
-  border-bottom: 1px solid #f1f2f6;
 }
 
 .header-grid {
+  background:url('/images/headerBg.svg') no-repeat center;
+  background-size: cover;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
+    a{
+    font-family: "Recoleta",sans-serif;
+      font-size: 18px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #0d0a00;
+  }
 }
 
 .nav-left {
   display: flex;
   align-items: center;
   gap: 2rem;
-  justify-content: flex-start;
+  justify-content: flex-end;
 }
 
 .nav-right {
   display: flex;
   align-items: center;
   gap: 2rem;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .nav-link {
@@ -109,11 +124,11 @@ const closeContactModal = () => {
     display: flex;
     justify-content: space-between;
   }
-  
+
   .desktop-only {
     display: none;
   }
-  
+
   .mobile-toggle {
     display: block;
   }

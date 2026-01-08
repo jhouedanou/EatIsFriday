@@ -1,0 +1,597 @@
+{
+  "homepage": {
+    "hero_section": {
+      "tag": "NEW LOCATIONS",
+      "title": {
+        "line_1": "Bursting",
+        "line_2_prefix": "With",
+        "line_2_highlight": "Flavour.",
+        "line_3": "Built With",
+        "line_4": "Passion."
+      },
+      "description": "We don't just serve food — we create experiences. From the bustling concessions at your favorite stadium to the elegant spreads at VIP events, we craft culinary moments that bring people together.",
+      "cta_primary": {
+        "text": "Start a Project",
+        "link": "/contact"
+      },
+      "cta_secondary": {
+        "text": "Join Our Team",
+        "link": "/careers"
+      },
+      "images": [
+        {
+          "src": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=600&auto=format&fit=crop",
+          "alt": "Grilled food presentation"
+        },
+        {
+          "src": "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?q=80&w=600&auto=format&fit=crop",
+          "alt": "Gourmet breakfast plate"
+        },
+        {
+          "src": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=600&auto=format&fit=crop",
+          "alt": "Fresh pizza"
+        }
+      ],
+      "experience_badge": {
+        "number": "15+",
+        "label": "Years Experience"
+      },
+      "floating_badge": "Open for Events"
+    },
+    "locations_section": {
+      "tag": "LOCATIONS",
+      "title": {
+        "line_1": "Explore Where We",
+        "line_2_highlight": "Operate"
+      },
+      "description": "From Paris to Marseille, we bring exceptional culinary experiences to the biggest venues in France. Discover our presence in your city.",
+      "jobs_suffix": "jobs",
+      "locations": [
+        { "name": "Paris", "count": 12 },
+        { "name": "Lyon", "count": 8 },
+        { "name": "Marseille", "count": 6 },
+        { "name": "Bordeaux", "count": 4 }
+      ],
+      "map_venues": [
+        {
+          "id": "1",
+          "name": "Paris",
+          "location": "Stade Jean Bouin",
+          "lat": 48.8427,
+          "lng": 2.2536,
+          "open_positions": 12
+        },
+        {
+          "id": "2",
+          "name": "Lyon",
+          "location": "Groupama Stadium",
+          "lat": 45.764,
+          "lng": 4.8357,
+          "open_positions": 8
+        },
+        {
+          "id": "3",
+          "name": "Marseille",
+          "location": "Stade Vélodrome",
+          "lat": 43.2965,
+          "lng": 5.3698,
+          "open_positions": 6
+        }
+      ]
+    },
+    "services_section": {
+      "tag": "OUR SERVICES",
+      "title": {
+        "line_1": "B2B Experiences Built With",
+        "highlight": "Precision",
+        "line_2": "And Energy"
+      },
+      "services": [
+        {
+          "title": "Corporate Catering",
+          "description": "Premium culinary experiences for your business events and meetings.",
+          "icon": "chef-hat",
+          "bg_color": "pink",
+          "text_color": "white"
+        },
+        {
+          "title": "Stadium Concessions",
+          "description": "High-volume, high-quality food service for major arenas and venues.",
+          "icon": "utensils",
+          "bg_color": "lime",
+          "text_color": "dark"
+        },
+        {
+          "title": "Private Events",
+          "description": "Unforgettable moments crafted with passion and exceptional flavor.",
+          "icon": "party-popper",
+          "bg_color": "yellow",
+          "text_color": "dark"
+        }
+      ],
+      "learn_more_button": "Learn more"
+    },
+    "partners_section": {
+      "intro_text": "They Trusted Us For Their Restauration By The General Public. They Did Not Regret Their Choices",
+      "partners": [
+        { "name": "Partner 1", "logo_url": "" },
+        { "name": "Partner 2", "logo_url": "" },
+        { "name": "Partner 3", "logo_url": "" },
+        { "name": "Partner 4", "logo_url": "" },
+        { "name": "Partner 5", "logo_url": "" },
+        { "name": "Partner 6", "logo_url": "" }
+      ]
+    },
+    "cta_section": {
+      "title": "Ready to Make an Impact?",
+      "description": "Join our team and be part of creating unforgettable culinary experiences across France's most exciting venues.",
+      "cta_primary": {
+        "text": "Apply for a position",
+        "link": "/careers"
+      },
+      "cta_secondary": {
+        "text": "Get in touch",
+        "link": "/contact"
+      }
+    },
+    "gallery_section": {
+      "images": [
+        {
+          "src": "https://images.unsplash.com/photo-1565299507177-b0ac66763828?q=80&w=400&auto=format&fit=crop",
+          "alt": "Burger gourmet"
+        },
+        {
+          "src": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=400&auto=format&fit=crop",
+          "alt": "Salade fraiche"
+        },
+        {
+          "src": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=400&auto=format&fit=crop",
+          "alt": "Plat gastronomique"
+        },
+        {
+          "src": "https://images.unsplash.com/photo-1482049016gy?q=80&w=400&auto=format&fit=crop",
+          "alt": "Dessert"
+        }
+      ]
+    }
+  },
+  "careers": {
+    "map_loading": "Loading map...",
+    "hero_section": {
+      "tag": "NOW HIRING",
+      "title_template": "Join Our Team At {venue_name}",
+      "open_positions_suffix": "Open Positions"
+    },
+    "search_section": {
+      "search_placeholder": "Search job title and category...",
+      "job_types": ["All job types", "Full time", "Part time", "Contract", "Freelance"]
+    },
+    "job_listing": {
+      "positions_available_singular": "Position",
+      "positions_available_plural": "Positions",
+      "positions_available_suffix": "Available",
+      "posted_prefix": "Posted",
+      "department_prefix": "Department",
+      "apply_button": "Apply Now",
+      "view_details_button": "View details"
+    },
+    "no_results": {
+      "title": "No jobs found at this venue",
+      "description": "Try selecting a different venue or adjusting your filters",
+      "clear_filters_button": "Clear all filters"
+    },
+    "cta_section": {
+      "title": "Don't See Your Perfect Role?",
+      "description": "We are always looking for talented individuals to join our team. Discover and explore positions at other venues or submit a general application.",
+      "explore_venues_button": "Explore all venues",
+      "general_application_button": "Submit general application"
+    },
+    "venues": [
+      {
+        "id": "stade-jean-bouin",
+        "name": "Stade Jean Bouin",
+        "location": "Paris, France",
+        "lat": 48.8427,
+        "lng": 2.2536,
+        "open_positions": 6,
+        "image": "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=600&auto=format&fit=crop"
+      },
+      {
+        "id": "parc-des-princes",
+        "name": "Parc des Princes",
+        "location": "Paris, France",
+        "lat": 48.8414,
+        "lng": 2.253,
+        "open_positions": 4,
+        "image": "https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=600&auto=format&fit=crop"
+      },
+      {
+        "id": "stade-de-france",
+        "name": "Stade de France",
+        "location": "Saint-Denis, France",
+        "lat": 48.9244,
+        "lng": 2.3601,
+        "open_positions": 8,
+        "image": "https://images.unsplash.com/photo-1577223625816-7546f13df25d?q=80&w=600&auto=format&fit=crop"
+      }
+    ],
+    "jobs": [
+      {
+        "id": "1",
+        "title": "Head Chef At VIP Hospitality",
+        "department": "Culinary",
+        "type": "Part time",
+        "salary": "$150 - $200 / Hour",
+        "description": "Lead our VIP culinary team delivering exceptional fine dining experiences for luxury boxes and corporate hospitality suites during major sporting events and concerts.",
+        "posted_time": "3 hours ago",
+        "venue_id": "stade-jean-bouin"
+      },
+      {
+        "id": "2",
+        "title": "Concession Sales Associate",
+        "department": "Operations",
+        "type": "Part time",
+        "salary": "$50 - $80 / Hour",
+        "description": "Serve fans at concession stands, handle transactions, and provide friendly customer service at our stadium locations.",
+        "posted_time": "3 hours ago",
+        "venue_id": "stade-jean-bouin"
+      },
+      {
+        "id": "3",
+        "title": "Event Coordinator",
+        "department": "Events",
+        "type": "Full time",
+        "salary": "$200 - $300 / Day",
+        "description": "Coordinate logistics for large-scale events, managing vendors, schedules, and on-site troubleshooting.",
+        "posted_time": "5 hours ago",
+        "venue_id": "parc-des-princes"
+      },
+      {
+        "id": "4",
+        "title": "Sous Chef",
+        "department": "Culinary",
+        "type": "Full time",
+        "salary": "$120 - $160 / Hour",
+        "description": "Assist the Head Chef in kitchen management, menu planning, and ensuring food quality standards are met.",
+        "posted_time": "1 day ago",
+        "venue_id": "stade-de-france"
+      }
+    ]
+  },
+  "contact": {
+    "hero_section": {
+      "title": {
+        "line_1": "Reach",
+        "line_1_highlight": "Out",
+        "line_2": "Let's Create",
+        "line_3": "Something",
+        "line_3_highlight": "Amazing"
+      },
+      "description": "Ready to elevate your event with exceptional catering? Share your vision and we'll bring it to life.",
+      "image": {
+        "src": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=1200&auto=format&fit=crop",
+        "alt": "Delicious food spread"
+      }
+    },
+    "form": {
+      "name_placeholder": "Enter Name",
+      "email_placeholder": "Enter Email Adress",
+      "event_type_placeholder": "Event Type",
+      "location_placeholder": "Enter Location",
+      "date_placeholder": "Date of Event",
+      "guests_placeholder": "Number of Guests",
+      "message_placeholder": "Message",
+      "submit_button": "Send Message"
+    }
+  },
+  "events": {
+    "page_hero": {
+      "title": "Food Events",
+      "subtitle": "Discover and join our upcoming culinary events and celebrations"
+    },
+    "loading_text": "Loading events...",
+    "seo": {
+      "title": "Events - Eat Is Friday",
+      "meta_description": "Join our food festivals, tastings, and culinary celebrations. Discover upcoming events and book your spot."
+    }
+  },
+  "blog": {
+    "index": {
+      "section_title": "Our Blog",
+      "section_subtitle": "Stories about food, events, and the people who make it happen.",
+      "read_article_link": "Read Article",
+      "load_more_button": "Load More Articles",
+      "articles": [
+        {
+          "title": "The Future Of Stadium Catering: 5 Trends Reshaping The Industry",
+          "excerpt": "From sustainable packaging to tech-enabled ordering, discover how big venues are changing the game.",
+          "image": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=1000&auto=format&fit=crop",
+          "date": "Posted 3 hours ago",
+          "tag": "Trends"
+        },
+        {
+          "title": "Behind The Scenes: Feeding 50,000 Fans At Stade de France",
+          "excerpt": "An exclusive look at the logistics, passion, and teamwork required to pull off a major matchday service.",
+          "image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1000&auto=format&fit=crop",
+          "date": "Posted 1 day ago",
+          "tag": "Case Study"
+        },
+        {
+          "title": "Meet The Chef: Sarah Jenkins On Elevating VIP Hospitality",
+          "excerpt": "Our Head Chef discusses her inspiration and the challenge of creating fine dining experiences in a stadium setting.",
+          "image": "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?q=80&w=1000&auto=format&fit=crop",
+          "date": "Posted 2 days ago",
+          "tag": "People"
+        },
+        {
+          "title": "Sustainability In Food Service: Our Commitment To The Planet",
+          "excerpt": "How Eat is Family is reducing waste and sourcing locally to create a greener future for events.",
+          "image": "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=1000&auto=format&fit=crop",
+          "date": "Posted 4 days ago",
+          "tag": "Sustainability"
+        },
+        {
+          "title": "Top 10 Street Food Concepts Taking Over Corporate Events",
+          "excerpt": "Why street food stations are becoming the most popular choice for business gatherings.",
+          "image": "https://images.unsplash.com/photo-1565123409695-7b5ef63a2efb?q=80&w=1000&auto=format&fit=crop",
+          "date": "Posted 1 week ago",
+          "tag": "Menu Ideas"
+        },
+        {
+          "title": "The Art Of Plating: Visual Storytelling On A Plate",
+          "excerpt": "Visual appeal is just as important as taste. Learn how our chefs design dishes that wow.",
+          "image": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=1000&auto=format&fit=crop",
+          "date": "Posted 1 week ago",
+          "tag": "Culinary Arts"
+        }
+      ]
+    },
+    "detail": {
+      "back_link": "Back to all articles",
+      "share_button": "Share Article",
+      "next_article_button": "Next Article",
+      "featured_image_alt": "Article featured image"
+    }
+  },
+  "job_detail": {
+    "cta_banner": {
+      "title": "Ready To Join Our Team?",
+      "subtitle": "Apply now and be part of something special",
+      "apply_button": "Apply for this position"
+    },
+    "life_at_location": {
+      "title_template": "Life at {location}"
+    },
+    "job_description": {
+      "section_title": "Job Description And Requirement",
+      "what_you_do_title": "What You'll Do",
+      "what_you_do_intro": "You'll do the following:",
+      "requirements_title": "What We're Looking For",
+      "requirements_intro": "The following requirement is what we are looking for"
+    },
+    "why_join_us": {
+      "title": "Why Join Us"
+    },
+    "quick_facts": {
+      "title": "Quick Facts",
+      "location_label": "Location",
+      "department_label": "Department",
+      "employment_type_label": "Employment Type",
+      "available_positions_label": "Available Positions"
+    },
+    "share_section": {
+      "title": "Do You Know Someone That Is Perfect For This Position?",
+      "subtitle": "Kindly Share This Job To The Person",
+      "share_button": "Share this job"
+    },
+    "final_cta": {
+      "title": "Ready To Make An Impact?",
+      "description": "Join our team and be part of creating unforgettable experiences at one of France's most exciting venues.",
+      "apply_button": "Apply for this position",
+      "back_button": "Go back to jobs"
+    },
+    "sample_job": {
+      "title": "Head Chef At VIP Hospitality",
+      "location": "Stade Jean Bouin, Paris",
+      "department": "Culinary",
+      "type": "Part time",
+      "salary": "$50 - $200 / Hour",
+      "slots": "2 Slots",
+      "description": "Lead our VIP culinary team delivering exceptional fine dining experiences for luxury boxes and corporate hospitality suites during major sporting events and concerts. Oversee family-friendly dining areas, create kid-friendly menus, and ensure welcoming atmosphere for all ages.",
+      "what_you_do": [
+        "Lead daily operations and ensure quality standards",
+        "Collaborate with team members to deliver excellence",
+        "Maintain safety and hygiene protocols",
+        "Contribute to menu planning and innovation",
+        "Train and mentor junior staff members"
+      ],
+      "requirements": [
+        "At least 5 years experience in high volume fine dining",
+        "Culinary degree or equivalent certification",
+        "Experience with event catering",
+        "Ability to manage teams of 10-15 chefs",
+        "Fluent in French and English"
+      ],
+      "why_join_us": [
+        "Work at one of France's most iconic venues",
+        "Be part of major sporting and entertainment events",
+        "Competitive compensation and benefits",
+        "Career growth and professional development",
+        "Dynamic and supportive team environment"
+      ],
+      "images": [
+        "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=600&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?q=80&w=600&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?q=80&w=600&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1581299894007-aaa50297cf16?q=80&w=600&auto=format&fit=crop"
+      ]
+    }
+  },
+  "job_detail_slug": {
+    "section_titles": {
+      "about_position": "About the Position",
+      "requirements": "Requirements",
+      "benefits": "Benefits"
+    },
+    "sidebar": {
+      "title": "Interested?",
+      "subtitle": "Apply for this position and join our team!"
+    },
+    "loading_text": "Loading job details..."
+  },
+  "apply_activities": {
+    "page_hero": {
+      "title": "Culinary Activities",
+      "subtitle": "Join our exciting cooking workshops and food experiences"
+    },
+    "loading_text": "Loading activities...",
+    "seo": {
+      "title": "Activities - Eat Is Friday",
+      "meta_description": "Explore our culinary workshops, cooking classes, and food experiences. Learn from expert chefs and discover new skills."
+    }
+  },
+  "apply_jobs": {
+    "page_hero": {
+      "title": "Job Opportunities",
+      "subtitle": "Find your next career opportunity in the food industry"
+    },
+    "loading_text": "Loading jobs...",
+    "seo": {
+      "title": "Job Opportunities - Eat Is Friday",
+      "meta_description": "Explore career opportunities in the food industry. Join our team and build your culinary career."
+    }
+  },
+  "about": {
+    "section_titles": {
+      "values": "Our Values",
+      "team": "Meet Our Team"
+    },
+    "seo": {
+      "title": "About Us - Eat Is Friday",
+      "meta_description": "Learn about Eat Is Friday, our mission, vision, and the team behind our culinary experiences."
+    }
+  },
+  "components": {
+    "header": {
+      "logo": "LOGO",
+      "nav_links": {
+        "careers": "Careers",
+        "blogs": "Blogs",
+        "get_in_touch": "Get in touch",
+        "about": "About",
+        "activities": "Activities",
+        "events": "Our Events"
+      }
+    },
+    "navbar": {
+      "brand_name": "Eat is",
+      "brand_highlight": "Family",
+      "nav_links": [
+        { "text": "About Us", "to": "/about" },
+        { "text": "Activities", "to": "/activities" },
+        { "text": "Careers", "to": "/careers" },
+        { "text": "Blog", "to": "/blog" }
+      ],
+      "cta_desktop": "Get in touch",
+      "cta_mobile": "Contact"
+    },
+    "contact_modal": {
+      "title": "Get in Touch",
+      "subtitle": "We'd love to hear from you!"
+    },
+    "footer": {
+      "brand_name": "Eat is Family",
+      "brand_description": "Creating unforgettable culinary experiences that bring people together and celebrate life's special moments.",
+      "contact_email": "hello@eatsfamily.fr",
+      "contact_phone": "+33 1 23 5 67 89",
+      "company_title": "Company",
+      "company_links": [
+        { "text": "About us", "to": "/about" },
+        { "text": "Activities", "to": "/activities" },
+        { "text": "Our Events", "to": "/events" },
+        { "text": "Careers", "to": "/careers" },
+        { "text": "Blogs", "to": "/blog" },
+        { "text": "Contact us", "to": "/contact" }
+      ],
+      "policy_title": "Policy Info",
+      "policy_links": [
+        { "text": "Privacy Statement", "to": "/privacy" },
+        { "text": "Terms and condition", "to": "/terms" },
+        { "text": "Cookies policy", "to": "/cookies" }
+      ],
+      "copyright_template": "© {year} Eat is Family. All Rights Reserved.",
+      "back_to_top": "Back to top"
+    },
+    "footer_alt": {
+      "brand_title": "Eat Is Friday",
+      "quick_links_title": "Quick Links",
+      "contact_title": "Contact",
+      "follow_us_title": "Follow Us",
+      "social_links": {
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "twitter": "Twitter"
+      }
+    }
+  },
+  "forms": {
+    "contact_form": {
+      "name_label": "Name *",
+      "name_placeholder": "Your name",
+      "email_label": "Email *",
+      "email_placeholder": "your@email.com",
+      "subject_label": "Subject *",
+      "subject_placeholder": "How can we help?",
+      "message_label": "Message *",
+      "message_placeholder": "Your message...",
+      "submit_button": "Send Message",
+      "submitting_button": "Sending...",
+      "success_message": "Message sent successfully! We'll get back to you soon."
+    },
+    "job_application_form": {
+      "title": "Apply for this Job",
+      "name_label": "Full Name *",
+      "name_placeholder": "John Doe",
+      "email_label": "Email *",
+      "email_placeholder": "john@example.com",
+      "phone_label": "Phone Number *",
+      "phone_placeholder": "+33 6 12 34 56 78",
+      "resume_label": "Resume/CV *",
+      "cover_letter_label": "Cover Letter",
+      "cover_letter_placeholder": "Tell us why you're interested in this position...",
+      "submit_button": "Submit Application",
+      "submitting_button": "Submitting...",
+      "success_message": "Application submitted successfully! We will contact you soon."
+    },
+    "activity_registration_form": {
+      "title": "Register for this Activity",
+      "name_label": "Full Name *",
+      "name_placeholder": "John Doe",
+      "email_label": "Email *",
+      "email_placeholder": "john@example.com",
+      "phone_label": "Phone Number *",
+      "phone_placeholder": "+33 6 12 34 56 78",
+      "participants_label": "Number of Participants *",
+      "dietary_restrictions_label": "Dietary Restrictions",
+      "dietary_restrictions_placeholder": "Any allergies or dietary preferences...",
+      "additional_info_label": "Additional Information",
+      "additional_info_placeholder": "Any questions or special requests...",
+      "submit_button": "Register Now",
+      "submitting_button": "Submitting...",
+      "success_message": "Registration successful! Check your email for confirmation."
+    }
+  },
+  "cards": {
+    "job_card": {
+      "view_details_button": "View Details"
+    },
+    "activity_card": {
+      "spots_available_template": "{available_spots} / {capacity} spots available"
+    }
+  },
+  "map": {
+    "venue_popup": {
+      "open_positions_template": "{count} open positions"
+    }
+  }
+}

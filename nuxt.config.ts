@@ -32,7 +32,27 @@ export default defineNuxtConfig({
     }
   },
 
-  css: ['~/assets/css/main.css'],
+  css: [
+    'bootstrap/dist/css/bootstrap.min.css',
+    '~/assets/scss/main.scss'
+  ],
+
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: '@use "~/assets/scss/_variables.scss" as *;'
+        }
+      }
+    }
+  },
+
+  components: [
+    {
+      path: '~/components',
+      pathPrefix: true,
+    }
+  ],
 
   devtools: { enabled: true }
 })

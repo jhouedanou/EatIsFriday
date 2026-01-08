@@ -1,9 +1,9 @@
 <template>
   <div class="apply-activities-page">
-    <section class="page-hero">
+    <section v-if="content" class="page-hero">
       <div class="container">
-        <h1>Culinary Activities</h1>
-        <p>Join our exciting cooking workshops and food experiences</p>
+        <h1>{{ content.page_hero.title }}</h1>
+        <p>{{ content.page_hero.subtitle }}</p>
       </div>
     </section>
 
@@ -12,29 +12,35 @@
         <div v-if="activities" class="grid grid-2">
           <ActivityCard v-for="activity in activities" :key="activity.id" :activity="activity" />
         </div>
-        <div v-else class="loading">Loading activities...</div>
+        <div v-else-if="content" class="loading">{{ content.loading_text }}</div>
       </div>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
+
 const { getActivities } = useActivities()
+const { getContentByPath } = usePageContent()
+
 const activities = ref<any>(null)
+const content = ref<any>(null)
 
 onMounted(async () => {
+  content.value = await getContentByPath('apply_activities')
   activities.value = await getActivities()
 })
 
-useHead({
-  title: 'Activities - Eat Is Friday',
+useHead(() => ({
+  title: content.value?.seo?.title || 'Activities - Eat Is Friday',
   meta: [
-    { name: 'description', content: 'Explore our culinary workshops, cooking classes, and food experiences. Learn from expert chefs and discover new skills.' }
+    { name: 'description', content: content.value?.seo?.meta_description || '' }
   ]
-})
+}))
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .loading {
   text-align: center;
   padding: 4rem 0;

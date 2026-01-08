@@ -1,24 +1,33 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import { LucideArrowRight, LucideX } from 'lucide-vue-next'
 
+const { getContentByPath } = usePageContent()
+const content = ref<any>(null)
+
+// In a real app, this would come from an API based on route params
 const article = {
   title: 'The Future Of Stadium Catering: 5 Trends Reshaping The Industry',
   date: 'Posted 3 hours ago',
   image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?q=80&w=1200&auto=format&fit=crop',
   content: `
     <p>The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible.</p>
-    
+
     <p>The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible. The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible.</p>
-    
+
     <p>The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible. The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible.</p>
-    
+
     <p>The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible. The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible.</p>
   `
 }
+
+onMounted(async () => {
+  content.value = await getContentByPath('blog.detail')
+})
 </script>
 
 <template>
-  <div class="min-h-screen bg-white">
+  <div v-if="content" class="min-h-screen bg-white">
     <!-- Close Button -->
     <button class="fixed top-6 right-6 z-50 w-12 h-12 bg-brand-yellow rounded-full flex items-center justify-center border-2 border-black hover:scale-110 transition-transform shadow-organic">
       <LucideX class="w-6 h-6" />
@@ -41,10 +50,10 @@ const article = {
 
       <!-- Featured Image -->
       <div class="mb-12 border-organic overflow-hidden">
-        <NuxtImg 
-          :src="article.image" 
+        <NuxtImg
+          :src="article.image"
           class="w-full h-auto object-cover"
-          alt="Article featured image"
+          :alt="content.featured_image_alt"
         />
       </div>
 
@@ -55,13 +64,13 @@ const article = {
       <!-- Share / Navigation -->
       <div class="mt-12 pt-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center gap-4">
         <NuxtLink to="/blog" class="text-brand-pink font-bold hover:underline flex items-center gap-2">
-          ← Back to all articles
+          ← {{ content.back_link }}
         </NuxtLink>
-        
+
         <div class="flex gap-4">
-          <button class="btn-secondary text-sm">Share Article</button>
+          <button class="btn-secondary text-sm">{{ content.share_button }}</button>
           <button class="btn-primary text-sm flex items-center gap-2">
-            Next Article <LucideArrowRight class="w-4 h-4" />
+            {{ content.next_article_button }} <LucideArrowRight class="w-4 h-4" />
           </button>
         </div>
       </div>

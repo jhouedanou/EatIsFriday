@@ -1,9 +1,9 @@
 <template>
   <div class="apply-jobs-page">
-    <section class="page-hero">
+    <section v-if="content" class="page-hero">
       <div class="container">
-        <h1>Job Opportunities</h1>
-        <p>Find your next career opportunity in the food industry</p>
+        <h1>{{ content.page_hero.title }}</h1>
+        <p>{{ content.page_hero.subtitle }}</p>
       </div>
     </section>
 
@@ -12,29 +12,35 @@
         <div v-if="jobs" class="grid grid-2">
           <JobCard v-for="job in jobs" :key="job.id" :job="job" />
         </div>
-        <div v-else class="loading">Loading jobs...</div>
+        <div v-else-if="content" class="loading">{{ content.loading_text }}</div>
       </div>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
+
 const { getJobs } = useJobs()
+const { getContentByPath } = usePageContent()
+
 const jobs = ref<any>(null)
+const content = ref<any>(null)
 
 onMounted(async () => {
+  content.value = await getContentByPath('apply_jobs')
   jobs.value = await getJobs()
 })
 
-useHead({
-  title: 'Job Opportunities - Eat Is Friday',
+useHead(() => ({
+  title: content.value?.seo?.title || 'Job Opportunities - Eat Is Friday',
   meta: [
-    { name: 'description', content: 'Explore career opportunities in the food industry. Join our team and build your culinary career.' }
+    { name: 'description', content: content.value?.seo?.meta_description || '' }
   ]
-})
+}))
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .loading {
   text-align: center;
   padding: 4rem 0;

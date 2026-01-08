@@ -1,5 +1,5 @@
 <template>
-  <div v-if="job" class="job-detail-page">
+  <div v-if="content && job" class="job-detail-page">
     <section class="job-header">
       <img :src="job.featured_media" :alt="job.title.rendered" class="header-image" />
       <div class="header-overlay">
@@ -19,19 +19,19 @@
         <div class="content-grid">
           <div class="main-content">
             <div class="section">
-              <h2>About the Position</h2>
+              <h2>{{ content.section_titles.about_position }}</h2>
               <div v-html="job.content.rendered"></div>
             </div>
 
             <div class="section">
-              <h2>Requirements</h2>
+              <h2>{{ content.section_titles.requirements }}</h2>
               <ul class="requirements-list">
                 <li v-for="(req, index) in job.requirements" :key="index">{{ req }}</li>
               </ul>
             </div>
 
             <div class="section">
-              <h2>Benefits</h2>
+              <h2>{{ content.section_titles.benefits }}</h2>
               <ul class="benefits-list">
                 <li v-for="(benefit, index) in job.benefits" :key="index">{{ benefit }}</li>
               </ul>
@@ -40,8 +40,8 @@
 
           <div class="sidebar">
             <div class="apply-card">
-              <h3>Interested?</h3>
-              <p>Apply for this position and join our team!</p>
+              <h3>{{ content.sidebar.title }}</h3>
+              <p>{{ content.sidebar.subtitle }}</p>
               <FormsJobApplicationForm />
             </div>
           </div>
@@ -50,16 +50,19 @@
     </section>
   </div>
   <div v-else class="loading">
-    <div class="container">Loading job details...</div>
+    <div class="container">{{ content?.loading_text || 'Loading job details...' }}</div>
   </div>
 </template>
 
 <script setup lang="ts">
 const route = useRoute()
 const { getJobBySlug } = useJobs()
+const { getJobDetailSlugContent } = usePageContent()
+const content = ref<any>(null)
 const job = ref<any>(null)
 
 onMounted(async () => {
+  content.value = await getJobDetailSlugContent()
   const slug = route.params.slug as string
   job.value = await getJobBySlug(slug)
 })
@@ -72,7 +75,7 @@ useHead(() => ({
 }))
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .job-header {
   position: relative;
   height: 400px;
@@ -211,11 +214,11 @@ useHead(() => ({
   .content-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .sidebar {
     position: static;
   }
-  
+
   .header-overlay h1 {
     font-size: 2rem;
   }

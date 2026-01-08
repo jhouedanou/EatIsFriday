@@ -1,0 +1,50 @@
+// Brand Colors
+$brand-pink: #FF4D6D;
+$brand-lime: #C8F560;
+$brand-yellow: #FFDD00;
+$brand-blue: #A0C4FF;
+$brand-purple: #E4B1F0;
+$brand-dark: #1A1A1A;
+$brand-gray: #F5F5F5;
+
+// Bootstrap Color Overrides
+$primary: $brand-pink;
+$secondary: $brand-dark;
+$success: $brand-lime;
+$info: $brand-blue;
+$warning: $brand-yellow;
+$danger: #dc3545;
+$light: $brand-gray;
+$dark: $brand-dark;
+
+// Typography
+$font-family-heading: 'Recoleta', Georgia, serif;
+$font-family-body: 'Plus Jakarta Sans', 'Inter', sans-serif;
+$font-family-sans-serif: $font-family-body;
+
+// Border radius
+$border-radius: 0.5rem;
+$border-radius-sm: 0.25rem;
+$border-radius-lg: 1rem;
+$border-radius-xl: 1.5rem;
+
+// Shadows
+$shadow-organic: 4px 4px 0 rgba(0, 0, 0, 1);
+$shadow-organic-sm: 2px 2px 0 rgba(0, 0, 0, 1);
+$shadow-organic-lg: 6px 6px 0 rgba(0, 0, 0, 1);
+$shadow-organic-hover: 6px 6px 0 rgba(0, 0, 0, 1);
+
+// Spacing
+$spacer: 1rem;
+
+// Container
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1320px
+);
+
+// Grid
+$grid-gutter-width: 1.5rem;

@@ -1,5 +1,10 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import { LucideX } from 'lucide-vue-next'
+import type { ContactContent } from '~/composables/usePageContent'
+
+const { getContactContent } = usePageContent()
+const content = ref<ContactContent | null>(null)
 
 const form = ref({
   name: '',
@@ -11,6 +16,10 @@ const form = ref({
   message: ''
 })
 
+onMounted(async () => {
+  content.value = await getContactContent()
+})
+
 const submitForm = () => {
   console.log('Form submitted:', form.value)
   // Handle form submission
@@ -18,7 +27,7 @@ const submitForm = () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-brand-lime">
+  <div v-if="content" class="min-h-screen bg-brand-lime">
     <!-- Close Button (for modal context) -->
     <button class="fixed top-6 right-6 z-50 w-12 h-12 bg-brand-yellow rounded-full flex items-center justify-center border-2 border-black hover:scale-110 transition-transform shadow-organic">
       <LucideX class="w-6 h-6" />
@@ -38,15 +47,15 @@ const submitForm = () => {
         <!-- Left: Heading -->
         <div class="lg:w-1/2">
           <h1 class="font-heading text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.95] text-brand-dark">
-            Reach <span class="relative inline-block">
-              Out
+            {{ content.hero_section.title.line_1 }} <span class="relative inline-block">
+              {{ content.hero_section.title.line_1_highlight }}
               <span class="absolute -bottom-2 left-0 w-full h-4 bg-brand-blue/60 -z-10 transform -rotate-1"></span>
-            </span> Let's Create<br/>
-            Something <span class="italic">Amazing</span>
+            </span> {{ content.hero_section.title.line_2 }}<br/>
+            {{ content.hero_section.title.line_3 }} <span class="italic">{{ content.hero_section.title.line_3_highlight }}</span>
           </h1>
-          
+
           <p class="mt-8 text-lg text-brand-dark/80 max-w-md font-body">
-            Ready to elevate your event with exceptional catering? Share your vision and we'll bring it to life.
+            {{ content.hero_section.description }}
           </p>
         </div>
 
@@ -55,13 +64,13 @@ const submitForm = () => {
           <div class="relative w-72 h-72 md:w-80 md:h-80 lg:w-[450px] lg:h-[450px]">
             <!-- The actual blob shaped image -->
             <div class="absolute inset-0 blob-mask overflow-hidden border-4 border-black group">
-              <NuxtImg 
-                src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=1200&auto=format&fit=crop" 
+              <NuxtImg
+                :src="content.hero_section.image.src"
                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                alt="Delicious food spread"
+                :alt="content.hero_section.image.alt"
               />
             </div>
-            
+
             <!-- Floating accent circles -->
             <div class="absolute -top-10 -right-10 w-32 h-32 bg-brand-yellow rounded-full -z-10 animate-float"></div>
             <div class="absolute -bottom-10 -left-10 w-24 h-24 bg-brand-blue rounded-full -z-10 animate-float" style="animation-delay: 1.5s"></div>
@@ -75,18 +84,18 @@ const submitForm = () => {
           <!-- Row 1: Name & Email -->
           <div class="grid md:grid-cols-2 gap-6">
             <div>
-              <input 
+              <input
                 v-model="form.name"
-                type="text" 
-                placeholder="Enter Name"
+                type="text"
+                :placeholder="content.form.name_placeholder"
                 class="input-organic"
               />
             </div>
             <div>
-              <input 
+              <input
                 v-model="form.email"
-                type="email" 
-                placeholder="Enter Email Adress"
+                type="email"
+                :placeholder="content.form.email_placeholder"
                 class="input-organic"
               />
             </div>
@@ -95,18 +104,18 @@ const submitForm = () => {
           <!-- Row 2: Event Type & Location -->
           <div class="grid md:grid-cols-2 gap-6">
             <div>
-              <input 
+              <input
                 v-model="form.eventType"
-                type="text" 
-                placeholder="Event Type"
+                type="text"
+                :placeholder="content.form.event_type_placeholder"
                 class="input-organic"
               />
             </div>
             <div>
-              <input 
+              <input
                 v-model="form.location"
-                type="text" 
-                placeholder="Enter Location"
+                type="text"
+                :placeholder="content.form.location_placeholder"
                 class="input-organic"
               />
             </div>
@@ -115,18 +124,18 @@ const submitForm = () => {
           <!-- Row 3: Date & Guests -->
           <div class="grid md:grid-cols-2 gap-6">
             <div>
-              <input 
+              <input
                 v-model="form.date"
-                type="text" 
-                placeholder="Date of Event"
+                type="text"
+                :placeholder="content.form.date_placeholder"
                 class="input-organic"
               />
             </div>
             <div>
-              <input 
+              <input
                 v-model="form.guests"
-                type="text" 
-                placeholder="Number of Guests"
+                type="text"
+                :placeholder="content.form.guests_placeholder"
                 class="input-organic"
               />
             </div>
@@ -134,9 +143,9 @@ const submitForm = () => {
 
           <!-- Row 4: Message -->
           <div>
-            <textarea 
+            <textarea
               v-model="form.message"
-              placeholder="Message"
+              :placeholder="content.form.message_placeholder"
               rows="5"
               class="textarea-organic"
             ></textarea>
@@ -145,7 +154,7 @@ const submitForm = () => {
           <!-- Submit Button -->
           <div class="pt-4">
             <button type="submit" class="btn-primary text-lg px-10 py-4">
-              Send Message
+              {{ content.form.submit_button }}
             </button>
           </div>
         </form>
