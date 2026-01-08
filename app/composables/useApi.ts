@@ -1,20 +1,9 @@
 export const useApi = () => {
     const fetchData = async <T>(endpoint: string): Promise<T | null> => {
         try {
-            const { data, error } = await useFetch<T>(`/api/${endpoint}`, {
-                key: endpoint,
-                // Enable caching for better performance
-                getCachedData: (key) => {
-                    return useNuxtData(key).data.value as T
-                }
-            })
-
-            if (error.value) {
-                console.error(`Error fetching ${endpoint}:`, error.value)
-                return null
-            }
-
-            return data.value
+            // Use $fetch for static JSON files in public folder
+            const data = await $fetch<T>(`/api/${endpoint}`)
+            return data
         } catch (err) {
             console.error(`Failed to fetch ${endpoint}:`, err)
             return null

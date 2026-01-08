@@ -4,10 +4,8 @@ import gsap from 'gsap'
 import type { HomepageContent } from '~/composables/usePageContent'
 
 const heroTitle = ref(null)
-
-// Fetch content directly with useFetch at top level
-const { data: pagesContent } = await useFetch('/api/pages-content.json')
-const content = computed<HomepageContent | null>(() => pagesContent.value?.homepage || null)
+const { getHomepageContent } = usePageContent()
+const content = ref<HomepageContent | null>(null)
 
 // Icon mapping
 const iconMap: Record<string, any> = {
@@ -28,7 +26,9 @@ const textColorMap: Record<string, string> = {
   'dark': 'text-brand-dark'
 }
 
-onMounted(() => {
+onMounted(async () => {
+  content.value = await getHomepageContent()
+  
   if (heroTitle.value && content.value) {
     gsap.from(heroTitle.value, {
       y: 60,

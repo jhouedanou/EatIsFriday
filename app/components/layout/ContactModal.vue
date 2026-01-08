@@ -17,10 +17,12 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits(['close'])
+const { getContactModalContent } = usePageContent()
+const content = ref<any>(null)
 
-// Fetch content directly at top level
-const { data: pagesContent } = await useFetch('/api/pages-content.json')
-const content = computed(() => pagesContent.value?.components?.contact_modal || null)
+onMounted(async () => {
+  content.value = await getContactModalContent()
+})
 
 const close = () => {
   emit('close')

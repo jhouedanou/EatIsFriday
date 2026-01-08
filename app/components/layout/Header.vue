@@ -1,6 +1,6 @@
 <template>
   <header v-if="content" class="header">
-    <div class="container header-grid">
+    <div class="container header-grid torn-paper">
       <!-- Left Navigation -->
 
       <nav class="nav-right desktop-only">
@@ -33,11 +33,13 @@
 </template>
 
 <script setup lang="ts">
+const { getHeaderContent } = usePageContent()
+const content = ref<any>(null)
 const isContactModalOpen = ref(false)
 
-// Fetch content directly at top level
-const { data: pagesContent } = await useFetch('/api/pages-content.json')
-const content = computed(() => pagesContent.value?.components?.header || null)
+onMounted(async () => {
+  content.value = await getHeaderContent()
+})
 
 const openContactModal = () => {
   isContactModalOpen.value = true
@@ -57,11 +59,10 @@ const closeContactModal = () => {
 }
 
 .header-grid {
-  background:url('/images/headerBg.svg') no-repeat center;
-  background-size: cover;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
+  padding:1em;
     a{
     font-family: "Recoleta",sans-serif;
       font-size: 18px;

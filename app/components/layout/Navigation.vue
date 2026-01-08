@@ -20,12 +20,14 @@
 </template>
 
 <script setup lang="ts">
+const { getHeaderContent } = usePageContent()
+const content = ref<any>(null)
 const isOpen = ref(false)
 const emit = defineEmits(['open-contact'])
 
-// Fetch content directly at top level
-const { data: pagesContent } = await useFetch('/api/pages-content.json')
-const content = computed(() => pagesContent.value?.components?.header || null)
+onMounted(async () => {
+  content.value = await getHeaderContent()
+})
 
 const toggleMenu = () => {
   isOpen.value = !isOpen.value
