@@ -1,32 +1,36 @@
 <template>
   <header v-if="content" class="header">
-    <div class="container header-grid torn-paper">
-      <!-- Left Navigation -->
+    <TornPaperContainer variant="white">
+      <div class="container header-grid">
+        <!-- Left Navigation -->
 
-      <nav class="nav-right desktop-only">
-        <NuxtLink to="/about" class="nav-link">{{ content.nav_links.about }}</NuxtLink>
-        <NuxtLink to="/apply-activities" class="nav-link">{{ content.nav_links.activities }}</NuxtLink>
-        <NuxtLink to="/events" class="nav-link">{{ content.nav_links.events }}</NuxtLink>
-      </nav>
-      <!-- Center Logo -->
-      <div class="logo-container">
-        <NuxtLink to="/" class="logo">
-          {{ content.logo }}
-        </NuxtLink>
+        <nav class="nav-right desktop-only">
+          <NuxtLink to="/about" class="nav-link">{{ content.nav_links.about }}</NuxtLink>
+          <NuxtLink to="/apply-activities" class="nav-link">{{ content.nav_links.activities }}</NuxtLink>
+          <NuxtLink to="/events" class="nav-link">{{ content.nav_links.events }}</NuxtLink>
+        </nav>
+        <!-- Center Logo -->
+        <div class="logo-container">
+          <NuxtLink to="/" class="logo">
+            {{ content.logo }}
+          </NuxtLink>
+        </div>
+
+        <!-- Right Navigation -->
+        <nav class="nav-left desktop-only">
+          <NuxtLink to="/careers" class="nav-link">{{ content.nav_links.careers }}</NuxtLink>
+          <NuxtLink to="/blog" class="nav-link">{{ content.nav_links.blogs }}</NuxtLink>
+          <OrganicButton variant="primary" @click="openContactModal">
+            {{ content.nav_links.get_in_touch }}
+          </OrganicButton>
+        </nav>
+
+        <!-- Mobile Menu Toggle -->
+        <div class="mobile-toggle">
+          <LayoutNavigation @open-contact="openContactModal" />
+        </div>
       </div>
-
-      <!-- Right Navigation -->
-      <nav class="nav-left desktop-only">
-        <NuxtLink to="/careers" class="nav-link">{{ content.nav_links.careers }}</NuxtLink>
-        <NuxtLink to="/blog" class="nav-link">{{ content.nav_links.blogs }}</NuxtLink>
-        <button class="btn-cta" @click="openContactModal">{{ content.nav_links.get_in_touch }}</button>
-      </nav>
-
-      <!-- Mobile Menu Toggle -->
-      <div class="mobile-toggle">
-        <LayoutNavigation @open-contact="openContactModal" />
-      </div>
-    </div>
+    </TornPaperContainer>
 
     <LayoutContactModal :is-open="isContactModalOpen" @close="closeContactModal" />
   </header>
@@ -112,12 +116,6 @@ const closeContactModal = () => {
 
 .mobile-toggle {
   display: none;
-}
-
-/* Button override for header */
-.btn-cta {
-  font-size: 0.9rem;
-  padding: 0.5rem 1.25rem;
 }
 
 @media (max-width: 968px) {
