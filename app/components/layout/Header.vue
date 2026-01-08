@@ -74,7 +74,7 @@ const closeContactModal = () => {
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   height:103px;
-  background:url(images/headerBg.png) no-repeat center;
+  background:url(/images/headerBg.png) no-repeat center;
   background-size: contain;
     a{
       font-family: "Recoleta",sans-serif;
