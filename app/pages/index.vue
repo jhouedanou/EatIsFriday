@@ -57,6 +57,14 @@ onMounted(async () => {
                 {{ content.hero_section.title.line_1 }}
               </p>
             </h1>
+             <div class="contact-button-wrapper" @click="">
+            <span class="contact-label">Explore interactive map</span>
+            <NuxtImg
+              src="/images/btnXL.svg"
+              alt="Get in touch"
+              class="contact-image"
+            />
+          </div>
           </div>
         </div>
     </section>
