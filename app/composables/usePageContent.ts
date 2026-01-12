@@ -42,8 +42,40 @@ export interface MapVenue {
   location: string
   lat: number
   lng: number
-  open_positions: number
+  open_positions?: number
+  type?: string
   image?: string
+  image2?: string
+  logo?: string
+  capacity?: string
+  staff_members?: number
+  recent_event?: string
+  guests_served?: string
+  shops_count?: number
+  menus_count?: number
+  description?: string
+}
+
+export interface EventType {
+  id: string
+  name: string
+  image: string
+}
+
+export interface Stat {
+  value: string
+  label: string
+}
+
+export interface HomepageCTA {
+  title: string
+  image: string
+  description: string
+  link: string
+  button: string
+  additionalText: string
+  button2: string
+  link2: string
 }
 
 export interface Partner {
@@ -90,11 +122,11 @@ export interface HomepageContent {
     texte: string
   }
   locations_section: {
-    tag: string
-    title: HeroTitle
+    title: string
     description: string
-    jobs_suffix: string
-    locations: Location[]
+    filter_label: string
+    event_types: EventType[]
+    stats: Stat[]
     map_venues: MapVenue[]
   }
   services_section: {
@@ -118,6 +150,7 @@ export interface HomepageContent {
   examples: Example[]
   partners_title: string
   partners: Partner[]
+  homepageCTA: HomepageCTA
 }
 
 export interface CareersContent {
