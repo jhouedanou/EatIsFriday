@@ -521,3 +521,14 @@ background-position: 100% 102%;
     color: #f9375b;
   }
 } 
+
+#tromp{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  img{
+    width:283px;
+    height:auto;
+  }
+}

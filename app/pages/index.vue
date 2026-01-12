@@ -70,8 +70,11 @@ onMounted(async () => {
         </div>
     </section>
 <section id="presentationEatIsFamily" class="py-5 bg-white">
-<div class="container">
+<div id="tromp" class="container">
   <div class="kemiseba" v-html="content.intro_section.texte"></div>
+  <NuxtLink to="/about" aria-label="En savoir plus sur nous" class="d-inline-block mt-4">
+    <NuxtImg src="/images/btnLearnMoreAboutUs.svg" alt="En savoir plus sur nous" />
+  </NuxtLink>
 </div>
 
 </section>
