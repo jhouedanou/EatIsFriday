@@ -649,7 +649,7 @@ body {
     z-index: -1;
     position: absolute;
     content: "";
-    background: url('/images/line5.svg');
+    background: url("/images/line5.svg");
     background-size: contain;
     width: 100vw;
     max-width: 400px;
@@ -659,7 +659,8 @@ body {
     top: 0vh;
     left: -1vw;
   }
-  strong {  font-family: FONTSPRINGDEMO-RecoletaSemiBold !important;
+  strong {
+    font-family: FONTSPRINGDEMO-RecoletaSemiBold !important;
 
     color: #000000;
   }
@@ -708,8 +709,8 @@ body {
     text-align: left;
     color: #000;
   }
-   .innerService{
-    padding:30px !important;
+  .innerService {
+    padding: 30px !important;
   }
 }
 
@@ -772,36 +773,81 @@ body {
 }
 .font-header {
   font-family: FONTSPRINGDEMO-RecoletaBold !important;
-    font-size: 50px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: normal;
-    text-align: left;
-    color: #000;
-    white-space: pre-line;
+  font-size: 50px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #000;
+  white-space: pre-line;
 }
 .preserve-lines {
   white-space: pre-line;
 }
 
-#lasalle{
+#lasalle {
   .example {
     padding: 5px;
-    .inner-example{
-      padding:20px;
-      border-radius: 20px;
+    .inner-example {
+      padding:4em 4em 10em 4em;      border-radius: 20px;
     }
-  }
-  #example-0{
-    .inner-example{
-      background: #a7f49d;
+    h4 {
+      font-family: FONTSPRINGDEMO-RecoletaBold;
+      font-size: 50px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      text-align: left;
+      color: #000b0f;
+      padding-bottom: 1em;
     }
-  }
-    #example-1{
-.inner-example{
-background: #93cbff;    
+    p{
+      font-family: FONTSPRINGDEMO-RecoletaMedium;
+  font-size: 18px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.56;
+  letter-spacing: normal;
+  text-align: left;
+  color: #0d0a00;
+        padding-bottom: 1em;
 
-  }  }
+    }
+  }
+  #example-0 {
+    .inner-example {
+      background: #a7f49d;
+      background-image: url(images/concession.svg);
+      background-repeat: no-repeat;
+      background-position: right bottom;
+    }
+    h4{
+      z-index:0;
+      position: relative;
+      &::before{
+ z-index: -1;
+    position: absolute;
+    content: "";
+    background: url("/images/line6.svg");
+    background-size: contain;
+    width: 100vw;
+    max-width: 400px;
+    height: 100vh;
+    max-height: 80px;
+    background-repeat: no-repeat;
+    top: 1vh;
+    left: -1vw;
+      }
+    }
+  }
+  #example-1 {
+    .inner-example {
+      background: #93cbff;
+    }
+  }
 }
