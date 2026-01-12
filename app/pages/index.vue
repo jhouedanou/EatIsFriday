@@ -58,7 +58,7 @@ onMounted(async () => {
                 <h1 id="heroTitle" ref="heroTitle" class="font-heading display-1 fw-bold lh-1 text-brand-dark m-0">
                 {{ content.hero_section.title.line_1 }}
             </h1>
-              <p class="position-relative d-inline-block m-0">
+              <p class="position-relative d-inline-block m-0 recoleta mb-4 mt-4">
                 {{ content.hero_section.title.line_2 }}
               </p>
               </div>
