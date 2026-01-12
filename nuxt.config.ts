@@ -33,12 +33,6 @@ export default defineNuxtConfig({
     pageTransition: { name: 'page', mode: 'out-in' }
   },
 
-  router: {
-    options: {
-      scrollBehaviorType: 'smooth'
-    }
-  },
-
   css: [
     'bootstrap/dist/css/bootstrap.min.css',
     '~/assets/scss/main.scss'

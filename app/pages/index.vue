@@ -176,23 +176,20 @@ onMounted(async () => {
 
     <!-- CTA Section -->
     <section class="py-5 bg-white">
-     <div class="container">
-      <div class="kemiseba-alt" v-html="content.cta_section.description"></div>
-     </div>
+      <div class="container">
+        <div class="kemiseba-alt" v-html="content.cta_section.description"></div>
+      </div>
     </section>
 
     <!-- Food Gallery Section -->
-    <section class="py-5">
+    <section class="py-5 bg-white">
       <div class="container">
         <div class="gallery-grid">
           <!-- Grande image à gauche -->
           <div class="gallery-item-large">
             <div class="gallery-item-wrapper">
-              <NuxtImg
-                :src="content.gallery_section.images[0].src"
-                class="w-100 gallery-img"
-                :alt="content.gallery_section.images[0].alt"
-              />
+              <NuxtImg :src="content.gallery_section.images[0].src" class="w-100 gallery-img"
+                :alt="content.gallery_section.images[0].alt" />
             </div>
           </div>
 
@@ -207,10 +204,43 @@ onMounted(async () => {
         </div>
       </div>
     </section>
+    <!-- sustainable service  -->
+    <section id="sustan" class="py-5 bg-white">
+      <!-- une loop qui affiche les services durables -->
+      <h3 class="font-header center text-center">{{ content.sustainable_service_title }}</h3>
+      <div id="brik" class="row mx-auto ">
+        <div :id="`sustainable-service-${index}`" v-for="(service, index) in content.sustainable_service" :key="index"
+          class="sustainable-service-item col-md-4 text-center p-4">
+          <div class="inner">
+
+            <img :src="service.icone" :alt="service.title" />
+            <h4>{{ service.title }}</h4>
+            <p>{{ service.description }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="beautiful-moments" class="py-5 bg-white">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col">
+            <h3 class="damsnt" v-html="content.beautiful.title"></h3>
+          </div>
+          <div class="col">
+            <p class="kemi" v-html="content.beautiful.text"></p>
+          </div>
+        </div>
+        <div class="row mt-4">
+          <img :src="content.beautiful.image" alt="Beautiful Moments We’ve Helped Create"
+            class="img-fluid mx-auto d-block">
+        </div>
+      </div>
+    </section>
+
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 /* Préserve les retours à la ligne du JSON */
 .preserve-lines {
   white-space: pre-line;
@@ -368,6 +398,107 @@ onMounted(async () => {
 
   .gallery-item-small {
     height: 250px;
+  }
+}
+
+#brik {
+  max-width: 1380px;
+}
+
+.sustainable-service-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  .inner {
+    width: 441.43px;
+    height: 437px;
+    border-radius: 20px;
+    background-size: contain;
+    padding: 2em;
+    background-repeat: no-repeat;
+
+    h4 {
+      font-family: FONTSPRINGDEMO-RecoletaBold;
+      font-size: 24px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      text-align: center;
+      color: #000;
+      text-transform: capitalize;
+      margin: 1em 0;
+    }
+
+    p {
+      font-family: FONTSPRINGDEMO-Recoleta-Regular !important;
+      font-size: 16px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.52;
+      letter-spacing: normal;
+      text-align: center;
+      color: #000;
+      margin: 1em 0;
+
+    }
+  }
+}
+
+#sustainable-service-0 {
+  .inner {
+    background-image: url('images/sus1.svg');
+    transform: rotate(-356deg);
+
+  }
+
+}
+
+#sustainable-service-1 {
+  .inner {
+    background-image: url('images/sus2.svg');
+    transform: rotate(-1deg);
+
+  }
+
+}
+
+#sustainable-service-2 {
+  .inner {
+    background-image: url('images/sus3.svg');
+    transform: rotate(-4deg);
+
+  }
+
+}
+
+#beautiful-moments {
+  h3 {
+    font-family: FONTSPRINGDEMO-RecoletaBold;
+    font-size: 50px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #000;
+  }
+
+  p {
+    font-family: FONTSPRINGDEMO-Recoleta-Regular !important;
+    font-size: 18px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.56;
+    letter-spacing: normal;
+    text-align: left;
+    color: #000;
   }
 }
 </style>

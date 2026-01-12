@@ -754,3 +754,18 @@ body {
     order: 2;
   }
 }
+.font-header {
+  font-family: FONTSPRINGDEMO-RecoletaBold !important;
+    font-size: 50px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #000;
+    white-space: pre-line;
+}
+.preserve-lines {
+  white-space: pre-line;
+}

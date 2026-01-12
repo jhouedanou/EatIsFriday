@@ -138,23 +138,32 @@
         }
       ]
     },
+    "sustainable_service_title": "Our Commitment To Sustainable\nService",
     "sustainable_service": [
       {
-        "icone":"images/🔄.svg",
+        "background":"sus1.svg",
+        "icone":"images/🔄.png",
         "title":"Reusable Service\nSolutions at the core",
         "description":"Implementing reusable containers and serviceware wherever possible to reduce single-use plastics.We minimize waste and source ingredients"
       },
       {
-        "icone":"images/♻️.svg",
+        "background":"sus2.svg",
+        "icone":"images/♻️.png",
         "title":"Our Responsible Sourcing\nand Waste Reduction",
         "description":"We minimize waste and source ingredients responsibly to reduce environmental impact. We minimize waste and source ingredients responsibly to reduce environmental impact."
       },
       {
-        "icone":"images/📦.svg",
-        "title":"we practise Eco\nConscious Packaging",
+        "background":"sus3.svg",
+        "icone":"images/📦.png",
+        "title":"WÒe practise Eco\nConscious Packaging",
         "description":"Biodegradable and compostable packaging options for all our service operations. We minimize waste and source ingredients responsibly to reduce environmental impact."
       }
-     ]
+     ],
+     "beautiful":{
+      "title":"Beautiful Moments We’ve\nHelped Create",
+     "text":"We see every event as an opportunity to create memorable moments around the table.  We give your venue a unique setting with our food and drink stands – where taste, freshness and conviviality come together to enhance the catering experience of your events.",
+     "image":"images/image3.jpg"
+     }
   },
   "careers": {
     "map_loading": "Loading map...",
