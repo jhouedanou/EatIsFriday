@@ -624,7 +624,7 @@ nuxt-link:has(img) {
 
 #sustainable-service-0 {
   .inner {
-    background-image: url('images/sus1.svg');
+    background-image: url('/images/sus1.svg');
     transform: rotate(-356deg);
 
   }
@@ -633,7 +633,7 @@ nuxt-link:has(img) {
 
 #sustainable-service-1 {
   .inner {
-    background-image: url('images/sus2.svg');
+    background-image: url('/images/sus2.svg');
     transform: rotate(-1deg);
 
   }
@@ -642,7 +642,7 @@ nuxt-link:has(img) {
 
 #sustainable-service-2 {
   .inner {
-    background-image: url('images/sus3.svg');
+    background-image: url('/images/sus3.svg');
     transform: rotate(-4deg);
 
   }
