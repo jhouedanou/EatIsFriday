@@ -1,10 +1,24 @@
 <template>
   <div class="about-page">
-    <section v-if="siteContent" class="page-hero">
-      <div class="container">
-        <h1>{{ siteContent.about.hero.title }}</h1>
-        <p>{{ siteContent.about.hero.subtitle }}</p>
+    <section v-if="siteContent" id="aboutHero" class="page-hero">
+      <div class="container-fluid d-flex flex-column justify-content-center align-items-center h-100">
+        <h1 class="heroTitle">{{ siteContent.about.hero.title }}</h1>
+        <div class="d-flex">
+          <div class="row">
+            <div class="col-4">
+              <div class="heroTextContainer">
+                <h2 class="heroSubtitle">{{ siteContent.about.hero.subtitle }}</h2>
+                <p class="heroDescription">{{ siteContent.about.hero.description }}</p>
+              </div>
+            </div>
+            <div class="col-8">
+              <img :src="siteContent.about.hero.image.src" :alt="siteContent.about.hero.image.alt"
+                class="img-fluid heroImage" />
+            </div>
+          </div>
+        </div>
       </div>
+
     </section>
 
     <section v-if="siteContent" class="page-content">
@@ -72,6 +86,26 @@ useHead(() => ({
 </script>
 
 <style scoped lang="scss">
+#aboutHero {
+  height: 930px;
+  margin: 0 0 14px;
+  padding: 22px 60.4px 56px 70px;
+  border-radius: 2px;
+  background: url(images/vectorBgAbout.svg) no-repeat center 20% #a7f49d !important;
+
+  h1 {
+    font-family: FONTSPRINGDEMO-RecoletaBold;
+    font-size: 75px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.2;
+    letter-spacing: normal;
+    text-align: center;
+    color: #000b0f;
+  }
+}
+
 .content-section {
   margin-bottom: 3rem;
 

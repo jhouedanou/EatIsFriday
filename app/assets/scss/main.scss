@@ -851,3 +851,38 @@ body {
     }
   }
 }
+.heroTextContainer {
+  max-width: 520px;
+  width:100vw;
+  height:100vh;
+  max-height:430px;
+  display:flex;
+  flex-direction:column;
+  margin-top: 2rem;
+align-items: center;
+padding:2em;
+  background:url(images/backgroundBgAbout.svg) no-repeat center;
+  bakcground-size:contain;
+  h2{
+      font-family: FONTSPRINGDEMO-RecoletaBold;
+  font-size: 26px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #161616;
+  }
+  p{
+      font-family: FONTSPRINGDEMO-RecoletaMedium;
+  font-size: 22px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.55;
+  letter-spacing: normal;
+  text-align: left;
+  color: #000;
+  }
+}

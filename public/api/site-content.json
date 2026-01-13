@@ -70,10 +70,14 @@
     },
     "about": {
         "hero": {
-            "title": "About Eat Is Family",
-            "subtitle": "Our Story",
-            "image": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=1200"
-        },
+      "title": "Bursting With Flavour. Built With Passion.",
+      "subtitle":"We are Eat Is Family",
+      "description": "We bring handcrafted food, bold flavour and reliable operations to stadiums, arenas and the biggest festivals in France. Our work mixes human warmth with professional scale — and our story is worth a look.",
+      "image": {
+        "src": "images/unsplash_6vfYbDwOuMocopie.png",
+        "alt": "Team working in kitchen"
+      }
+    },
         "mission": {
             "title": "Our Mission",
             "content": "At Eat Is Family, we believe that food brings people together. Our mission is to create memorable culinary experiences that celebrate the joy of cooking, eating, and sharing. We connect food enthusiasts with expert chefs, organize exciting events, and foster a community passionate about gastronomy."

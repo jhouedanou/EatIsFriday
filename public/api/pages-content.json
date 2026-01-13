@@ -314,6 +314,26 @@
     }
      
   },
+    
+  "about": {
+    "hero": {
+      "title": "Bursting With Flavour. Built With Passion.",
+      "subtitle":"We are Eat Is Family",
+      "description": "We bring handcrafted food, bold flavour and reliable operations to stadiums, arenas and the biggest festivals in France. Our work mixes human warmth with professional scale — and our story is worth a look.",
+      "image": {
+        "src": "images/unsplash_6vfYbDwOuMocopie.png",
+        "alt": "Team working in kitchen"
+      }
+    },
+    "section_titles": {
+      "values": "Our Values",
+      "team": "Meet Our Team"
+    },
+    "seo": {
+      "title": "About Us - Eat Is Family",
+      "meta_description": "Learn about Eat Is Family, our mission, vision, and the team behind our culinary experiences."
+    }
+  },
   "careers": {
     "map_loading": "Loading map...",
     "hero_section": {
@@ -626,16 +646,7 @@
       "meta_description": "Explore career opportunities in the food industry. Join our team and build your culinary career."
     }
   },
-  "about": {
-    "section_titles": {
-      "values": "Our Values",
-      "team": "Meet Our Team"
-    },
-    "seo": {
-      "title": "About Us - Eat Is Family",
-      "meta_description": "Learn about Eat Is Family, our mission, vision, and the team behind our culinary experiences."
-    }
-  },
+
   "components": {
     "header": {
       "logo": "LOGO",
