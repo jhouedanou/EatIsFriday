@@ -791,7 +791,8 @@ body {
   .example {
     padding: 5px;
     .inner-example {
-      padding:4em 4em 10em 4em;      border-radius: 20px;
+      padding: 4em 4em 10em 4em;
+      border-radius: 20px;
     }
     h4 {
       font-family: FONTSPRINGDEMO-RecoletaBold;
@@ -805,18 +806,17 @@ body {
       color: #000b0f;
       padding-bottom: 1em;
     }
-    p{
+    p {
       font-family: FONTSPRINGDEMO-RecoletaMedium;
-  font-size: 18px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.56;
-  letter-spacing: normal;
-  text-align: left;
-  color: #0d0a00;
-        padding-bottom: 1em;
-
+      font-size: 18px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.56;
+      letter-spacing: normal;
+      text-align: left;
+      color: #0d0a00;
+      padding-bottom: 1em;
     }
   }
   #example-0 {
@@ -826,22 +826,22 @@ body {
       background-repeat: no-repeat;
       background-position: right bottom;
     }
-    h4{
-      z-index:0;
+    h4 {
+      z-index: 0;
       position: relative;
-      &::before{
- z-index: -1;
-    position: absolute;
-    content: "";
-    background: url("/images/line6.svg");
-    background-size: contain;
-    width: 100vw;
-    max-width: 400px;
-    height: 100vh;
-    max-height: 80px;
-    background-repeat: no-repeat;
-    top: 1vh;
-    left: -1vw;
+      &::before {
+        z-index: -1;
+        position: absolute;
+        content: "";
+        background: url("/images/line6.svg");
+        background-size: contain;
+        width: 100vw;
+        max-width: 400px;
+        height: 100vh;
+        max-height: 80px;
+        background-repeat: no-repeat;
+        top: 1vh;
+        left: -1vw;
       }
     }
   }
@@ -853,36 +853,80 @@ body {
 }
 .heroTextContainer {
   max-width: 520px;
-  width:100vw;
-  height:100vh;
-  max-height:430px;
-  display:flex;
-  flex-direction:column;
+  width: 100vw;
+  height: 100vh;
+  max-height: 430px;
+  display: flex;
+  flex-direction: column;
   margin-top: 2rem;
-align-items: center;
-padding:2em;
-  background:url(images/backgroundBgAbout.svg) no-repeat center;
-  bakcground-size:contain;
-  h2{
-      font-family: FONTSPRINGDEMO-RecoletaBold;
-  font-size: 26px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  text-align: left;
-  color: #161616;
+  align-items: flex-start;
+  padding: 2em;
+  background: url(images/backgroundBgAbout.svg) no-repeat center;
+  background-size: contain;
+  justify-content: space-around;
+  a{
+    display: inline-block;
+
+      width:163px; 
+      height:24px;
+    img{
+      width:100%;}
   }
-  p{
-      font-family: FONTSPRINGDEMO-RecoletaMedium;
-  font-size: 22px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.55;
-  letter-spacing: normal;
-  text-align: left;
-  color: #000;
+  h2 {
+    font-family: FONTSPRINGDEMO-RecoletaBold;
+    font-size: 26px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #161616;
+  }
+  p {
+    font-family: FONTSPRINGDEMO-RecoletaMedium;
+    font-size: 22px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.55;
+    letter-spacing: normal;
+    text-align: left;
+    color: #000;
   }
 }
+#timeline{
+  margin-top:-20px;
+  z-index: 1;
+  background:url(images/timelineBg.svg) ;
+  padding:1em;
+  h3
+  {
+     font-family: FONTSPRINGDEMO-RecoletaBold;
+  font-size: 50px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.48;
+  letter-spacing: normal;
+  text-align: center;
+  color: #fff;
+  }
+
+}
+#timeline{
+  h4 {
+  opacity: 0.7;
+  font-family: FONTSPRINGDEMO-RecoletaMedium;
+  font-size: 18px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.13;
+  letter-spacing: normal;
+  text-align: center;
+  color: #fff;
+    }
+}
+.sound-wave-container {
+bacground:red;}
