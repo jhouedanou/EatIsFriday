@@ -71,79 +71,77 @@
     "about": {
         "hero": {
             "title": "Bursting With Flavour. Built With Passion.",
-            "subtitle":"We are Eat Is Family",
+            "subtitle": "We are Eat Is Family",
             "description": "We bring handcrafted food, bold flavour and reliable operations to stadiums, arenas and the biggest festivals in France. Our work mixes human warmth with professional scale — and our story is worth a look.",
             "image": {
                 "src": "images/unsplash_6vfYbDwOuMocopie.png",
                 "alt": "Team working in kitchen"
             },
-            "buttonContact":"images/btnContactAbout.svg"
+            "buttonContact": "images/btnContactAbout.svg"
         },
         "timeline": {
             "title": "Our Journey Through Time: From one\nfood truck to tens of venues",
-            "subtitle":"Drag playhead or click markers to explore",
+            "subtitle": "Drag playhead or click markers to explore",
             "events": [
                 {
-                    "id":1,
+                    "id": 1,
                     "year": "13 jUNE 2015",
-                    "title":"First Meal",
+                    "title": "First Meal",
                     "event": "What started as a single food truck with a bold vision has grown into France leading event catering company. We began with simple, honest food and a commitment to quality that still drives us today.",
-                    "eventImage":"images/timeline/01.png"
+                    "eventImage": "images/timeline/01.png"
                 },
                 {
-                    "id":2,
+                    "id": 2,
                     "year": "22 AUGUST 2017",
-                    "title":"Expanding Horizons",
+                    "title": "Expanding Horizons",
                     "event": "With a growing reputation for excellence, we expanded our operations to include multiple food trucks and pop-up kitchens at major events across France.",
-                    "eventImage":"images/timeline/02.png"
+                    "eventImage": "images/timeline/02.png"
                 },
                 {
-                    "id":3,
+                    "id": 3,
                     "year": "15 MAY 2019",
-                    "title":"Culinary Excellence",
+                    "title": "Culinary Excellence",
                     "event": "We partnered with renowned chefs to elevate our menu offerings, introducing gourmet options that delighted our customers and set us apart in the industry.",
-                    "eventImage":"images/timeline/03.png"
+                    "eventImage": "images/timeline/03.png"
                 },
                 {
-                    "id":4,
+                    "id": 4,
                     "year": "30 SEPTEMBER 2021",
-                    "title":"Nationwide Presence",
+                    "title": "Nationwide Presence",
                     "event": "Our commitment to quality and service led to partnerships with major venues and festivals nationwide, solidifying our position as a leader in event catering.",
-                    "eventImage":"images/timeline/04.png"
+                    "eventImage": "images/timeline/04.png"
                 },
                 {
-                    "id":5,
+                    "id": 5,
                     "year": "10 DECEMBER 2023",
-                    "title":"Sustainability Initiatives",
+                    "title": "Sustainability Initiatives",
                     "event": "We launched several sustainability initiatives, focusing on reducing waste, sourcing local ingredients, and promoting eco-friendly practices throughout our operations.",
-                    "eventImage":"images/timeline/05.png"
+                    "eventImage": "images/timeline/05.png"
                 },
                 {
-                    "id":6,
+                    "id": 6,
                     "year": "5 MARCH 2025",
-                    "title":"Looking Ahead",
+                    "title": "Looking Ahead",
                     "event": "As we look to the future, we remain dedicated to innovation, quality, and community. Our journey continues as we explore new culinary horizons and create unforgettable food experiences.",
-                    "eventImage":"images/timeline/06.png"
+                    "eventImage": "images/timeline/06.png"
                 }
-                
-               
             ]
         },
         "mission": {
             "title": "Where Food Becomes Art  and Moments\nBecome Magic",
-            "image":"images/image3.jpg",
+            "image": "images/image3.jpg",
             "encadres": [
                 {
                     "title": "what we do and our promise to you",
                     "desc": "We cater events of all sizes with a balance of professional service and artistic presentation. From intimate dinners to big celebrations, our dishes are carefully prepared, beautifully plated. \n\nWhether it’s a wedding, corporate event, birthday, or private dining, we deliver catering that feels fresh, exciting, and full of character. We don’t just serve food — we bring the experience.\n\nAt Eat Is Family, food isn’t just served.It’s celebrated. It’s shared. It’s remembered.",
-                    "btn":"",
-                    "link":""
+                    "btn": "",
+                    "link": ""
                 },
                 {
                     "title": "Our Philosophy and why we’re different",
                     "desc": "Good food. Good people. Good vibes. We show up with passion, precision, and personality. Every meal tells a story. Every plate gets treated like a canvas. Every client becomes part of our family.\n\nWe are different because we blend traditional flavours with modern, bold presentations,  we focus on family style warmth with high quality service  and we make your event feel alive, vibrant, and unforgettable",
-                    "btn":"images/btnGetInTouchAlt.svg",
-                    "link":"/contact"
+                    "btn": "images/btnGetInTouchAlt.svg",
+                    "link": "/contact"
                 }
             ]
         },
@@ -169,9 +167,41 @@
         },
         "vision": {
             "title": "The Brains Behind Eat\nis family",
-            "content": "Founded by Adrien Clerc and Jimmy Herbaux, two restaurateurs and event caterers convinced that a comprehensive food service would greatly facilitate the organization of events."
+            "content": "Founded by Adrien Clerc and Jimmy Herbaux, two restaurateurs and event caterers convinced that a comprehensive food service would greatly facilitate the organization of events.",
+            "image": "images/lesgens.webp"
+        },
+        "gallery_section": {
+            "images": [
+                {
+                    "src": "images/unsplash_6vfYbDwOuMo.jpg",
+                    "alt": "Grilled food presentation"
+                },
+                {
+                    "src": "images/image5.jpg",
+                    "alt": "Gourmet breakfast plate"
+                },
+                {
+                    "src": "images/neicurz.jpg",
+                    "alt": "Fresh pizza"
+                }
+            ]
+        },
+        "gallery_section2": {
+            "images": [
+                {
+                    "src": "images/34.jpg",
+                    "alt": "Grilled food presentation"
+                },
+                {
+                    "src": "images/23.jpg",
+                    "alt": "Gourmet breakfast plate"
+                },
+                {
+                    "src": "images/56.jpg",
+                    "alt": "Fresh pizza"
+                }
+            ]
         }
-       
     },
     "contact": {
         "hero": {

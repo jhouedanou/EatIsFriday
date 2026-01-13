@@ -146,11 +146,22 @@
         </div>
       </div>
     </section>
-    <PartnersSection
-      v-if="homepageContent?.partners"
-      :title="homepageContent.partners_title"
-      :partners="homepageContent.partners.map((p: any) => ({ ...p, name: p.alt }))"
-    />
+    <section v-if="siteContent?.about?.vision" id="vision" class="my-5">
+      <div class="container-fluid">
+        <TwoColumnText :title="siteContent.about.vision.title" :text="siteContent.about.vision.content" />
+        <img :src="siteContent.about.vision.image" :alt="siteContent.about.vision.image.alt"
+          class="img-fluid my-4 rounded w-100" />
+        <CtaBlock :text="homepageContent?.homepageCTA.additionalText" :link="homepageContent?.homepageCTA.link"
+          :button-image="homepageContent?.homepageCTA.button2" :button-alt="homepageContent?.homepageCTA.title" />
+      </div>
+    </section>
+    <GalleryGrid v-if="siteContent?.about?.gallery_section?.images"
+      :images="siteContent.about.gallery_section.images" />
+    <PartnersSection v-if="homepageContent?.partners" :title="homepageContent.partners_title"
+      :partners="homepageContent.partners.map((p: any) => ({ ...p, name: p.alt }))" />
+    
+      <GalleryGrid v-if="siteContent?.about?.gallery_section2?.images"
+      :images="siteContent.about.gallery_section2.images" />
   </div>
 </template>
 

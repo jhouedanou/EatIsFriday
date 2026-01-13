@@ -865,12 +865,14 @@ body {
   background-size: contain;
   justify-content: space-around;
   a {
-    display: inline-block;
-
+    display: block;
     width: 163px;
     height: 24px;
     img {
+      
       width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
   }
   h2 {
@@ -1041,3 +1043,37 @@ body {
 
   }
 }
+.damsnt {
+  
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    margin-bottom: .5rem;
+    margin-top: 0;
+    font-family: FONTSPRINGDEMO-RecoletaBold;
+    font-size: 50px;
+    line-height: normal;
+    color: #000;
+    font-stretch: normal;
+    font-style: normal;
+    font-weight: 800;
+    letter-spacing: normal;
+    text-align: left;}
+
+    .kemi{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 1rem;
+    margin-top: 0;
+    white-space: pre-line;
+    color: #000;
+    font-stretch: normal;
+    font-style: normal;
+    font-weight: 400;
+    letter-spacing: normal;
+    text-align: left;
+    font-family: FONTSPRINGDEMO-Recoleta-Regular!important;
+    font-size: 18px;
+    line-height: 1.56;
+    }
