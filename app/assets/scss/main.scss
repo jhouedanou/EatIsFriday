@@ -724,6 +724,13 @@ body {
   a {
     margin-top: 70px !important;
   }
+  a{
+    width: 291px;
+    height: 74px;
+    img{
+      width: 100%;
+    }
+  }
 }
 #service-0 {
   .service-desc {
@@ -788,6 +795,13 @@ body {
 }
 
 #lasalle {
+  a{
+    width:271px;
+    height:74px;
+    img{
+      width:100%;
+    }
+  }
   .example {
     padding: 5px;
     .inner-example {
@@ -821,10 +835,21 @@ body {
   }
   #example-0 {
     .inner-example {
-      background: #a7f49d;
-      background-image: url(/images/concession.svg);
+      background:url(/images/bgRE2.svg);
       background-repeat: no-repeat;
       background-position: right bottom;
+      position:relative;
+      &::before{
+        content:"";
+              background-image: url(/images/concession.svg);
+        width:221px;
+        height:195px;
+        display: block;
+        position: absolute;
+        bottom:0;
+        right:0;
+        background-size: contain;
+      }
     }
     h4 {
       z-index: 0;
@@ -847,7 +872,8 @@ body {
   }
   #example-1 {
     .inner-example {
-      background: #93cbff;
+      background:url(/images/bgRE.svg);        background-repeat: no-repeat;
+
     }
   }
 }
@@ -866,9 +892,9 @@ body {
   justify-content: space-around;
   a {
     display: inline-block;
-
-    width: 163px;
-    height: 24px;
+    display: inline-block;
+    width: 264px;
+    height: 73px;
     img {
       width: 100%;
     }
