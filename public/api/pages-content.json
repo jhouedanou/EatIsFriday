@@ -655,7 +655,7 @@
       "title": "Consulting services  Rooted in Real World Expertise",
       "subtitle":"We dont just cook — we help teams build systems that work.",
       "image":"images/unsplash_6vfYbDwOuMo2.jpg",
-      "meta_description": "Our consulting service supports restaurants, event venues, and food businesses looking to optimise workflows, scale operations, improve quality or launch new concepts.\n\nOur approach is grounded in real field expertise: the way teams communicate, how meals are prepared at scale, and how service truly runs when the pressure is high.",
+      "description": "Our consulting service supports restaurants, event venues, and food businesses looking to optimise workflows, scale operations, improve quality or launch new concepts.\n\nOur approach is grounded in real field expertise: the way teams communicate, how meals are prepared at scale, and how service truly runs when the pressure is high.",
       "btn":"images/btnContacts.svg",
       "link":"/contact"
     },

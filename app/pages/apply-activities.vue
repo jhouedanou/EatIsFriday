@@ -6,40 +6,50 @@
         <img :src="content.page_hero.image.src" :alt="content.page_hero.image.alt">
       </div>
     </section>
-<section v-if="content" id="mouf" class="booba">
-  <div id="denzel" class="container">
-    <h1 class="preserve-lines">{{ content.section2.text }}</h1>
-    <div id="rohff" class="d-flex justify-content-center align-items-center text-center gap-4 flex-wrap">
-    <nuxtlink :to="content.section2.link1">
-      <img :src="content.section2.btn1" >
-    </nuxtlink>
-     <nuxtlink :to="content.section2.link2">
-      <img :src="content.section2.btn2" >
-    </nuxtlink>
-    </div>
-  </div>
-</section>
-<section v-if="activities" class="explore-section">  
-  <HomeExploreSection />
-</section>
-<section>
-  <!-- parteners  -->
-   <PartnersSection v-if="homepageContent?.partners" :title="homepageContent.partners_title"
-      :partners="homepageContent.partners.map((p: any) => ({ ...p, name: p.alt }))" />
-    <!-- gallery grid -->
+    <section v-if="content" id="mouf" class="booba">
+      <div id="denzel" class="container">
+        <h1 class="preserve-lines">{{ content.section2.text }}</h1>
+        <div id="rohff" class="d-flex justify-content-center align-items-center text-center gap-4 flex-wrap">
+          <nuxtlink :to="content.section2.link1">
+            <img :src="content.section2.btn1">
+          </nuxtlink>
+          <nuxtlink :to="content.section2.link2">
+            <img :src="content.section2.btn2">
+          </nuxtlink>
+        </div>
+      </div>
+    </section>
+    <section v-if="activities && content?.textedelapage">
+      <div class="row container-fluid p-0 m-0 d-flex align-items-center">
+        <div class="col-5">
+          <h3 class="font-header">{{ content.textedeapage.title }}</h3>
+          <p>{{ content.textedelapage.subtitle }}</p>
+
+          <ul>
+            <li v-for="(item, index) in content.textedelapage.liste" :key="index">{{ item }}</li>
+          </ul>
+        </div>
+        <div class="col-7">
+          <img :src="content.textedeapage.image" alt="Services illustration" class="img-fluid">
+        </div>
+      </div>
+    </section>
+    <section v-if="activities" class="explore-section">
+      <HomeExploreSection />
+    </section>
+    <section>
+      <!-- parteners  -->
+      <PartnersSection v-if="homepageContent?.partners" :title="homepageContent.partners_title"
+        :partners="homepageContent.partners.map((p: any) => ({ ...p, name: p.alt }))" />
+      <!-- gallery grid -->
       <GalleryGrid v-if="siteContent?.about?.gallery_section2?.images"
-      :images="siteContent.about.gallery_section2.images" />
-   <!--  ready to make an impact -->
-    <HomepageCTA v-if="content?.homepageCTA"
-      :image="content.homepageCTA.image"
-      :title="content.homepageCTA.title"
-      :description="content.homepageCTA.description"
-      :link="content.homepageCTA.link"
-      :button-image="content.homepageCTA.button"
-      :additional-text="content.homepageCTA.additionalText"
-      :button-image2="content.homepageCTA.button2"
-    />
-</section>
+        :images="siteContent.about.gallery_section2.images" />
+      <!--  ready to make an impact -->
+      <HomepageCTA v-if="content?.homepageCTA" :image="content.homepageCTA.image" :title="content.homepageCTA.title"
+        :description="content.homepageCTA.description" :link="content.homepageCTA.link"
+        :button-image="content.homepageCTA.button" :additional-text="content.homepageCTA.additionalText"
+        :button-image2="content.homepageCTA.button2" />
+    </section>
   </div>
 </template>
 
@@ -48,7 +58,7 @@ import { ref, onMounted } from 'vue'
 const { getSiteContent } = useSiteContent()
 
 const { getActivities } = useActivities()
-const { getContentByPath , getHomepageContent} = usePageContent()
+const { getContentByPath, getHomepageContent } = usePageContent()
 const homepageContent = ref<any>(null)
 const siteContent = ref<any>(null)
 const activities = ref<any>(null)
@@ -76,100 +86,108 @@ useHead(() => ({
   font-size: 1.25rem;
   color: #718096;
 }
+
 #future.page-hero {
-     background: white !important;
-    text-align: center;
-    margin: 0;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    position: relative;
-    align-items: center;
-    padding: 117px 0 0 0;
-    height: 100%;
+  background: white !important;
+  text-align: center;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  align-items: center;
+  padding: 117px 0 0 0;
+  height: 100%;
+
   ::before {
-      content: "";
-      display: block;
-      background-image: url("/images/bgVector.svg");
-      background-size: contain;
-      width: 100%;
-      height: 300px;
-      background-repeat: no-repeat;
-      top: 10pc;
-      position: absolute;
+    content: "";
+    display: block;
+    background-image: url("/images/bgVector.svg");
+    background-size: contain;
+    width: 100%;
+    height: 300px;
+    background-repeat: no-repeat;
+    top: 10pc;
+    position: absolute;
   }
 
   h1 {
     font-family: FONTSPRINGDEMO-RecoletaBold;
-  font-size: 75px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.2;
-  letter-spacing: normal;
-  text-align: center;
-  color: #000b0f;
-  z-index: 1;
-    white-space: pre-line; /* To handle newline characters */
-    position:relative;
-    &::before{
-      display:none !important;
+    font-size: 75px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.2;
+    letter-spacing: normal;
+    text-align: center;
+    color: #000b0f;
+    z-index: 1;
+    white-space: pre-line;
+    /* To handle newline characters */
+    position: relative;
+
+    &::before {
+      display: none !important;
     }
+
     &::after {
-        
-    content: "";
-    display: block;
-    background-image: url(/images/line5.svg);
-    background-size: contain;
-    width: 450px;
-    height: 100px;
-    background-repeat: no-repeat;
-    position: absolute;
-    z-index: -1;
-    margin: auto;
-    right: 0;
-    left: 0;
-    top: 0;
+
+      content: "";
+      display: block;
+      background-image: url(/images/line5.svg);
+      background-size: contain;
+      width: 450px;
+      height: 100px;
+      background-repeat: no-repeat;
+      position: absolute;
+      z-index: -1;
+      margin: auto;
+      right: 0;
+      left: 0;
+      top: 0;
     }
-  
+
   }
 }
 
 #mouf {
-       background: url("/images/unsplash_6vfYbDwOuMo.svg");
-    background-size: cover;
-    padding: 4em 0 !important;
-    background-repeat: no-repeat;
-    position: relative;
-    min-height: 66vh;
-  &:after{
-    background:url("/images/concession.svg");
-    content:"";
-    display:block;
-    position:absolute;
-    width:100%;
-    right:0;
-    bottom:0;
-    width:221px;
-    height:195px;
+  background: url("/images/unsplash_6vfYbDwOuMo.svg");
+  background-size: cover;
+  padding: 4em 0 !important;
+  background-repeat: no-repeat;
+  position: relative;
+  min-height: 66vh;
+
+  &:after {
+    background: url("/images/concession.svg");
+    content: "";
+    display: block;
+    position: absolute;
+    width: 100%;
+    right: 0;
+    bottom: 0;
+    width: 221px;
+    height: 195px;
   }
-  h1{
-      font-family: FONTSPRINGDEMO-RecoletaMedium;
-  font-size: 34px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.47;
-  letter-spacing: normal;
-  text-align: center;
-  color: #000;
-  max-width: 1066px;
-  padding:60px auto;
+
+  h1 {
+    font-family: FONTSPRINGDEMO-RecoletaMedium;
+    font-size: 34px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.47;
+    letter-spacing: normal;
+    text-align: center;
+    color: #000;
+    max-width: 1066px;
+    padding: 60px auto;
   }
 }
-#rohff{
+
+#rohff {
   margin-top: 15px;
-  padding:20px 0;
+  padding: 20px 0;
 }
 </style>
