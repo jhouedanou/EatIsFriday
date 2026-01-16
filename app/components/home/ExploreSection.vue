@@ -100,7 +100,7 @@ const closeVenueDetails = () => {
           <!-- Info: Location, Capacity, Staff -->
           <div class="venue-info-row">
             <div class="venue-info-item">
-              <span class="venue-info-icon">📍</span>
+              <span class="venue-info-icon"><img src="/images/mapIcon.svg" alt=""></span>
               <span class="venue-info-text">{{ selectedVenue.location }}</span>
             </div>
             <div class="venue-info-item">
@@ -404,7 +404,7 @@ const closeVenueDetails = () => {
 
 .venue-image {
   width: 100%;
-  height: 120px;
+  height: 300px;
   background-size: cover;
   background-position: center;
 }
@@ -472,10 +472,15 @@ const closeVenueDetails = () => {
 }
 
 .venue-name {
-  font-family: FONTSPRINGDEMO-RecoletaBold, Georgia, serif;
-  font-size: 1.25rem;
-  color: #FF4D6D;
-  margin: 0;
+  font-family: FONTSPRINGDEMO-RecoletaSemiBold;
+  font-size: 24px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 2.2;
+  letter-spacing: normal;
+  text-align: left;
+  color: #f9375b;
   text-transform: uppercase;
 }
 
@@ -499,12 +504,37 @@ const closeVenueDetails = () => {
 }
 
 .venue-info-label {
-  color: #666;
-}
+ font-family: FONTSPRINGDEMO-RecoletaMedium;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.42;
+  letter-spacing: normal;
+  text-align: left;
+  color: #000;}
 
-.venue-info-value {
-  color: #333;
-  font-weight: 500;
+.venue-info-value{
+  font-family: FONTSPRINGDEMO-RecoletaMedium;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.42;
+  letter-spacing: normal;
+  text-align: left;
+  color: #000;
+}
+.venue-info-text{
+  font-family: FONTSPRINGDEMO-RecoletaBold;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.42;
+  letter-spacing: normal;
+  text-align: left;
+  color: #000;
 }
 
 .venue-event-banner {
