@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import type { Event } from '~/composables/useEvents'
-
-const { getContentByPath } = usePageContent()
-
+const { getSiteContent } = useSiteContent()
+const { getContentByPath, getHomepageContent } = usePageContent()
+const siteContent = ref<any>(null)
+const pageContent = ref<any>(null)
 const content = ref<any>(null)
 const events = ref<Event[]>([])
 const loading = ref(true)
@@ -11,6 +12,9 @@ const loading = ref(true)
 onMounted(async () => {
   // Charger le contenu de la page
   content.value = await getContentByPath('events')
+
+  // Charger le site content pour la galerie
+  siteContent.value = await getSiteContent()
 
   // Charger les événements depuis events.json
   try {
@@ -68,8 +72,21 @@ useHead({
           Loading events...
         </div>
 
-        <div v-else-if="events.length > 0" class="events-grid">
-          <CardsEventCard v-for="event in events" :key="event.id" :event="event" />
+        <div v-else-if="events.length > 0">
+          <!-- First half of events (odd) -->
+          <div class="events-grid">
+            <CardsEventCard v-for="(event, index) in events.slice(0, Math.ceil(events.length / 2))" :key="event.id"
+              :event="event" :is-even="index % 2 === 0" />
+          </div>
+
+          <!-- Gallery component in the middle -->
+          <GalleryGrid v-if="siteContent?.about?.gallery_section2?.images"
+            :images="siteContent.about.gallery_section2.images" />
+          <!-- Second half of events (even) -->
+          <div class="events-grid">
+            <CardsEventCard v-for="(event, index) in events.slice(Math.ceil(events.length / 2))" :key="event.id"
+              :event="event" :is-even="index % 2 === 0" />
+          </div>
         </div>
 
         <div v-else class="no-events">
@@ -92,14 +109,17 @@ useHead({
   justify-content: flex-end;
   display: flex;
   align-items: flex-end;
-  a{  
-     width: 250px;
-  height: 70px;
-    img{
+
+  a {
     width: 250px;
-height: 70px;
+    height: 70px;
+
+    img {
+      width: 250px;
+      height: 70px;
+    }
   }
-  }
+
   .loris {
     display: flex;
     flex-direction: column;
@@ -125,7 +145,22 @@ height: 70px;
     letter-spacing: normal;
     text-align: left;
     color: #000;
-
+    z-index:1;
+    position: relative;
+    &::before {
+      z-index: -1;
+      position: absolute;
+      content: "";
+      background: url(/images/decoHeaderBg.svg);
+      background-size: contain;
+      width: 100vw;
+      max-width: 400px;
+      height: 100vh;
+      max-height: 80px;
+      background-repeat: no-repeat;
+      top: 1vh;
+      left: -1vw;
+    }
   }
 
   .subtitle {
@@ -144,24 +179,27 @@ height: 70px;
 
 .intro-section {
   padding: 4rem 0;
-  background-color:white;
-background-image: url('/images/vectorBgAbout.svg');
-background-repeat: no-repeat;
-background-position: center;
-background-size: contain;
- .container {
+  background-color: white;
+  background-image: url('/images/vectorBgAbout.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  .container {
     max-width: 1100px;
-    margin: 0 auto;}
+    margin: 0 auto;
+  }
+
   .intro-text {
-     font-family: FONTSPRINGDEMO-RecoletaMedium;
-  font-size: 34px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.59;
-  letter-spacing: normal;
-  text-align: center;
-  color: #000;
+    font-family: FONTSPRINGDEMO-RecoletaMedium;
+    font-size: 34px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.59;
+    letter-spacing: normal;
+    text-align: center;
+    color: #000;
   }
 }
 
@@ -175,14 +213,14 @@ background-size: contain;
 
   .section-description {
     font-family: FONTSPRINGDEMO-RecoletaBold;
-  font-size: 50px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  text-align: left;
-  color: #000;
+    font-size: 50px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #000;
   }
 }
 

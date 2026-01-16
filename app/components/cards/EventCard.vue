@@ -7,8 +7,12 @@
     <div class="card-content">
       <h3>{{ event.title }}</h3>
       <p class="description">{{ event.description }}</p>
-      <NuxtLink :to="`/events/${event.slug}`" class="btn-view">
-        View Event
+      <NuxtLink :to="`/contacts`">
+        <img
+          :src="isEven ? '/images/contact-even.svg' : '/images/contact-odd.svg'"
+          alt="Contact"
+          class="contact-image"
+        />
       </NuxtLink>
     </div>
   </div>
@@ -19,6 +23,7 @@ import type { Event } from '~/composables/useEvents'
 
 defineProps<{
   event: Event
+  isEven?: boolean
 }>()
 </script>
 
@@ -27,13 +32,11 @@ defineProps<{
   background: white;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 4px 4px 0 rgba(0, 0, 0, 1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .event-card:hover {
   transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0 rgba(0, 0, 0, 1);
 }
 
 .card-image {
