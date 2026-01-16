@@ -1,10 +1,17 @@
 <template>
-  <div class="event-card">
+  <div class="event-card" :class="{ 'is-even': isEven, 'is-odd': !isEven }">
     <div class="card-image">
       <img :src="event.image" :alt="event.title" loading="lazy" />
       <span class="event-type-badge">{{ event.event_type }}</span>
     </div>
-    <div class="card-content">
+    <div
+      class="card-content"
+      :style="{
+        backgroundColor: currentColor,
+        borderColor: currentColor
+      }"
+    >
+      <div class="torn-edge" :class="{ 'torn-edge-right': isEven, 'torn-edge-left': !isEven }"></div>
       <h3>{{ event.title }}</h3>
       <p class="description">{{ event.description }}</p>
       <NuxtLink :to="`/contacts`">
@@ -19,20 +26,48 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import type { Event } from '~/composables/useEvents'
 
-defineProps<{
+const props = defineProps<{
   event: Event
-  isEven?: boolean
+  colorIndex?: number
 }>()
+
+const colors = [
+  '#a7f49d', // green
+  '#ffffff', // white
+  '#d7a8ff', // purple
+  '#93cbff', // blue
+  '#ffffff', // white
+  '#f93257'  // red/pink
+]
+
+const currentColor = computed(() => {
+  const index = (props.colorIndex ?? 0) % colors.length
+  return colors[index]
+})
+
+const isEven = computed(() => (props.colorIndex ?? 0) % 2 === 0)
 </script>
 
 <style scoped>
 .event-card {
+  display: flex;
   background: white;
   border-radius: 12px;
-  overflow: hidden;
+  overflow: visible;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Even: image right, content left */
+.event-card.is-even {
+  flex-direction: row-reverse;
+}
+
+/* Odd: image left, content right */
+.event-card.is-odd {
+  flex-direction: row;
 }
 
 .event-card:hover {
@@ -41,8 +76,17 @@ defineProps<{
 
 .card-image {
   position: relative;
-  height: 200px;
+  flex: 1;
+  min-height: 300px;
   overflow: hidden;
+}
+
+.is-even .card-image {
+  border-radius: 0 12px 12px 0;
+}
+
+.is-odd .card-image {
+  border-radius: 12px 0 0 12px;
 }
 
 .card-image img {
@@ -69,7 +113,75 @@ defineProps<{
 }
 
 .card-content {
+  position: relative;
+  flex: 1;
   padding: 1.5rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  border: 3px solid;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.is-even .card-content {
+  border-right: none;
+  border-radius: 12px 0 0 12px;
+}
+
+.is-odd .card-content {
+  border-left: none;
+  border-radius: 0 12px 12px 0;
+}
+
+/* Torn edge on the left side (for odd cards - content is on right) */
+.torn-edge-left {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  left: -12px;
+  width: 20px;
+  background: inherit;
+  background-color: inherit;
+  clip-path: polygon(
+    50% 0%,
+    60% 2%, 45% 4%, 55% 6%, 48% 8%, 58% 10%,
+    42% 12%, 55% 14%, 47% 16%, 60% 18%, 45% 20%,
+    55% 22%, 48% 24%, 58% 26%, 42% 28%, 55% 30%,
+    47% 32%, 60% 34%, 45% 36%, 55% 38%, 48% 40%,
+    58% 42%, 42% 44%, 55% 46%, 47% 48%, 60% 50%,
+    45% 52%, 55% 54%, 48% 56%, 58% 58%, 42% 60%,
+    55% 62%, 47% 64%, 60% 66%, 45% 68%, 55% 70%,
+    48% 72%, 58% 74%, 42% 76%, 55% 78%, 47% 80%,
+    60% 82%, 45% 84%, 55% 86%, 48% 88%, 58% 90%,
+    42% 92%, 55% 94%, 47% 96%, 60% 98%, 50% 100%,
+    100% 100%, 100% 0%
+  );
+}
+
+/* Torn edge on the right side (for even cards - content is on left) */
+.torn-edge-right {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  right: -12px;
+  width: 20px;
+  background: inherit;
+  background-color: inherit;
+  clip-path: polygon(
+    50% 0%,
+    40% 2%, 55% 4%, 45% 6%, 52% 8%, 42% 10%,
+    58% 12%, 45% 14%, 53% 16%, 40% 18%, 55% 20%,
+    45% 22%, 52% 24%, 42% 26%, 58% 28%, 45% 30%,
+    53% 32%, 40% 34%, 55% 36%, 45% 38%, 52% 40%,
+    42% 42%, 58% 44%, 45% 46%, 53% 48%, 40% 50%,
+    55% 52%, 45% 54%, 52% 56%, 42% 58%, 58% 60%,
+    45% 62%, 53% 64%, 40% 66%, 55% 68%, 45% 70%,
+    52% 72%, 42% 74%, 58% 76%, 45% 78%, 53% 80%,
+    40% 82%, 55% 84%, 45% 86%, 52% 88%, 42% 90%,
+    58% 92%, 45% 94%, 53% 96%, 40% 98%, 50% 100%,
+    0% 100%, 0% 0%
+  );
 }
 
 .card-content h3 {
@@ -86,18 +198,56 @@ defineProps<{
   font-size: 0.95rem;
 }
 
-.btn-view {
-  display: inline-block;
-  background: #FF4D6D;
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: background 0.3s ease;
+.contact-image {
+  max-width: 150px;
+  height: auto;
 }
 
-.btn-view:hover {
-  background: #e63956;
+/* Responsive: stack on mobile */
+@media (max-width: 768px) {
+  .event-card.is-even,
+  .event-card.is-odd {
+    flex-direction: column;
+  }
+
+  .card-image {
+    min-height: 200px;
+  }
+
+  .is-even .card-image,
+  .is-odd .card-image {
+    border-radius: 12px 12px 0 0;
+  }
+
+  .is-even .card-content,
+  .is-odd .card-content {
+    border: 3px solid;
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+  }
+
+  .torn-edge-left,
+  .torn-edge-right {
+    top: -12px;
+    left: -3px;
+    right: -3px;
+    bottom: auto;
+    width: auto;
+    height: 20px;
+    clip-path: polygon(
+      0% 50%,
+      2% 60%, 4% 45%, 6% 55%, 8% 48%, 10% 58%,
+      12% 42%, 14% 55%, 16% 47%, 18% 60%, 20% 45%,
+      22% 55%, 24% 48%, 26% 58%, 28% 42%, 30% 55%,
+      32% 47%, 34% 60%, 36% 45%, 38% 55%, 40% 48%,
+      42% 58%, 44% 42%, 46% 55%, 48% 47%, 50% 60%,
+      52% 45%, 54% 55%, 56% 48%, 58% 58%, 60% 42%,
+      62% 55%, 64% 47%, 66% 60%, 68% 45%, 70% 55%,
+      72% 48%, 74% 58%, 76% 42%, 78% 55%, 80% 47%,
+      82% 60%, 84% 45%, 86% 55%, 88% 48%, 90% 58%,
+      92% 42%, 94% 55%, 96% 47%, 98% 60%, 100% 50%,
+      100% 100%, 0% 100%
+    );
+  }
 }
 </style>

@@ -76,7 +76,7 @@ useHead({
           <!-- First half of events (odd) -->
           <div class="events-grid">
             <CardsEventCard v-for="(event, index) in events.slice(0, Math.ceil(events.length / 2))" :key="event.id"
-              :event="event" :is-even="index % 2 === 0" />
+              :event="event" :color-index="index" />
           </div>
 
           <!-- Gallery component in the middle -->
@@ -85,7 +85,7 @@ useHead({
           <!-- Second half of events (even) -->
           <div class="events-grid">
             <CardsEventCard v-for="(event, index) in events.slice(Math.ceil(events.length / 2))" :key="event.id"
-              :event="event" :is-even="index % 2 === 0" />
+              :event="event" :color-index="index + Math.ceil(events.length / 2)" />
           </div>
         </div>
 
@@ -225,8 +225,8 @@ useHead({
 }
 
 .events-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 2rem;
 }
 
