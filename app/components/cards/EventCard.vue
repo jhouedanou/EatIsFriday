@@ -1,5 +1,5 @@
 <template>
-  <div class="event-card" :class="{ 'is-even': isEven, 'is-odd': !isEven }">
+  <div class="event-card" :class="[colorClass, { 'is-even': isEven, 'is-odd': !isEven }]">
     <div class="card-image">
       <img :src="event.image" :alt="event.title" loading="lazy" />
       <span class="event-type-badge">{{ event.event_type }}</span>
@@ -43,15 +43,18 @@ const colors = [
   '#f93257'  // red/pink
 ]
 
-const currentColor = computed(() => {
-  const index = (props.colorIndex ?? 0) % colors.length
-  return colors[index]
-})
+const colorNames = ['green', 'white', 'purple', 'blue', 'white-alt', 'red']
+
+const currentIndex = computed(() => (props.colorIndex ?? 0) % colors.length)
+
+const currentColor = computed(() => colors[currentIndex.value])
+
+const colorClass = computed(() => `color-${colorNames[currentIndex.value]}`)
 
 const isEven = computed(() => (props.colorIndex ?? 0) % 2 === 0)
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .event-card {
   display: flex;
   background: white;
@@ -184,18 +187,16 @@ const isEven = computed(() => (props.colorIndex ?? 0) % 2 === 0)
   );
 }
 
-.card-content h3 {
-  font-family: 'Recoleta', serif;
-  font-size: 1.25rem;
-  margin-bottom: 0.75rem;
-  color: #2d3748;
-}
 
-.description {
-  color: #4a5568;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-  font-size: 0.95rem;
+.description {  font-family: FONTSPRINGDEMO-RecoletaMedium;
+  font-size: 18px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.56;
+  letter-spacing: normal;
+  text-align: left;
+  color: #000;
 }
 
 .contact-image {
@@ -248,6 +249,141 @@ const isEven = computed(() => (props.colorIndex ?? 0) % 2 === 0)
       92% 42%, 94% 55%, 96% 47%, 98% 60%, 100% 50%,
       100% 100%, 0% 100%
     );
+  }
+}
+
+.card-content {
+  h3 {
+    font-family: FONTSPRINGDEMO-RecoletaBold;
+  font-size: 50px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color:black;
+}
+}
+
+.color-green{
+  h3{
+    z-index:1;
+    &::before{
+ z-index: -1;
+      position: absolute;
+      content: "";
+      background: url(/images/decoHeaderBg.svg);
+      background-size: contain;
+      width: 100vw;
+      max-width: 400px;
+      height: 100vh;
+      max-height: 80px;
+      background-repeat: no-repeat;
+      top: 1vh;
+      left: -1vw;
+    }
+  }
+
+}
+.color-white{
+  h3{
+    z-index:1;
+    &::before{
+ z-index: -1;
+      position: absolute;
+      content: "";
+      background: url(/images/decoHeaderBg.svg);
+      background-size: contain;
+      width: 100vw;
+      max-width: 400px;
+      height: 100vh;
+      max-height: 80px;
+      background-repeat: no-repeat;
+      top: 1vh;
+      left: -1vw;
+    }
+  }
+
+}
+.color-purple{
+  h3{
+    z-index:1;
+    &::before{
+ z-index: -1;
+      position: absolute;
+      content: "";
+      background: url(/images/decoHeaderBg.svg);
+      background-size: contain;
+      width: 100vw;
+      max-width: 400px;
+      height: 100vh;
+      max-height: 80px;
+      background-repeat: no-repeat;
+      top: 1vh;
+      left: -1vw;
+    }
+  }
+}
+.color-blue{
+  h3{
+    z-index:1;
+    &::before{
+ z-index: -1;
+      position: absolute;
+      content: "";
+      background: url(/images/decoHeaderBg.svg);
+      background-size: contain;
+      width: 100vw;
+      max-width: 400px;
+      height: 100vh;
+      max-height: 80px;
+      background-repeat: no-repeat;
+      top: 1vh;
+      left: -1vw;
+    }
+  }
+}
+.color-white-alt{
+  h3{
+    z-index:1;
+    &::before{
+ z-index: -1;
+      position: absolute;
+      content: "";
+      background: url(/images/decoHeaderBg.svg);
+      background-size: contain;
+      width: 100vw;
+      max-width: 400px;
+      height: 100vh;
+      max-height: 80px;
+      background-repeat: no-repeat;
+      top: 1vh;
+      left: -1vw;
+    }
+  }
+}
+.color-red{
+  h3{
+    z-index:1;
+    color:white !important;
+    &::before{
+ z-index: -1;
+      position: absolute;
+      content: "";
+      background: url(/images/decoHeaderBg.svg);
+      background-size: contain;
+      width: 100vw;
+      max-width: 400px;
+      height: 100vh;
+      max-height: 80px;
+      background-repeat: no-repeat;
+      top: 1vh;
+      left: -1vw;
+    }
+    .description  {
+      color:white !important;
+    }
   }
 }
 </style>
