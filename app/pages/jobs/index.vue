@@ -144,51 +144,48 @@ useHead({
           <!-- Filters Row -->
           <div class="filters-row">
             <!-- Job Type Dropdown -->
-            <div class="dropdown-wrapper" @click.stop>
+            <div class="dropdown-wrapper">
               <button
                 class="filter-button"
                 :class="{ 'has-value': selectedJobType }"
-                @click="showJobTypeDropdown = !showJobTypeDropdown; showLocationDropdown = false"
+                @click.stop="showJobTypeDropdown = !showJobTypeDropdown; showLocationDropdown = false"
               >
                 <LucideBriefcase class="filter-icon" />
                 <span>{{ selectedJobType || 'Job Type' }}</span>
                 <LucideChevronDown class="chevron" :class="{ 'rotated': showJobTypeDropdown }" />
               </button>
-              <Transition name="dropdown">
-                <div v-if="showJobTypeDropdown" class="dropdown-menu">
-                  <button
-                    class="dropdown-item"
-                    :class="{ 'active': !selectedJobType }"
-                    @click="selectedJobType = ''; showJobTypeDropdown = false"
-                  >
-                    All Types
-                  </button>
-                  <button
-                    v-for="type in uniqueJobTypes"
-                    :key="type"
-                    class="dropdown-item"
-                    :class="{ 'active': selectedJobType === type }"
-                    @click="selectedJobType = type; showJobTypeDropdown = false"
-                  >
-                    {{ type }}
-                  </button>
-                </div>
-              </Transition>
+              <div class="dropdown-menu" :class="{ 'is-visible': showJobTypeDropdown }" @click.stop>
+                <button
+                  class="dropdown-item"
+                  :class="{ 'active': !selectedJobType }"
+                  @click="selectedJobType = ''; showJobTypeDropdown = false"
+                >
+                  All Types
+                </button>
+                <button
+                  v-for="type in uniqueJobTypes"
+                  :key="type"
+                  class="dropdown-item"
+                  :class="{ 'active': selectedJobType === type }"
+                  @click="selectedJobType = type; showJobTypeDropdown = false"
+                >
+                  {{ type }}
+                </button>
+              </div>
             </div>
 
             <!-- Location Dropdown -->
-            <div class="dropdown-wrapper" @click.stop>
+            <div class="dropdown-wrapper">
               <button
                 class="filter-button"
                 :class="{ 'has-value': selectedLocation }"
-                @click="showLocationDropdown = !showLocationDropdown; showJobTypeDropdown = false"
+                @click.stop="showLocationDropdown = !showLocationDropdown; showJobTypeDropdown = false"
               >
                 <LucideMapPin class="filter-icon" />
                 <span>{{ selectedLocation || 'Location' }}</span>
                 <LucideChevronDown class="chevron" :class="{ 'rotated': showLocationDropdown }" />
               </button>
-              <Transition name="dropdown">
-                <div v-if="showLocationDropdown" class="dropdown-menu">
+              <div class="dropdown-menu" :class="{ 'is-visible': showLocationDropdown }" @click.stop>
                   <button
                     class="dropdown-item"
                     :class="{ 'active': !selectedLocation }"
@@ -206,7 +203,6 @@ useHead({
                     {{ location }}
                   </button>
                 </div>
-              </Transition>
             </div>
 
             <!-- Clear Filters -->
@@ -534,6 +530,14 @@ useHead({
   box-shadow: 4px 4px 0 rgba(0, 0, 0, 1);
   overflow: hidden;
   z-index: 100;
+
+  // Caché par défaut
+  display: none;
+
+  // Visible quand la classe is-visible est présente
+  &.is-visible {
+    display: block;
+  }
 }
 
 .dropdown-item {

@@ -13,19 +13,6 @@ const { data: jobs, pending, error } = useLazyFetch<Job[]>('/api/jobs.json', {
   server: false
 })
 
-// Debug: watch for changes
-watch(jobs, (newJobs) => {
-  console.log('Jobs data changed:', newJobs)
-  console.log('Jobs length:', newJobs?.length)
-}, { immediate: true })
-
-watch(pending, (isPending) => {
-  console.log('Pending state:', isPending)
-}, { immediate: true })
-
-watch(error, (err) => {
-  console.log('Error:', err)
-}, { immediate: true })
 
 const getJobTitle = (job: Job) => {
   return typeof job.title === 'string' ? job.title : job.title?.rendered || ''
@@ -43,13 +30,22 @@ const uniqueJobTitles = computed(() => {
 })
 
 const uniqueSites = computed(() => {
-  console.log('Computing uniqueSites, jobs.value:', jobs.value)
   if (!jobs.value) return []
   const sites = jobs.value.map(job => job.location).filter(Boolean)
-  const unique = [...new Set(sites)]
-  console.log('Unique sites:', unique)
-  return unique
+  return [...new Set(sites)]
 })
+
+const navigateToJob = (job: Job) => {
+  showJobTitleDropdown.value = false
+  navigateTo(`/jobs/${job.slug}`)
+}
+
+const selectSiteAndSearch = (site: string) => {
+  selectedSite.value = site
+  showSiteDropdown.value = false
+  // Navigate to jobs page filtered by location
+  navigateTo(`/jobs?location=${encodeURIComponent(site)}`)
+}
 
 const handleSearch = () => {
   const query = new URLSearchParams()
@@ -63,34 +59,24 @@ const handleSearch = () => {
 }
 
 const toggleJobTitleDropdown = () => {
-  console.log('Toggle job title dropdown, current:', showJobTitleDropdown.value)
   showJobTitleDropdown.value = !showJobTitleDropdown.value
   showSiteDropdown.value = false
-  console.log('After toggle:', showJobTitleDropdown.value)
 }
 
 const toggleSiteDropdown = () => {
-  console.log('Toggle site dropdown, current:', showSiteDropdown.value)
   showSiteDropdown.value = !showSiteDropdown.value
   showJobTitleDropdown.value = false
-  console.log('After toggle:', showSiteDropdown.value)
 }
 
 const closeDropdowns = (e: Event) => {
   const target = e.target as HTMLElement
-  // Ne fermer que si on clique en dehors du formulaire entier
   if (!target.closest('.job-search-form')) {
-    console.log('Closing dropdowns - clicked outside form')
     showJobTitleDropdown.value = false
     showSiteDropdown.value = false
   }
 }
 
 onMounted(() => {
-  console.log('JobSearchForm mounted')
-  console.log('Initial jobs.value:', jobs.value)
-  console.log('Initial pending:', pending.value)
-  console.log('Initial error:', error.value)
   document.addEventListener('click', closeDropdowns)
 })
 
@@ -104,7 +90,6 @@ onUnmounted(() => {
     <div class="form-header">
       <h2 class="form-title">Find Your Perfect Role</h2>
       <p class="form-subtitle">Explore more than {{ jobs?.length || 0 }} open positions across France</p>
-      <p style="font-size: 11px; color: green;">Debug: {{ uniqueJobTitles.length }} titles, {{ uniqueSites.length }} sites loaded</p>
     </div>
 
     <div class="form-fields">
@@ -128,7 +113,7 @@ onUnmounted(() => {
             <button
               class="dropdown-item"
               :class="{ 'active': selectedJobTitle === '' }"
-              @click="selectedJobTitle = ''; showJobTitleDropdown = false"
+              @click="selectedJobTitle = ''; showJobTitleDropdown = false; navigateTo('/jobs')"
             >
               All job titles
             </button>
@@ -165,7 +150,7 @@ onUnmounted(() => {
             <button
               class="dropdown-item"
               :class="{ 'active': selectedSite === '' }"
-              @click="selectedSite = ''; showSiteDropdown = false"
+              @click="selectedSite = ''; showSiteDropdown = false; navigateTo('/jobs')"
             >
               All sites
             </button>
@@ -174,7 +159,7 @@ onUnmounted(() => {
               :key="site"
               class="dropdown-item"
               :class="{ 'active': selectedSite === site }"
-              @click="selectedSite = site; showSiteDropdown = false"
+              @click="selectSiteAndSearch(site)"
             >
               {{ site }}
             </button>
