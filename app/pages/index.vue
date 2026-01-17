@@ -46,10 +46,15 @@ onMounted(async () => {
     <!-- Hero Section -->
     <section id="hero" class="container-fluid d-flex align-items-center v-90 px-0 w-100">
       <div class="d-flex flex-row row w-100">
-        <!-- image de la nourriture -->
-        <div id="marr" class="col-lg-6 col-md-6 p-0 min-vh-100"
-          :style="{ position: 'relative', backgroundImage: `url('${content.hero_section.bg}')`, backgroundSize: 'cover', backgroundPosition: 'center' }">
-          <span></span>
+        <!-- image de la nourriture avec formulaire de recherche d'emploi -->
+        <div id="marr" class="col-lg-6 col-md-6 p-0 min-vh-100 position-relative"
+          :style="{ backgroundImage: `url('${content.hero_section.bg}')`, backgroundSize: 'cover', backgroundPosition: 'center' }">
+          <!-- Blur overlay -->
+          <div class="hero-blur-overlay"></div>
+          <!-- Job Search Form -->
+          <div class="job-search-form-wrapper">
+            <FormsJobSearchForm />
+          </div>
         </div>
         <!-- right: Text -->
         <div id="blusy" class="col-lg-6 col-md-6 p-4 d-flex flex-wrap
@@ -233,6 +238,57 @@ nuxt-link:has(img) {
 
 .min-vh-90 {
   min-height: 90vh;
+}
+
+.hero-blur-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 245, 238, 0.3) 0%,
+    rgba(255, 220, 200, 0.2) 50%,
+    rgba(255, 200, 180, 0.3) 100%
+  );
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1;
+}
+
+.job-search-form-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: 90%;
+  max-width: 520px;
+  padding: 1rem;
+}
+
+.job-search-form-placeholder {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  border-radius: 1.5rem;
+  padding: 2.5rem;
+  text-align: center;
+  color: rgba(26, 26, 26, 0.6);
+}
+
+@media (max-width: 768px) {
+  .job-search-form-wrapper {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    width: 100%;
+    max-width: none;
+    padding: 2rem 1rem;
+  }
+
+  #marr {
+    min-height: auto !important;
+    padding: 2rem 0 !important;
+  }
 }
 
 .highlight-bar {

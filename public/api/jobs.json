@@ -1,101 +1,312 @@
 [
   {
     "id": 1,
-    "slug": "senior-frontend-developer",
-    "title": {
-      "rendered": "Senior Frontend Developer"
-    },
+    "slug": "head-chef-vip-hospitality-stade-jean-bouin",
+    "title": { "rendered": "Head Chef – VIP Hospitality" },
     "excerpt": {
-      "rendered": "Join our dynamic team as a Senior Frontend Developer and help build amazing web experiences."
+      "rendered": "Lead the culinary experience in VIP suites and corporate hospitality areas during major events."
     },
     "content": {
-      "rendered": "<p>We are looking for an experienced Senior Frontend Developer to join our growing team. You will be responsible for developing and maintaining high-quality web applications using modern frameworks and technologies.</p><p>As a Senior Frontend Developer, you will work closely with our design and backend teams to create seamless user experiences. You'll have the opportunity to mentor junior developers and contribute to our technical architecture decisions.</p>"
+      "rendered": "<p>We are looking for an experienced Head Chef to lead VIP culinary operations during high-profile sporting events and concerts. You will oversee menu execution, kitchen coordination, and service standards for premium guests.</p><p>You will manage a team of chefs, ensure HACCP compliance, collaborate with hospitality teams, and deliver consistent fine-dining quality under event-time pressure.</p>"
     },
-    "location": "Paris, France (Remote possible)",
+    "location": "Stade Jean Bouin, Paris",
     "job_type": "Full-time",
-    "salary": "€60,000 - €80,000",
+    "salary": "$150 - $200 / hour",
     "requirements": [
-      "5+ years of experience in frontend development",
-      "Expert knowledge of Vue.js, Nuxt.js, and modern JavaScript",
-      "Strong understanding of HTML5, CSS3, and responsive design",
-      "Experience with REST APIs and state management",
-      "Excellent problem-solving and communication skills"
+      "5+ years experience in high-volume fine dining or premium event catering",
+      "Strong leadership and team management skills (10+ kitchen staff)",
+      "Excellent knowledge of food safety standards (HACCP)",
+      "Ability to plan menus and control food costs",
+      "French and English communication skills"
     ],
     "benefits": [
-      "Competitive salary and benefits package",
-      "Remote work flexibility",
-      "Professional development opportunities",
-      "Health insurance",
-      "25 days paid vacation"
+      "Work on major events in an iconic venue",
+      "Competitive compensation",
+      "Professional growth and leadership opportunities",
+      "Dynamic team environment",
+      "High-quality kitchen equipment and resources"
     ],
-    "featured_media": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800",
-    "date": "2025-12-20T10:00:00",
+    "featured_media": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800",
+    "date": "2026-01-17T10:00:00",
     "status": "publish"
   },
   {
     "id": 2,
-    "slug": "ux-ui-designer",
-    "title": {
-      "rendered": "UX/UI Designer"
-    },
+    "slug": "sous-chef-vip-suites-paris",
+    "title": { "rendered": "Sous Chef – VIP Suites" },
     "excerpt": {
-      "rendered": "Create beautiful and intuitive user interfaces that delight our customers."
+      "rendered": "Support the Head Chef and drive flawless execution for VIP hospitality service."
     },
     "content": {
-      "rendered": "<p>We're seeking a talented UX/UI Designer to join our creative team. You will be responsible for designing user-centered digital experiences that are both beautiful and functional.</p><p>In this role, you'll conduct user research, create wireframes and prototypes, and work closely with developers to bring your designs to life. You'll have the opportunity to shape the visual identity of our products and contribute to our design system.</p>"
+      "rendered": "<p>As Sous Chef, you will support VIP production and service execution, ensuring quality, timing, and consistency across premium guest areas.</p><p>You will supervise stations, coordinate prep, assist with ordering and inventory, and maintain hygiene standards throughout event operations.</p>"
     },
-    "location": "Lyon, France",
+    "location": "Paris, France",
     "job_type": "Full-time",
-    "salary": "€45,000 - €65,000",
+    "salary": "$90 - $130 / hour",
     "requirements": [
-      "3+ years of experience in UX/UI design",
-      "Proficiency in Figma, Sketch, or Adobe XD",
-      "Strong portfolio demonstrating user-centered design",
-      "Understanding of design systems and accessibility",
-      "Excellent communication and collaboration skills"
+      "3+ years in fine dining, banqueting, or event catering",
+      "Strong pass/expediting experience",
+      "Solid knowledge of kitchen organization and prep planning",
+      "Ability to lead a station team under time pressure",
+      "Availability on evenings/weekends during events"
     ],
     "benefits": [
-      "Creative and collaborative work environment",
-      "Latest design tools and equipment",
-      "Flexible working hours",
-      "Health and wellness benefits",
-      "Career growth opportunities"
+      "Premium event environment",
+      "Clear career pathway to Head Chef roles",
+      "Meals provided during shifts",
+      "Supportive leadership team",
+      "Ongoing training on service standards"
     ],
-    "featured_media": "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800",
-    "date": "2025-12-18T14:30:00",
+    "featured_media": "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=800",
+    "date": "2026-01-16T09:30:00",
     "status": "publish"
   },
   {
     "id": 3,
-    "slug": "backend-developer-nodejs",
-    "title": {
-      "rendered": "Backend Developer (Node.js)"
-    },
+    "slug": "pastry-chef-hospitality-events-paris",
+    "title": { "rendered": "Pastry Chef – Hospitality Events" },
     "excerpt": {
-      "rendered": "Build scalable and robust backend systems with Node.js and modern technologies."
+      "rendered": "Create refined desserts and plated pastry for VIP guests during large-scale events."
     },
     "content": {
-      "rendered": "<p>We are looking for a skilled Backend Developer with expertise in Node.js to join our engineering team. You will design and implement scalable APIs and services that power our applications.</p><p>You'll work on challenging technical problems, optimize database performance, and ensure the security and reliability of our backend infrastructure. This is a great opportunity to work with cutting-edge technologies and contribute to architectural decisions.</p>"
+      "rendered": "<p>We are seeking a Pastry Chef to design and execute elegant desserts for VIP hospitality lounges and suites. You will manage pastry production, plating standards, and seasonal creations aligned with event menus.</p><p>You will work closely with the culinary leadership team to ensure premium presentation and consistent output at high volume.</p>"
     },
-    "location": "Remote",
+    "location": "Paris, France",
     "job_type": "Full-time",
-    "salary": "€50,000 - €70,000",
+    "salary": "$70 - $110 / hour",
     "requirements": [
-      "4+ years of backend development experience",
-      "Strong proficiency in Node.js and Express.js",
-      "Experience with databases (PostgreSQL, MongoDB)",
-      "Knowledge of RESTful API design and microservices",
-      "Familiarity with Docker and cloud platforms (AWS, GCP)"
+      "3+ years experience as pastry chef or senior pastry role",
+      "Strong plating and modern pastry techniques",
+      "Experience with production planning for high-volume service",
+      "Knowledge of allergens and labeling best practices",
+      "Creativity and attention to detail"
     ],
     "benefits": [
-      "100% remote work",
-      "Flexible schedule",
-      "Modern tech stack",
-      "Learning and development budget",
-      "Team retreats and events"
+      "Creative menu space for signature desserts",
+      "Premium clientele and high standards",
+      "Professional development opportunities",
+      "Access to quality ingredients and tools",
+      "Team events and recognition culture"
     ],
-    "featured_media": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800",
-    "date": "2025-12-15T09:00:00",
+    "featured_media": "https://images.unsplash.com/photo-1514516873430-83a62b1c5f97?w=800",
+    "date": "2026-01-15T14:00:00",
+    "status": "publish"
+  },
+  {
+    "id": 4,
+    "slug": "vip-hospitality-service-manager-paris",
+    "title": { "rendered": "VIP Hospitality Service Manager" },
+    "excerpt": {
+      "rendered": "Manage guest experience and service teams across VIP lounges, suites, and premium zones."
+    },
+    "content": {
+      "rendered": "<p>As VIP Hospitality Service Manager, you will oversee front-of-house operations for premium guests during events. You’ll coordinate service teams, ensure timing and quality, and resolve guest needs proactively.</p><p>You will partner with culinary leadership, logistics, and venue ops to deliver seamless high-end hospitality.</p>"
+    },
+    "location": "Stade Jean Bouin, Paris",
+    "job_type": "Full-time",
+    "salary": "€45,000 - €60,000",
+    "requirements": [
+      "4+ years in hospitality service management (hotel, events, or premium lounges)",
+      "Strong leadership and staff coordination skills",
+      "Excellent guest relation and problem-solving abilities",
+      "Comfortable working evenings/weekends during events",
+      "Fluent French, professional English preferred"
+    ],
+    "benefits": [
+      "High-end service environment",
+      "Leadership responsibilities with visibility",
+      "Performance-based bonuses",
+      "Professional training and certifications",
+      "Fast-paced and rewarding team culture"
+    ],
+    "featured_media": "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=800",
+    "date": "2026-01-14T10:15:00",
+    "status": "publish"
+  },
+  {
+    "id": 5,
+    "slug": "event-catering-coordinator-paris",
+    "title": { "rendered": "Event Catering Coordinator" },
+    "excerpt": {
+      "rendered": "Coordinate catering logistics, timing, and vendor flow for major venue events."
+    },
+    "content": {
+      "rendered": "<p>We are hiring an Event Catering Coordinator to support planning and on-the-day execution of catering operations. You will manage schedules, deliveries, stock flow, and coordination between kitchen and service teams.</p><p>This role is critical to ensure the right resources are in the right place at the right time during high-attendance events.</p>"
+    },
+    "location": "Paris, France",
+    "job_type": "Full-time",
+    "salary": "€35,000 - €45,000",
+    "requirements": [
+      "2+ years in event operations, hospitality logistics, or catering coordination",
+      "Strong organization and communication skills",
+      "Ability to manage multiple stakeholders under pressure",
+      "Comfortable with inventory tracking and basic reporting",
+      "Availability on event schedules (evenings/weekends)"
+    ],
+    "benefits": [
+      "Exposure to large-scale events operations",
+      "Structured growth into ops management",
+      "Transport support on late shifts",
+      "Team meals during event days",
+      "Training on venue processes and standards"
+    ],
+    "featured_media": "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=800",
+    "date": "2026-01-13T09:00:00",
+    "status": "publish"
+  },
+  {
+    "id": 6,
+    "slug": "line-cook-vip-hospitality-paris",
+    "title": { "rendered": "Line Cook – VIP Hospitality" },
+    "excerpt": {
+      "rendered": "Execute premium dishes with precision for VIP lounges and corporate suites."
+    },
+    "content": {
+      "rendered": "<p>We are looking for skilled Line Cooks to join our VIP hospitality kitchen team. You will run a station, execute recipes to standard, and support service during peak event periods.</p><p>Ideal candidates are fast, precise, and comfortable in high-volume environments with elevated presentation standards.</p>"
+    },
+    "location": "Paris, France",
+    "job_type": "Part-time",
+    "salary": "€18 - €28 / hour",
+    "requirements": [
+      "1-3 years experience as line cook or commis in a professional kitchen",
+      "Strong mise en place and station discipline",
+      "Ability to follow recipes and plating guides",
+      "Knowledge of food safety basics",
+      "Availability on event days"
+    ],
+    "benefits": [
+      "Flexible event-based scheduling",
+      "Premium kitchen environment",
+      "Opportunity to learn from senior chefs",
+      "Meals provided during shifts",
+      "Potential to transition to full-time"
+    ],
+    "featured_media": "https://images.unsplash.com/photo-1555992336-cbf4b6b2f6c1?w=800",
+    "date": "2026-01-12T11:20:00",
+    "status": "publish"
+  },
+  {
+    "id": 7,
+    "slug": "bartender-vip-lounge-paris",
+    "title": { "rendered": "Bartender – VIP Lounge" },
+    "excerpt": {
+      "rendered": "Deliver premium bar service and craft cocktails in VIP hospitality areas."
+    },
+    "content": {
+      "rendered": "<p>We are seeking an experienced Bartender to provide high-end beverage service in VIP lounges and suites. You will prepare cocktails, manage bar stock, and ensure an exceptional guest experience.</p><p>You will work closely with service managers to maintain speed, presentation, and a polished, welcoming atmosphere.</p>"
+    },
+    "location": "Paris, France",
+    "job_type": "Part-time",
+    "salary": "€16 - €24 / hour",
+    "requirements": [
+      "2+ years bartending experience in premium venues",
+      "Knowledge of classic cocktails and service etiquette",
+      "Ability to manage bar setup, stock, and cleanliness",
+      "Strong customer service mindset",
+      "Comfortable with fast-paced event service"
+    ],
+    "benefits": [
+      "Event-based flexibility",
+      "Tips + competitive hourly pay",
+      "Premium clientele and service standards",
+      "Training on signature menus",
+      "Supportive team culture"
+    ],
+    "featured_media": "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=800",
+    "date": "2026-01-11T16:45:00",
+    "status": "publish"
+  },
+  {
+    "id": 8,
+    "slug": "guest-experience-host-vip-paris",
+    "title": { "rendered": "Guest Experience Host – VIP" },
+    "excerpt": {
+      "rendered": "Welcome VIP guests, guide seating, and ensure a seamless premium experience."
+    },
+    "content": {
+      "rendered": "<p>As a Guest Experience Host, you will be the face of our VIP hospitality spaces. You’ll welcome guests, support check-in, coordinate seating, and ensure guests feel cared for throughout the event.</p><p>You will communicate with service teams and respond quickly to guest needs with professionalism and warmth.</p>"
+    },
+    "location": "Stade Jean Bouin, Paris",
+    "job_type": "Part-time",
+    "salary": "€14 - €18 / hour",
+    "requirements": [
+      "1+ year experience in hospitality, reception, or guest services",
+      "Excellent communication and presentation",
+      "Comfortable in busy, high-visibility environments",
+      "Fluent French; English is a plus",
+      "Availability on event schedules"
+    ],
+    "benefits": [
+      "Great entry point into premium hospitality",
+      "Flexible shifts around event calendar",
+      "Uniform provided",
+      "Training on guest experience standards",
+      "Team-based environment"
+    ],
+    "featured_media": "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=800",
+    "date": "2026-01-10T10:00:00",
+    "status": "publish"
+  },
+  {
+    "id": 9,
+    "slug": "food-safety-quality-supervisor-events-paris",
+    "title": { "rendered": "Food Safety & Quality Supervisor – Events" },
+    "excerpt": {
+      "rendered": "Ensure HACCP compliance and quality standards across event catering operations."
+    },
+    "content": {
+      "rendered": "<p>We are seeking a Food Safety & Quality Supervisor to enforce hygiene, labeling, temperature controls, and process standards across kitchen and service areas during events.</p><p>You will conduct checks, support corrective actions, and help teams maintain consistent compliance in a fast-paced environment.</p>"
+    },
+    "location": "Paris, France",
+    "job_type": "Full-time",
+    "salary": "€40,000 - €55,000",
+    "requirements": [
+      "3+ years in food safety or quality roles (hospitality/catering preferred)",
+      "Strong HACCP knowledge and auditing experience",
+      "Ability to train teams and enforce standards diplomatically",
+      "Comfortable working on-site during events",
+      "Strong reporting and documentation skills"
+    ],
+    "benefits": [
+      "High-impact role across operations",
+      "Training budget for certifications",
+      "Strong cross-team collaboration",
+      "Career progression into quality leadership",
+      "Stable full-time contract"
+    ],
+    "featured_media": "https://images.unsplash.com/photo-1556761175-4b46a572b786?w=800",
+    "date": "2026-01-09T09:10:00",
+    "status": "publish"
+  },
+  {
+    "id": 10,
+    "slug": "kitchen-steward-dishwasher-events-paris",
+    "title": { "rendered": "Kitchen Steward / Dishwasher – Events" },
+    "excerpt": {
+      "rendered": "Keep the kitchen running smoothly with fast, organized cleaning and stewarding support."
+    },
+    "content": {
+      "rendered": "<p>We are hiring Kitchen Stewards to support event operations by maintaining cleanliness, washing dishes, organizing equipment, and ensuring work areas stay safe and efficient.</p><p>This role is essential to keeping service flowing during busy event periods.</p>"
+    },
+    "location": "Paris, France",
+    "job_type": "Part-time",
+    "salary": "€12 - €15 / hour",
+    "requirements": [
+      "Ability to work fast and stay organized",
+      "Comfortable with physical tasks and long standing periods",
+      "Basic understanding of hygiene and cleaning standards",
+      "Team spirit and reliability",
+      "Availability on event schedules"
+    ],
+    "benefits": [
+      "Flexible event-based shifts",
+      "Meals provided during shifts",
+      "Supportive team environment",
+      "Opportunity to grow into kitchen roles",
+      "Transport support on late shifts (where applicable)"
+    ],
+    "featured_media": "https://images.unsplash.com/photo-1556761175-4b46a572b786?w=800",
+    "date": "2026-01-08T08:30:00",
     "status": "publish"
   }
 ]
