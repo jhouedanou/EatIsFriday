@@ -116,6 +116,7 @@ const closeVenueDetails = () => {
           <!-- Recent event banner -->
           <div class="venue-event-banner">
             <div class="venue-event-item">
+               <nuxt-image src="images/iconCal.svg" alt="Staff Icon"></nuxt-image>
               <span class="venue-event-label">RECENT EVENT</span>
               <span class="venue-event-value">{{ selectedVenue.recent_event }}</span>
             </div>
@@ -148,8 +149,7 @@ const closeVenueDetails = () => {
           <NuxtLink
             :to="`/jobs?location=${encodeURIComponent(selectedVenue.location)}`"
             class="venue-join-btn"
-          >
-        view positions
+          >Job offers in {{ selectedVenue.name }}
           </NuxtLink>
         </div>
 
@@ -547,7 +547,8 @@ const closeVenueDetails = () => {
 
 .venue-event-banner {
   display: flex;
-  background-color: #d4e5ff;
+  background:url(images/infoContainer.svg);background-repeat:no-repeat;
+  background-size:contain;
   border-radius: 8px;
   padding: 0.75rem;
   margin-bottom: 1rem;
@@ -559,64 +560,107 @@ const closeVenueDetails = () => {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  position: relative;
+  &::nth-of-type(2){
+  &::before {
+    margin-right: 6px;
+    content:"";
+    height:100%;
+    width:1px;
+    background:url(images/divider.svg) no-repeat;
+    position:absolute;
+    left:0;
+  }}
 }
 
 .venue-event-label {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.6rem;
-  font-weight: 600;
-  color: #666;
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
+ display: flex;
+ align-items: center;
+   font-family: FONTSPRINGDEMO-Recoleta;
+  font-size: 11px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.5;
+  letter-spacing: 0.26px;
+  text-align: left;
+  color: rgba(26, 26, 26, 0.8);
 }
 
 .venue-event-label::before {
-  content: '📅';
-  font-size: 0.7rem;
+  margin-right: 6px;
+  content: "";
+  display:block;
+    background: url(images/iconCal.svg) no-repeat;
+  width: 16px;height:16px;  
 }
 
 .venue-event-item:last-child .venue-event-label::before {
-  content: '👥';
-}
+  content: "";
+  display:block;
+    background: url(images/iconPeople.svg) no-repeat;
+  width: 16px;height:16px;  } 
 
 .venue-event-value {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: #333;
+   font-family: FONTSPRINGDEMO-RecoletaMedium;
+  font-size: 13px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.25;
+  letter-spacing: normal;
+  text-align: left;
+  color: #000;
 }
 
 .venue-tabs {
   display: flex;
   gap: 0.5rem;
   margin-bottom: 1rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: solid 1px rgba(0, 0, 0, 0.6);
   padding-bottom: 0.5rem;
 }
 
 .venue-tab {
   background: none;
   border: none;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: #999;
-  cursor: pointer;
-  padding: 0.25rem 0;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  transition: color 0.2s ease;
+   font-family: FONTSPRINGDEMO-RecoletaSemiBold;
+  font-size: 15px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.36;
+  letter-spacing: 0.34px;
+  text-align: left;
+  color: rgba(0, 0, 0, 0.6);
+
+filter: alpha(opacity=50); /* internet explorer */
+  -khtml-opacity: 0.5;      /* khtml, old safari */
+  -moz-opacity: 0.5;       /* mozilla, netscape */
+  opacity: 0.5;           /* fx, safari, opera */
+  
 }
 
 .venue-tab.active {
   color: #FF4D6D;
+
+
+       filter: alpha(opacity=100); /* internet explorer */
+        -khtml-opacity: 1;      /* khtml, old safari */
+        -moz-opacity: 1;       /* mozilla, netscape */
+        opacity: 1;           /* fx, safari, opera */
+          
 }
 
 .venue-tab:hover {
   color: #FF4D6D;
+  
+  
+         filter: alpha(opacity=100); /* internet explorer */
+          -khtml-opacity: 1;      /* khtml, old safari */
+          -moz-opacity: 1;       /* mozilla, netscape */
+          opacity: 1;           /* fx, safari, opera */
+          
 }
 
 .tab-icon {
@@ -628,45 +672,49 @@ const closeVenueDetails = () => {
 }
 
 .venue-about-title {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #333;
-  margin: 0 0 0.5rem 0;
-  text-transform: uppercase;
+   font-family: FONTSPRINGDEMO-RecoletaMedium;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.26px;
+  text-align: left;
+  color: rgba(26, 26, 26, 0.8);
 }
 
 .venue-about-text {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.8rem;
-  color: #666;
-  line-height: 1.5;
-  margin: 0;
+   font-family: FONTSPRINGDEMO-Recoleta;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.8;
+  letter-spacing: normal;
+  text-align: left;
+  color: #000;
 }
 
 /* Join Now Button */
-.venue-join-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 1.5rem;
-  padding: 0.875rem 2rem;
-  background-color: #FF4D6D;
-  color: white;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 600;
-  text-decoration: none;
-  border-radius: 50px;
-  border: 2px solid #1A1A1A;
-  box-shadow: 3px 3px 0 rgba(0, 0, 0, 1);
-  transition: all 0.2s ease;
-  cursor: pointer;
+.venue-join-btn {    background: url(images/button.svg);
+    width: 295px;
+    height: 104px;
+    background-size: contain;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: FONTSPRINGDEMO-RecoletaBold;
+    font-size: 20px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.4;
+    letter-spacing: normal;
+    text-align: center;
+    color: #fff;
+    text-decoration: none;
+    margin: 2rem auto 1rem auto;
+    transition: all 0.2s ease;
 }
 
-.venue-join-btn:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 5px 5px 0 rgba(0, 0, 0, 1);
-  background-color: #e63956;
-}
 </style>

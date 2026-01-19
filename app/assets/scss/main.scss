@@ -42,6 +42,14 @@
   font-style: normal;
   font-display: swap;
 }
+@font-face {
+  font-family: FONTSPRINGDEMO-Recoleta-Medium;
+  src: url("/fonts/Recoleta-Regular.woff2") format("woff2"),
+    url("/fonts/Recoleta-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
 @font-face {
   font-family: FONTSPRINGDEMO-RecoletaMedium;
