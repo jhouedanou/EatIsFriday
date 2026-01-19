@@ -2,6 +2,18 @@
 import { LucideSearch, LucideMapPin, LucideFilter, LucideBriefcase, LucideClock, LucideX, LucideChevronDown } from 'lucide-vue-next'
 import type { Job } from '~/composables/useJobs'
 
+interface Venue {
+  id: string
+  name: string
+  location: string
+  image?: string
+  image2?: string
+}
+
+interface LocationsData {
+  map_venues: Venue[]
+}
+
 const route = useRoute()
 const { getJobs } = useJobs()
 
@@ -13,6 +25,18 @@ const selectedJobType = ref('')
 const selectedLocation = ref('')
 const showJobTypeDropdown = ref(false)
 const showLocationDropdown = ref(false)
+
+// Load venues data for dynamic header
+const { data: locationsData } = await useFetch<LocationsData>('/api/locations.json')
+
+// Find the venue matching the selected location
+const activeVenue = computed(() => {
+  if (!selectedLocation.value || !locationsData.value?.map_venues) return null
+  return locationsData.value.map_venues.find(venue =>
+    venue.location === selectedLocation.value ||
+    venue.name.toLowerCase().includes(selectedLocation.value.toLowerCase())
+  ) || null
+})
 
 onMounted(async () => {
   const fetchedJobs = await getJobs()
@@ -59,10 +83,36 @@ const filteredJobs = computed(() => {
   })
 })
 
+// Pagination
+const ITEMS_PER_PAGE = 4
+const currentPage = ref(1)
+
+const totalPages = computed(() => {
+  return Math.ceil(filteredJobs.value.length / ITEMS_PER_PAGE)
+})
+
+const paginatedJobs = computed(() => {
+  const start = (currentPage.value - 1) * ITEMS_PER_PAGE
+  const end = start + ITEMS_PER_PAGE
+  return filteredJobs.value.slice(start, end)
+})
+
+const goToPage = (page: number) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page
+  }
+}
+
+// Reset to page 1 when filters change
+watch([searchQuery, selectedJobType, selectedLocation], () => {
+  currentPage.value = 1
+})
+
 const clearFilters = () => {
   searchQuery.value = ''
   selectedJobType.value = ''
   selectedLocation.value = ''
+  currentPage.value = 1
 }
 
 const hasActiveFilters = computed(() => {
@@ -104,15 +154,34 @@ useHead({
 <template>
   <div class="jobs-archive">
     <!-- Hero Section -->
-    <section class="hero-section">
-      <div class="hero-background">
+    <section class="hero-section" :class="{ 'has-venue': activeVenue }">
+      <div
+        class="hero-background"
+        :style="activeVenue ? { backgroundImage: `url('${activeVenue.image}')` } : {}"
+      >
         <div class="hero-overlay"></div>
       </div>
       <div class="container hero-content">
-        <span class="hero-tag">Careers</span>
-        <h1 class="hero-title">Join Our Team</h1>
-        <p class="hero-subtitle">Discover exciting opportunities in hospitality & culinary excellence</p>
-        <div class="hero-stats">
+        <span class="hero-tag">{{ activeVenue ? 'Now Hiring' : 'Careers' }}</span>
+        <h1 class="hero-title">
+          <template v-if="activeVenue">
+            Join Our Team At {{ activeVenue.name }}
+          </template>
+          <template v-else>
+            Join Our Team
+          </template>
+        </h1>
+        <p class="hero-subtitle">
+          <template v-if="activeVenue">
+            <LucideMapPin class="subtitle-icon" /> {{ activeVenue.location }}
+            <span class="subtitle-divider">•</span>
+            {{ filteredJobs.length }} Open Position{{ filteredJobs.length !== 1 ? 's' : '' }}
+          </template>
+          <template v-else>
+            Discover exciting opportunities in hospitality & culinary excellence
+          </template>
+        </p>
+        <div v-if="!activeVenue" class="hero-stats">
           <div class="stat-item">
             <span class="stat-number">{{ jobs.length }}</span>
             <span class="stat-label">Open Positions</span>
@@ -130,28 +199,25 @@ useHead({
     <section class="filters-section">
       <div class="container">
         <div class="filters-card">
-          <!-- Search Input -->
-          <div class="search-wrapper">
-            <LucideSearch class="search-icon" />
-            <input
-              v-model="searchQuery"
-              type="text"
-              placeholder="Search jobs by title or keyword..."
-              class="search-input"
-            />
-          </div>
-
-          <!-- Filters Row -->
           <div class="filters-row">
+            <!-- Search Input -->
+            <div class="search-field">
+              <LucideSearch class="field-icon" />
+              <input
+                v-model="searchQuery"
+                type="text"
+                placeholder="Search Job title and category here"
+                class="filter-input"
+              />
+            </div>
+
             <!-- Job Type Dropdown -->
             <div class="dropdown-wrapper">
               <button
-                class="filter-button"
-                :class="{ 'has-value': selectedJobType }"
-                @click.stop="showJobTypeDropdown = !showJobTypeDropdown; showLocationDropdown = false"
+                class="filter-select"
+                @click.stop="showJobTypeDropdown = !showJobTypeDropdown"
               >
-                <LucideBriefcase class="filter-icon" />
-                <span>{{ selectedJobType || 'Job Type' }}</span>
+                <span>{{ selectedJobType || 'All job types' }}</span>
                 <LucideChevronDown class="chevron" :class="{ 'rotated': showJobTypeDropdown }" />
               </button>
               <div class="dropdown-menu" :class="{ 'is-visible': showJobTypeDropdown }" @click.stop>
@@ -160,7 +226,7 @@ useHead({
                   :class="{ 'active': !selectedJobType }"
                   @click="selectedJobType = ''; showJobTypeDropdown = false"
                 >
-                  All Types
+                  All job types
                 </button>
                 <button
                   v-for="type in uniqueJobTypes"
@@ -173,47 +239,6 @@ useHead({
                 </button>
               </div>
             </div>
-
-            <!-- Location Dropdown -->
-            <div class="dropdown-wrapper">
-              <button
-                class="filter-button"
-                :class="{ 'has-value': selectedLocation }"
-                @click.stop="showLocationDropdown = !showLocationDropdown; showJobTypeDropdown = false"
-              >
-                <LucideMapPin class="filter-icon" />
-                <span>{{ selectedLocation || 'Location' }}</span>
-                <LucideChevronDown class="chevron" :class="{ 'rotated': showLocationDropdown }" />
-              </button>
-              <div class="dropdown-menu" :class="{ 'is-visible': showLocationDropdown }" @click.stop>
-                  <button
-                    class="dropdown-item"
-                    :class="{ 'active': !selectedLocation }"
-                    @click="selectedLocation = ''; showLocationDropdown = false"
-                  >
-                    All Locations
-                  </button>
-                  <button
-                    v-for="location in uniqueLocations"
-                    :key="location"
-                    class="dropdown-item"
-                    :class="{ 'active': selectedLocation === location }"
-                    @click="selectedLocation = location; showLocationDropdown = false"
-                  >
-                    {{ location }}
-                  </button>
-                </div>
-            </div>
-
-            <!-- Clear Filters -->
-            <button
-              v-if="hasActiveFilters"
-              class="clear-filters-btn"
-              @click="clearFilters"
-            >
-              <LucideX class="clear-icon" />
-              Clear Filters
-            </button>
           </div>
         </div>
       </div>
@@ -222,14 +247,6 @@ useHead({
     <!-- Jobs Listing Section -->
     <section class="jobs-section">
       <div class="container">
-        <!-- Results Count -->
-        <div class="results-header">
-          <h2 class="results-count">
-            <span class="count-number">{{ filteredJobs.length }}</span>
-            {{ filteredJobs.length === 1 ? 'Position' : 'Positions' }} Available
-          </h2>
-        </div>
-
         <!-- Loading State -->
         <div v-if="isLoading" class="loading-state">
           <div class="loading-spinner"></div>
@@ -237,49 +254,71 @@ useHead({
         </div>
 
         <!-- Jobs Grid -->
-        <div v-else-if="filteredJobs.length > 0" class="jobs-grid">
-          <article
-            v-for="job in filteredJobs"
-            :key="job.id"
-            class="job-card"
-          >
-            <div class="job-card-image">
-              <img :src="job.featured_media" :alt="getJobTitle(job)" loading="lazy" />
-              <span class="job-type-badge" :class="job.job_type.toLowerCase().replace('-', '')">
-                {{ job.job_type }}
-              </span>
-            </div>
-            <div class="job-card-content">
+        <div v-else-if="filteredJobs.length > 0">
+          <div class="jobs-grid">
+            <article
+              v-for="job in paginatedJobs"
+              :key="job.id"
+              class="job-card"
+            >
+              <!-- Card Header -->
+              <div class="job-card-header">
+                <span class="job-posted">Posted {{ Math.floor(Math.random() * 5) + 1 }} hours ago</span>
+              </div>
+
+              <!-- Job Title -->
               <h3 class="job-title">{{ getJobTitle(job) }}</h3>
 
-              <div class="job-meta">
-                <div class="meta-item">
-                  <LucideMapPin class="meta-icon" />
-                  <span>{{ job.location }}</span>
-                </div>
-                <div class="meta-item">
-                  <LucideClock class="meta-icon" />
-                  <span>{{ job.job_type }}</span>
-                </div>
+              <!-- Tags -->
+              <div class="job-tags">
+                <span class="tag tag-department">Department · Culinary</span>
+                <span class="tag tag-type" :class="job.job_type.toLowerCase().replace('-', '').replace(' ', '')">
+                  {{ job.job_type }}
+                </span>
+                <span class="tag tag-salary">{{ job.salary }}</span>
               </div>
 
+              <!-- Excerpt -->
               <p class="job-excerpt" v-html="getJobExcerpt(job)"></p>
 
-              <div class="job-salary">
-                <span class="salary-label">Salary:</span>
-                <span class="salary-value">{{ job.salary }}</span>
-              </div>
-
+              <!-- Actions -->
               <div class="job-actions">
-                <NuxtLink :to="`/jobs/${job.slug}`" class="btn-view-details">
-                  View Details
-                </NuxtLink>
                 <NuxtLink :to="`/jobs/${job.slug}#apply`" class="btn-apply">
                   Apply Now
                 </NuxtLink>
+                <NuxtLink :to="`/jobs/${job.slug}`" class="btn-view-details">
+                  View details
+                </NuxtLink>
               </div>
-            </div>
-          </article>
+            </article>
+          </div>
+
+          <!-- Pagination -->
+          <div v-if="totalPages > 1" class="pagination">
+            <button
+              class="pagination-btn"
+              :disabled="currentPage === 1"
+              @click="goToPage(currentPage - 1)"
+            >
+              &larr;
+            </button>
+            <button
+              v-for="page in totalPages"
+              :key="page"
+              class="pagination-btn"
+              :class="{ 'active': currentPage === page }"
+              @click="goToPage(page)"
+            >
+              {{ page }}
+            </button>
+            <button
+              class="pagination-btn"
+              :disabled="currentPage === totalPages"
+              @click="goToPage(currentPage + 1)"
+            >
+              &rarr;
+            </button>
+          </div>
         </div>
 
         <!-- No Results -->
@@ -320,6 +359,33 @@ useHead({
   position: relative;
   padding: 8rem 0 6rem;
   overflow: hidden;
+
+  // Dynamic venue header
+  &.has-venue {
+    padding: 10rem 0 6rem;
+
+    .hero-background {
+      background: none;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+
+      &::before {
+        display: none;
+      }
+    }
+
+    .hero-overlay {
+      background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.7) 100%);
+    }
+
+    .hero-title {
+      font-size: 2.75rem;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
 }
 
 .hero-background {
@@ -379,6 +445,20 @@ useHead({
   max-width: 500px;
   margin-left: auto;
   margin-right: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.subtitle-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.subtitle-divider {
+  margin: 0 0.25rem;
+  opacity: 0.6;
 }
 
 .hero-stats {
@@ -426,39 +506,45 @@ useHead({
 .filters-card {
   background: white;
   border-radius: 1rem;
-  padding: 1.5rem;
+  padding: 1rem;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
   border: 2px solid var(--brand-dark);
 }
 
-.search-wrapper {
-  position: relative;
-  margin-bottom: 1rem;
+.filters-row {
+  display: flex;
+  gap: 1rem;
+  align-items: stretch;
 }
 
-.search-icon {
+.search-field {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.field-icon {
   position: absolute;
-  left: 1.25rem;
-  top: 50%;
-  transform: translateY(-50%);
+  left: 1rem;
   width: 1.25rem;
   height: 1.25rem;
   color: rgba(0, 0, 0, 0.4);
+  pointer-events: none;
 }
 
-.search-input {
+.filter-input {
   width: 100%;
-  padding: 1rem 1rem 1rem 3.5rem;
+  padding: 0.875rem 1rem 0.875rem 3rem;
   border: 2px solid rgba(0, 0, 0, 0.1);
-  border-radius: 0.75rem;
-  font-size: 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.9375rem;
   font-family: var(--font-body);
   transition: all 0.2s ease;
 
   &:focus {
     outline: none;
     border-color: var(--brand-pink);
-    box-shadow: 0 0 0 3px rgba(255, 77, 109, 0.1);
   }
 
   &::placeholder {
@@ -466,25 +552,21 @@ useHead({
   }
 }
 
-.filters-row {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
 .dropdown-wrapper {
   position: relative;
+  min-width: 180px;
 }
 
-.filter-button {
+.filter-select {
+  width: 100%;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.5rem;
-  padding: 0.75rem 1.25rem;
-  background: var(--brand-gray);
-  border: 2px solid transparent;
-  border-radius: 0.75rem;
+  padding: 0.875rem 1rem;
+  background: white;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
   font-size: 0.9375rem;
   font-family: var(--font-body);
   color: var(--brand-dark);
@@ -492,20 +574,8 @@ useHead({
   transition: all 0.2s ease;
 
   &:hover {
-    background: white;
     border-color: var(--brand-dark);
   }
-
-  &.has-value {
-    background: var(--brand-lime);
-    border-color: var(--brand-dark);
-  }
-}
-
-.filter-icon {
-  width: 1rem;
-  height: 1rem;
-  opacity: 0.6;
 }
 
 .chevron {
@@ -523,18 +593,15 @@ useHead({
   position: absolute;
   top: calc(100% + 0.5rem);
   left: 0;
-  min-width: 200px;
+  right: 0;
   background: white;
   border: 2px solid var(--brand-dark);
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   box-shadow: 4px 4px 0 rgba(0, 0, 0, 1);
   overflow: hidden;
   z-index: 100;
-
-  // Caché par défaut
   display: none;
 
-  // Visible quand la classe is-visible est présente
   &.is-visible {
     display: block;
   }
@@ -543,7 +610,7 @@ useHead({
 .dropdown-item {
   display: block;
   width: 100%;
-  padding: 0.875rem 1.25rem;
+  padding: 0.75rem 1rem;
   text-align: left;
   background: none;
   border: none;
@@ -563,47 +630,9 @@ useHead({
   }
 }
 
-.clear-filters-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.25rem;
-  background: none;
-  border: none;
-  color: var(--brand-pink);
-  font-size: 0.9375rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-
-  &:hover {
-    opacity: 0.7;
-  }
-}
-
-.clear-icon {
-  width: 1rem;
-  height: 1rem;
-}
-
 // Jobs Section
 .jobs-section {
   padding: 2rem 0 4rem;
-}
-
-.results-header {
-  margin-bottom: 2rem;
-}
-
-.results-count {
-  font-family: var(--font-heading);
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--brand-dark);
-}
-
-.count-number {
-  color: var(--brand-pink);
 }
 
 // Loading State
@@ -631,18 +660,18 @@ useHead({
   to { transform: rotate(360deg); }
 }
 
-// Jobs Grid
+// Jobs Grid - 2 columns
 .jobs-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
 }
 
 .job-card {
   background: white;
   border: 2px solid var(--brand-dark);
   border-radius: 1rem;
-  overflow: hidden;
+  padding: 1.5rem;
   transition: all 0.3s ease;
 
   &:hover {
@@ -651,48 +680,13 @@ useHead({
   }
 }
 
-.job-card-image {
-  position: relative;
-  height: 180px;
-  overflow: hidden;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-  }
-
-  .job-card:hover & img {
-    transform: scale(1.05);
-  }
+.job-card-header {
+  margin-bottom: 0.75rem;
 }
 
-.job-type-badge {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  padding: 0.375rem 0.875rem;
-  background: var(--brand-dark);
-  color: white;
+.job-posted {
   font-size: 0.75rem;
-  font-weight: 600;
-  border-radius: 50px;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-
-  &.fulltime {
-    background: var(--brand-pink);
-  }
-
-  &.parttime {
-    background: var(--brand-blue);
-    color: var(--brand-dark);
-  }
-}
-
-.job-card-content {
-  padding: 1.5rem;
+  color: rgba(0, 0, 0, 0.5);
 }
 
 .job-title {
@@ -704,34 +698,52 @@ useHead({
   line-height: 1.3;
 }
 
-.job-meta {
+// Tags
+.job-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 0.5rem;
   margin-bottom: 1rem;
 }
 
-.meta-item {
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
-  font-size: 0.875rem;
-  color: rgba(0, 0, 0, 0.6);
+.tag {
+  display: inline-block;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 4px;
 }
 
-.meta-icon {
-  width: 1rem;
-  height: 1rem;
-  color: var(--brand-pink);
+.tag-department {
+  background: var(--brand-blue, #A0C4FF);
+  color: var(--brand-dark);
+}
+
+.tag-type {
+  background: var(--brand-lime, #C8F560);
+  color: var(--brand-dark);
+
+  &.fulltime {
+    background: var(--brand-lime);
+  }
+
+  &.parttime {
+    background: var(--brand-blue);
+  }
+}
+
+.tag-salary {
+  background: var(--brand-yellow, #FFDD00);
+  color: var(--brand-dark);
 }
 
 .job-excerpt {
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   color: rgba(0, 0, 0, 0.7);
   line-height: 1.6;
-  margin: 0 0 1rem;
+  margin: 0 0 1.25rem;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 
@@ -740,62 +752,82 @@ useHead({
   }
 }
 
-.job-salary {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
-  background: var(--brand-gray);
-  border-radius: 0.5rem;
-  margin-bottom: 1.25rem;
-}
-
-.salary-label {
-  font-size: 0.875rem;
-  color: rgba(0, 0, 0, 0.5);
-}
-
-.salary-value {
-  font-weight: 700;
-  color: var(--brand-dark);
-}
-
 .job-actions {
   display: flex;
   gap: 0.75rem;
 }
 
-.btn-view-details,
 .btn-apply {
-  flex: 1;
-  padding: 0.875rem 1rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--brand-pink);
+  color: white;
+  border: 2px solid var(--brand-dark);
   border-radius: 0.5rem;
   font-size: 0.875rem;
   font-weight: 600;
-  text-align: center;
   text-decoration: none;
   transition: all 0.2s ease;
+
+  &:hover {
+    background: #e63956;
+    box-shadow: 2px 2px 0 rgba(0, 0, 0, 1);
+    transform: translate(-2px, -2px);
+  }
 }
 
 .btn-view-details {
+  padding: 0.75rem 1.5rem;
   background: white;
   color: var(--brand-dark);
   border: 2px solid var(--brand-dark);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
 
   &:hover {
     background: var(--brand-gray);
   }
 }
 
-.btn-apply {
-  background: var(--brand-pink);
-  color: white;
-  border: 2px solid var(--brand-dark);
+// Pagination
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 2.5rem;
+}
 
-  &:hover {
-    background: darken(#FF4D6D, 8%);
-    box-shadow: 2px 2px 0 rgba(0, 0, 0, 1);
-    transform: translate(-2px, -2px);
+.pagination-btn {
+  min-width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 2px solid var(--brand-dark);
+  border-radius: 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--brand-dark);
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: var(--brand-gray);
+  }
+
+  &.active {
+    background: var(--brand-pink);
+    color: white;
+    border-color: var(--brand-dark);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
   }
 }
 
@@ -910,6 +942,14 @@ useHead({
 @media (max-width: 768px) {
   .hero-section {
     padding: 6rem 0 5rem;
+
+    &.has-venue {
+      padding: 7rem 0 4rem;
+
+      .hero-title {
+        font-size: 1.75rem;
+      }
+    }
   }
 
   .hero-title {
@@ -918,6 +958,7 @@ useHead({
 
   .hero-subtitle {
     font-size: 1rem;
+    flex-wrap: wrap;
   }
 
   .hero-stats {
@@ -932,20 +973,24 @@ useHead({
   }
 
   .filters-card {
-    padding: 1rem;
+    padding: 0.75rem;
   }
 
   .filters-row {
     flex-direction: column;
-    align-items: stretch;
+    gap: 0.75rem;
   }
 
-  .filter-button {
+  .search-field {
     width: 100%;
-    justify-content: space-between;
   }
 
-  .dropdown-menu {
+  .dropdown-wrapper {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .filter-select {
     width: 100%;
   }
 
@@ -953,8 +998,22 @@ useHead({
     grid-template-columns: 1fr;
   }
 
+  .job-card {
+    padding: 1.25rem;
+  }
+
   .job-actions {
     flex-direction: column;
+  }
+
+  .btn-apply,
+  .btn-view-details {
+    width: 100%;
+    text-align: center;
+  }
+
+  .pagination {
+    flex-wrap: wrap;
   }
 }
 </style>
