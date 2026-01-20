@@ -1,106 +1,219 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { LucideArrowRight, LucideX } from 'lucide-vue-next'
+import { ref } from 'vue'
+import { LucideX } from 'lucide-vue-next'
 
-const { getContentByPath } = usePageContent()
-const content = ref<any>(null)
+const router = useRouter()
+const route = useRoute()
 
-// In a real app, this would come from an API based on route params
-const article = {
+// In production, fetch article based on route.params.slug
+const article = ref({
   title: 'The Future Of Stadium Catering: 5 Trends Reshaping The Industry',
   date: 'Posted 3 hours ago',
   image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?q=80&w=1200&auto=format&fit=crop',
   content: `
-    <p>The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible.</p>
+    <p>The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible.. The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible.. The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible.. The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible.</p>
 
-    <p>The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible. The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible.</p>
-
-    <p>The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible. The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible.</p>
-
-    <p>The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible. The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible.</p>
+    <p>The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible. The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible. The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible.. The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible.</p>
   `
-}
-
-onMounted(async () => {
-  content.value = await getContentByPath('blog.detail')
 })
+
+const goBack = () => {
+  router.back()
+}
 </script>
 
 <template>
-  <div v-if="content" class="min-vh-100 bg-white">
+  <div class="blog-detail-page">
     <!-- Close Button -->
-    <button class="position-fixed top-0 end-0 mt-4 me-4 close-btn rounded-circle bg-brand-yellow d-flex align-items-center justify-content-center border border-2 border-dark shadow-organic">
-      <LucideX style="width: 1.5rem; height: 1.5rem;" />
+    <button class="close-btn" @click="goBack" aria-label="Close">
+      <LucideX :size="24" />
     </button>
 
-    <article class="container py-5 article-container">
+    <article class="article-container">
       <!-- Header -->
-      <header class="mb-4">
-        <h1 class="font-heading display-4 fw-bold lh-sm mb-3">
-          <span class="position-relative d-inline">
-            {{ article.title.split(':')[0] }}:
-          </span>
-          <span class="position-relative d-inline-block">
-            {{ article.title.split(':')[1] }}
-            <span class="position-absolute bottom-0 start-0 w-100 bg-brand-yellow highlight-bar"></span>
-          </span>
+      <header class="article-header">
+        <h1 class="article-title">
+          {{ article.title }}
         </h1>
-        <p class="text-muted font-body">{{ article.date }}</p>
+        <p class="article-date">{{ article.date }}</p>
       </header>
 
       <!-- Featured Image -->
-      <div class="mb-5 border-organic overflow-hidden">
-        <NuxtImg
-          :src="article.image"
-          class="w-100 h-auto object-fit-cover"
-          :alt="content.featured_image_alt"
-        />
+      <div class="article-image">
+        <img :src="article.image" :alt="article.title" />
       </div>
 
       <!-- Content -->
-      <div class="article-content font-body text-muted lh-lg" v-html="article.content">
-      </div>
-
-      <!-- Share / Navigation -->
-      <div class="mt-5 pt-4 border-top d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
-        <NuxtLink to="/blog" class="text-brand-pink fw-bold text-decoration-none d-flex align-items-center gap-2">
-          ← {{ content.back_link }}
-        </NuxtLink>
-
-        <div class="d-flex gap-3">
-          <button class="btn-secondary small">{{ content.share_button }}</button>
-          <button class="btn-primary small d-flex align-items-center gap-2">
-            {{ content.next_article_button }} <LucideArrowRight style="width: 1rem; height: 1rem;" />
-          </button>
-        </div>
-      </div>
+      <div class="article-content" v-html="article.content"></div>
     </article>
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+.blog-detail-page {
+  min-height: 100vh;
+  background: #fff;
+  padding: 2rem 0 4rem;
+  position: relative;
+}
+
+// Close button
 .close-btn {
-  width: 3rem;
-  height: 3rem;
-  z-index: 50;
-  transition: transform 0.3s ease;
+  position: fixed;
+  top: 1.5rem;
+  right: 2rem;
+  width: 48px;
+  height: 48px;
+  background: #FFDD00;
+  border: 2px solid #1a1a1a;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 100;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 2px 2px 0 #1a1a1a;
+  }
 }
 
-.close-btn:hover {
-  transform: scale(1.1);
-}
-
+// Article container
 .article-container {
-  max-width: 56rem;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 2rem;
 }
 
-.highlight-bar {
-  height: 1rem;
-  z-index: -1;
-  transform: rotate(-1deg);
+// Header
+.article-header {
+  padding-top: 2rem;
+  margin-bottom: 2rem;
 }
 
-.article-content p {
-  margin-bottom: 1.5rem;
+.article-title {
+  font-family: var(--font-heading, 'Recoleta', serif);
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: #1a1a1a;
+  margin: 0 0 1rem;
+}
+
+.article-date {
+  font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
+  font-size: 0.9375rem;
+  color: #666;
+  margin: 0;
+}
+
+// Featured image
+.article-image {
+  margin-bottom: 2.5rem;
+  border-radius: 12px;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+  }
+}
+
+// Content
+.article-content {
+  font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #444;
+
+  :deep(p) {
+    margin: 0 0 1.75rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  :deep(h2) {
+    font-family: var(--font-heading, 'Recoleta', serif);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 2.5rem 0 1rem;
+  }
+
+  :deep(h3) {
+    font-family: var(--font-heading, 'Recoleta', serif);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 2rem 0 0.75rem;
+  }
+
+  :deep(ul), :deep(ol) {
+    margin: 0 0 1.75rem;
+    padding-left: 1.5rem;
+  }
+
+  :deep(li) {
+    margin-bottom: 0.5rem;
+  }
+
+  :deep(blockquote) {
+    margin: 2rem 0;
+    padding: 1.5rem 2rem;
+    background: #f8f8f8;
+    border-left: 4px solid #FF4D6D;
+    font-style: italic;
+    color: #555;
+  }
+
+  :deep(a) {
+    color: #FF4D6D;
+    text-decoration: underline;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: #e04460;
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .blog-detail-page {
+    padding: 1.5rem 0 3rem;
+  }
+
+  .close-btn {
+    top: 1rem;
+    right: 1rem;
+    width: 40px;
+    height: 40px;
+  }
+
+  .article-container {
+    padding: 0 1.25rem;
+  }
+
+  .article-header {
+    padding-top: 3rem;
+  }
+
+  .article-title {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .article-content {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+  }
 }
 </style>

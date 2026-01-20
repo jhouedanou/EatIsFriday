@@ -13,7 +13,7 @@
         <NuxtLink to="/about" @click="closeMenu">{{ content.nav_links.about }}</NuxtLink>
         <NuxtLink to="/apply-activities" @click="closeMenu">{{ content.nav_links.activities }}</NuxtLink>
         <NuxtLink to="/events" @click="closeMenu">{{ content.nav_links.events }}</NuxtLink>
-        <button class="btn-cta mobile-cta" @click="handleContactClick">{{ content.nav_links.get_in_touch }}</button>
+        <NuxtLink to="/contact" class="btn-cta mobile-cta" @click="closeMenu">{{ content.nav_links.get_in_touch }}</NuxtLink>
       </div>
     </div>
   </div>
@@ -23,7 +23,6 @@
 const { getHeaderContent } = usePageContent()
 const content = ref<any>(null)
 const isOpen = ref(false)
-const emit = defineEmits(['open-contact'])
 
 onMounted(async () => {
   content.value = await getHeaderContent()
@@ -41,11 +40,6 @@ const toggleMenu = () => {
 const closeMenu = () => {
   isOpen.value = false
   document.body.style.overflow = ''
-}
-
-const handleContactClick = () => {
-  closeMenu()
-  emit('open-contact')
 }
 </script>
 

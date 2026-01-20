@@ -342,7 +342,7 @@ const goToMenuPage = (page: number) => {
 
           <!-- Join Now Button -->
           <NuxtLink
-            :to="`/jobs?location=${encodeURIComponent(selectedVenue.location)}`"
+            :to="`/careers?venue=${encodeURIComponent(selectedVenue.location)}`"
             class="d-flex align-items-start justify-content-start venue-join-btn"
           >
           <nuxt-img src="/images/joinNowBtn.svg" alt="Join Now Button" class="img-fluid"></nuxt-img>

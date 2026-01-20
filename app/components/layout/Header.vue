@@ -20,43 +20,31 @@
         <nav class="nav-left desktop-only">
           <NuxtLink to="/careers" class="nav-link">{{ content.nav_links.careers }}</NuxtLink>
           <NuxtLink to="/blog" class="nav-link">{{ content.nav_links.blogs }}</NuxtLink>
-          <div class="contact-button-wrapper" @click="openContactModal">
-            <!-- <span class="contact-label">Get in touch</span> -->
+          <NuxtLink to="/contact" class="contact-button-wrapper">
             <NuxtImg
               src="/images/btnGetInTouch.svg"
               alt="Get in touch"
               class="contact-image"
             />
-          </div>
+          </NuxtLink>
         </nav>
 
         <!-- Mobile Menu Toggle -->
         <div class="mobile-toggle">
-          <LayoutNavigation @open-contact="openContactModal" />
+          <LayoutNavigation />
         </div>
       </div>
     </TornPaperContainer>
-
-    <LayoutContactModal :is-open="isContactModalOpen" @close="closeContactModal" />
   </header>
 </template>
 
 <script setup lang="ts">
 const { getHeaderContent } = usePageContent()
 const content = ref<any>(null)
-const isContactModalOpen = ref(false)
 
 onMounted(async () => {
   content.value = await getHeaderContent()
 })
-
-const openContactModal = () => {
-  isContactModalOpen.value = true
-}
-
-const closeContactModal = () => {
-  isContactModalOpen.value = false
-}
 </script>
 
 <style scoped lang="scss">

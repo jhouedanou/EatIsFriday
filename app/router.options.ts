@@ -8,15 +8,24 @@ export default <RouterConfig>{
       return savedPosition
     }
 
-    // Si on a un hash dans l'URL (ancre)
+    // Si on a un hash dans l'URL (ancre), attendre que la page soit prête
     if (to.hash) {
-      return {
-        el: to.hash,
-        behavior: 'smooth',
-      }
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          const el = document.querySelector(to.hash)
+          if (el) {
+            resolve({
+              el: to.hash,
+              behavior: 'smooth',
+            })
+          } else {
+            resolve({ top: 0, left: 0 })
+          }
+        }, 150)
+      })
     }
 
-    // Pour les nouvelles navigations, remonter en haut de la page
-    return { top: 0, behavior: 'smooth' }
+    // Le plugin scroll-to-top.client.ts gère le scroll pour les nouvelles navigations
+    return false
   },
 }
