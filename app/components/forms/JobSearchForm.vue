@@ -37,25 +37,27 @@ const uniqueSites = computed(() => {
 
 const navigateToJob = (job: Job) => {
   showJobTitleDropdown.value = false
-  navigateTo(`/jobs/${job.slug}`)
+  // Navigate to careers page with search filter for the job title
+  const title = getJobTitle(job)
+  navigateTo(`/careers?search=${encodeURIComponent(title)}`)
 }
 
 const selectSiteAndSearch = (site: string) => {
   selectedSite.value = site
   showSiteDropdown.value = false
-  // Navigate to jobs page filtered by location
-  navigateTo(`/jobs?location=${encodeURIComponent(site)}`)
+  // Navigate to careers page filtered by venue/location
+  navigateTo(`/careers?venue=${encodeURIComponent(site)}`)
 }
 
 const handleSearch = () => {
   const query = new URLSearchParams()
   if (selectedJobTitle.value) {
-    query.set('title', selectedJobTitle.value)
+    query.set('search', selectedJobTitle.value)
   }
   if (selectedSite.value) {
-    query.set('location', selectedSite.value)
+    query.set('venue', selectedSite.value)
   }
-  navigateTo(`/jobs${query.toString() ? '?' + query.toString() : ''}`)
+  navigateTo(`/careers${query.toString() ? '?' + query.toString() : ''}`)
 }
 
 const toggleJobTitleDropdown = () => {
@@ -112,7 +114,7 @@ onUnmounted(() => {
             <button
               class="dropdown-item"
               :class="{ 'active': selectedJobTitle === '' }"
-              @click="selectedJobTitle = ''; showJobTitleDropdown = false; navigateTo('/jobs')"
+              @click="selectedJobTitle = ''; showJobTitleDropdown = false; navigateTo('/careers')"
             >
               All job titles
             </button>
@@ -148,7 +150,7 @@ onUnmounted(() => {
             <button
               class="dropdown-item"
               :class="{ 'active': selectedSite === '' }"
-              @click="selectedSite = ''; showSiteDropdown = false; navigateTo('/jobs')"
+              @click="selectedSite = ''; showSiteDropdown = false; navigateTo('/careers')"
             >
               All sites
             </button>

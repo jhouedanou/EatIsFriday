@@ -1,9 +1,22 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
-import { LucideSearch, LucideMapPin, LucideX, LucideChevronDown, LucideChevronLeft, LucideChevronRight } from 'lucide-vue-next'
+import { LucideSearch, LucideMapPin, LucideChevronDown, LucideChevronLeft, LucideChevronRight } from 'lucide-vue-next'
 import type { CareersContent } from '~/composables/usePageContent'
 import type { Job } from '~/composables/useJobs'
 
+interface Venue {
+  id: string
+  name: string
+  location: string
+  image?: string
+  image2?: string
+}
+
+interface LocationsData {
+  map_venues: Venue[]
+}
+
+const route = useRoute()
 const { getCareersContent } = usePageContent()
 const { getJobs } = useJobs()
 const content = ref<CareersContent | null>(null)
@@ -19,6 +32,19 @@ const showVenueDropdown = ref(false)
 const currentPage = ref(1)
 const itemsPerPage = 6
 
+// Load venues data for dynamic header
+const { data: locationsData } = await useFetch<LocationsData>('/api/locations.json')
+
+// Find the venue matching the selected location
+const activeVenue = computed(() => {
+  if (!selectedVenue.value || !locationsData.value?.map_venues) return null
+  return locationsData.value.map_venues.find(venue =>
+    venue.location === selectedVenue.value ||
+    venue.name.toLowerCase().includes(selectedVenue.value.toLowerCase()) ||
+    selectedVenue.value.toLowerCase().includes(venue.name.toLowerCase())
+  ) || null
+})
+
 onMounted(async () => {
   content.value = await getCareersContent()
   const fetchedJobs = await getJobs()
@@ -27,8 +53,17 @@ onMounted(async () => {
   }
   if (content.value) {
     selectedJobType.value = content.value.search_section.job_types[0]
-    // Ne pas pré-sélectionner de venue - afficher tous les jobs par défaut
-    selectedVenue.value = ''
+  }
+
+  // Apply URL query parameters
+  if (route.query.venue) {
+    selectedVenue.value = route.query.venue as string
+  }
+  if (route.query.search) {
+    searchQuery.value = route.query.search as string
+  }
+  if (route.query.type) {
+    selectedJobType.value = route.query.type as string
   }
 })
 
@@ -40,12 +75,7 @@ const venueOptions = computed(() => {
       locations.add(job.location)
     }
   })
-  return ['All locations', ...Array.from(locations)]
-})
-
-const currentVenue = computed(() => {
-  if (!content.value || !selectedVenue.value) return null
-  return content.value.venues.find(v => v.id === selectedVenue.value) || null
+  return ['All Sites', ...Array.from(locations)]
 })
 
 // Helper pour obtenir le titre du job
@@ -91,8 +121,8 @@ const filteredJobs = computed(() => {
                         normalizedJobType.includes(normalizedSelectedType)
 
     // Filtre par venue/location depuis le dropdown
-    const matchesVenueFilter = selectedVenue.value === '' || 
-                               selectedVenue.value === 'All locations' ||
+    const matchesVenueFilter = selectedVenue.value === '' ||
+                               selectedVenue.value === 'All Sites' ||
                                job.location.toLowerCase().includes(selectedVenue.value.toLowerCase())
 
     return matchesSearch && matchesType && matchesVenueFilter
@@ -118,83 +148,63 @@ const goToPage = (page: number) => {
     currentPage.value = page
   }
 }
-
-const selectVenue = (venueId: string) => {
-  // Toggle: si on clique sur la même venue, désélectionner
-  selectedVenue.value = selectedVenue.value === venueId ? '' : venueId
-}
 </script>
 
 <template>
   <div v-if="content" class="min-vh-100 bg-brand-gray">
-    <!-- Hero Section with Map -->
-    <section class="position-relative hero-map-section">
-      <!-- Interactive Map Background -->
-      <div class="position-absolute top-0 start-0 end-0 bottom-0">
-        <ClientOnly>
-          <VenueMap
-            :venues="content.venues.map(v => ({
-              id: v.id,
-              name: v.name,
-              location: v.location,
-              lat: v.lat,
-              lng: v.lng,
-              openPositions: v.open_positions
-            }))"
-            :selected-venue="selectedVenue"
-            @select-venue="selectVenue"
-          />
-          <template #fallback>
-            <div class="w-100 h-100 bg-secondary d-flex align-items-center justify-content-center">
-              <span class="text-muted">{{ content.map_loading }}</span>
-            </div>
-          </template>
-        </ClientOnly>
+    <!-- Dynamic Hero Section -->
+    <section class="hero-section" :class="{ 'has-venue': activeVenue }">
+      <!-- Background with venue image or gradient -->
+      <div
+        class="hero-background"
+        :style="activeVenue ? { backgroundImage: `url('${activeVenue.image}')` } : {}"
+      >
+        <div class="hero-overlay"></div>
       </div>
 
-      <!-- Gradient Overlay -->
-      <div class="position-absolute top-0 start-0 end-0 bottom-0 gradient-overlay pe-none"></div>
-
-      <!-- Close Button -->
-      <button class="position-absolute top-0 end-0 mt-4 me-4 close-btn rounded-circle bg-brand-yellow d-flex align-items-center justify-content-center border border-2 border-dark shadow-organic">
-        <LucideX style="width: 1.25rem; height: 1.25rem;" />
-      </button>
-
-      <!-- Venue Info Card -->
-      <div v-if="currentVenue" class="position-absolute bottom-0 start-0 mb-4 ms-3 me-3 venue-info-card">
-        <div class="bg-white border-organic p-4 shadow-organic">
-          <span class="tag-lime small mb-3 d-inline-block">{{ content.hero_section.tag }}</span>
-
-          <h1 class="font-heading fs-2 fw-bold lh-sm mb-3">
-            {{ content.hero_section.title_template.replace('{venue_name}', currentVenue.name) }}
-          </h1>
-
-          <div class="d-flex align-items-center gap-3 text-muted">
-            <div class="d-flex align-items-center gap-2">
-              <LucideMapPin class="text-brand-pink" style="width: 1rem; height: 1rem;" />
-              <span class="small">{{ currentVenue.location }}</span>
-            </div>
-            <span class="rounded-circle bg-brand-lime" style="width: 0.375rem; height: 0.375rem;"></span>
-            <span class="small fw-bold">{{ currentVenue.open_positions }} {{ content.hero_section.open_positions_suffix }}</span>
+      <!-- Hero Content -->
+      <div class="container hero-content">
+        <span class="hero-tag">{{ activeVenue ? 'Now Hiring' : 'Careers' }}</span>
+        <h1 class="hero-title">
+          <template v-if="activeVenue">
+            Join Our Team At {{ activeVenue.name }}
+          </template>
+          <template v-else>
+            Join France's leading catering company
+          </template>
+        </h1>
+        <p class="hero-subtitle">
+          <template v-if="activeVenue">
+            <LucideMapPin class="subtitle-icon" /> {{ activeVenue.location }}
+            <span class="subtitle-divider">•</span>
+            {{ filteredJobs.length }} Open Position{{ filteredJobs.length !== 1 ? 's' : '' }}
+          </template>
+          <template v-else>
+            Discover exciting opportunities in hospitality & culinary excellence
+          </template>
+        </p>
+        <!-- Stats (only when no venue selected) -->
+        <div v-if="!activeVenue" class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-number">{{ allJobs.length }}</span>
+            <span class="stat-label">Open Positions</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-number">{{ venueOptions.length - 1 }}</span>
+            <span class="stat-label">Locations</span>
           </div>
         </div>
       </div>
+    </section>
 
-      <!-- Venue Pills -->
-      <div class="position-absolute top-0 start-0 mt-4 ms-3 d-flex gap-2 flex-wrap venue-pills">
-        <button
-          v-for="venue in content.venues"
-          :key="venue.id"
-          @click="selectVenue(venue.id)"
-          :class="[
-            'px-3 py-2 small fw-bold border border-2 border-dark venue-pill',
-            selectedVenue === venue.id
-              ? 'bg-brand-pink text-white shadow-organic-sm'
-              : 'bg-white'
-          ]"
-        >
-          {{ venue.name }}
-        </button>
+    <!-- Introduction Section (only when no venue selected) -->
+    <section v-if="!activeVenue" class="intro-section py-5">
+      <div class="container text-center">
+        <h2 class="font-heading fs-1 fw-bold mb-3">Find Your Perfect Role</h2>
+        <p class="fs-5 text-muted mb-0" style="max-width: 48rem; margin-left: auto; margin-right: auto;">
+          We're looking for passionate people who want to create unforgettable experiences. Explore more than 100 open positions across France.
+        </p>
       </div>
     </section>
 
@@ -208,7 +218,7 @@ const selectVenue = (venueId: string) => {
             <input
               v-model="searchQuery"
               type="text"
-              :placeholder="content.search_section.search_placeholder"
+              placeholder="Search Job title and category here"
               class="bg-transparent text-white border-0 flex-grow-1 py-2 font-body search-input"
             />
           </div>
@@ -221,7 +231,7 @@ const selectVenue = (venueId: string) => {
             class="bg-brand-dark border-start border-white border-opacity-25 px-4 py-2 d-flex align-items-center gap-3 text-white w-100 w-md-auto justify-content-between dropdown-btn"
           >
             <LucideMapPin style="width: 1rem; height: 1rem;" class="opacity-75" />
-            <span>{{ selectedVenue || 'All locations' }}</span>
+            <span>{{ selectedVenue || 'All Sites' }}</span>
             <LucideChevronDown style="width: 1rem; height: 1rem;" :class="{ 'rotate-180': showVenueDropdown }" />
           </button>
 
@@ -234,10 +244,10 @@ const selectVenue = (venueId: string) => {
               <button
                 v-for="venue in venueOptions"
                 :key="venue"
-                @click="selectedVenue = venue === 'All locations' ? '' : venue; showVenueDropdown = false"
+                @click="selectedVenue = venue === 'All Sites' ? '' : venue; showVenueDropdown = false"
                 :class="[
                   'w-100 text-start px-3 py-2 border-0 fw-medium dropdown-item-custom',
-                  (selectedVenue === venue || (venue === 'All locations' && !selectedVenue)) ? 'active' : ''
+                  (selectedVenue === venue || (venue === 'All Sites' && !selectedVenue)) ? 'active' : ''
                 ]"
               >
                 {{ venue }}
@@ -252,7 +262,7 @@ const selectVenue = (venueId: string) => {
             @click="showJobTypeDropdown = !showJobTypeDropdown; showVenueDropdown = false"
             class="bg-brand-dark border-start border-white border-opacity-25 px-4 py-2 d-flex align-items-center gap-3 text-white w-100 w-md-auto justify-content-between dropdown-btn"
           >
-            <span>{{ selectedJobType }}</span>
+            <span>{{ selectedJobType || 'All Job Types' }}</span>
             <LucideChevronDown style="width: 1rem; height: 1rem;" :class="{ 'rotate-180': showJobTypeDropdown }" />
           </button>
 
@@ -405,54 +415,148 @@ const selectVenue = (venueId: string) => {
 </template>
 
 <style scoped>
-.hero-map-section {
-  height: 500px;
+/* Dynamic Hero Section */
+.hero-section {
+  position: relative;
+  padding: 8rem 0 6rem;
+  overflow: hidden;
 }
 
-@media (min-width: 768px) {
-  .hero-map-section {
-    height: 600px;
-  }
+.hero-section.has-venue {
+  padding: 10rem 0 6rem;
 }
 
-.gradient-overlay {
-  background: linear-gradient(to bottom, transparent, transparent 50%, var(--brand-gray, #F5F5F0));
+.hero-section.has-venue .hero-background {
+  background: none;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-.close-btn {
-  width: 3rem;
+.hero-section.has-venue .hero-background::before {
+  display: none;
+}
+
+.hero-section.has-venue .hero-overlay {
+  background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.7) 100%);
+}
+
+.hero-section.has-venue .hero-title {
+  font-size: 2.75rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero-background {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #8B5CF6 0%, #7c3aed 100%);
+}
+
+.hero-background::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('/images/bgIntro.jpg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.15;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.3) 100%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: white;
+}
+
+.hero-tag {
+  display: inline-block;
+  padding: 0.5rem 1.25rem;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+.hero-title {
+  font-family: var(--font-heading);
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin: 0 0 1rem;
+  line-height: 1.1;
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  opacity: 0.9;
+  margin: 0 0 2.5rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.subtitle-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.subtitle-divider {
+  margin: 0 0.25rem;
+  opacity: 0.6;
+}
+
+.hero-stats {
+  display: inline-flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 1.5rem 2.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 1rem;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  opacity: 0.8;
+  margin-top: 0.25rem;
+}
+
+.stat-divider {
+  width: 1px;
   height: 3rem;
-  z-index: 20;
-  transition: transform 0.3s ease;
+  background: rgba(255, 255, 255, 0.3);
 }
 
-.close-btn:hover {
-  transform: scale(1.1);
-}
-
-.venue-info-card {
-  z-index: 10;
-}
-
-@media (min-width: 768px) {
-  .venue-info-card {
-    max-width: 28rem;
-    margin-right: auto;
-  }
-}
-
-.venue-pills {
-  max-width: 60%;
-  z-index: 20;
-}
-
-.venue-pill {
-  border-radius: 50px 10px 45px 10px / 10px 45px 10px 50px;
-  transition: all 0.3s ease;
-}
-
-.venue-pill:hover {
-  background-color: var(--brand-lime, #C8F560);
+.intro-section {
+  background-color: #F5F5F0;
 }
 
 .search-bar-section {
@@ -575,6 +679,41 @@ const selectVenue = (venueId: string) => {
   to {
     opacity: 0;
     transform: scale(0.95);
+  }
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 6rem 0 5rem;
+  }
+
+  .hero-section.has-venue {
+    padding: 7rem 0 4rem;
+  }
+
+  .hero-section.has-venue .hero-title {
+    font-size: 1.75rem;
+  }
+
+  .hero-title {
+    font-size: 2.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-stats {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem 2rem;
+  }
+
+  .stat-divider {
+    width: 3rem;
+    height: 1px;
   }
 }
 </style>
