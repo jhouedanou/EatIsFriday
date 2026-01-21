@@ -14,7 +14,7 @@
       <div class="torn-edge" :class="{ 'torn-edge-right': isEven, 'torn-edge-left': !isEven }"></div>
       <h3 class="preserve-lines">{{ event.title }}</h3>
       <p class="description preserve-lines">{{ event.description }}</p>
-      <NuxtLink :to="`/contacts`">
+      <NuxtLink :to="`/contact`">
         <img
           :src="isEven ? '/images/contact-even.svg' : '/images/contact-odd.svg'"
           alt="Contact"

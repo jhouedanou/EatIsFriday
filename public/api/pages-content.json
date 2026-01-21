@@ -361,13 +361,33 @@
       "canonical": "/careers"
     },
     "map_loading": "Loading map...",
+    "hero_default": {
+      "title_line_1": "Join France's Leading ",
+      "title_line_2": "Catering Company",
+      "image": "/images/honneur.png",
+      "background_image": "/images/dida.svg"
+    },
+    "join_box": {
+      "title": "Find Your Perfect Role",
+      "description": "We're looking for passionate people who want to create unforgettable experiences. Explore more than 100 open positions across France"
+    },
+    "hero_with_venue": {
+      "tag": "Now Hiring",
+      "title_prefix": "Join Our Team At",
+      "subtitle": "Discover exciting opportunities in hospitality & culinary excellence",
+      "stats": {
+        "open_positions_label": "Open Positions",
+        "locations_label": "Locations"
+      }
+    },
     "hero_section": {
       "tag": "NOW HIRING",
       "title_template": "Join Our Team At {venue_name}",
       "open_positions_suffix": "Open Positions"
     },
     "search_section": {
-      "search_placeholder": "Search job title and category...",
+      "search_placeholder": "Search Job title and category here",
+      "all_sites_label": "All Sites",
       "job_types": [
         "All job types",
         "Full time",

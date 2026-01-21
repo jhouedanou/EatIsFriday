@@ -57,6 +57,11 @@ onMounted(async () => {
   }
 })
 
+// Label pour "All Sites" depuis le JSON
+const allSitesLabel = computed(() => {
+  return content.value?.search_section.all_sites_label || 'All Sites'
+})
+
 // Extraire toutes les venues uniques des jobs
 const venueOptions = computed(() => {
   const locations = new Set<string>()
@@ -65,7 +70,7 @@ const venueOptions = computed(() => {
       locations.add(job.location)
     }
   })
-  return ['All Sites', ...Array.from(locations)]
+  return [allSitesLabel.value, ...Array.from(locations)]
 })
 
 // Helper pour obtenir le titre du job
@@ -85,7 +90,7 @@ const getPostedTime = (dateString: string) => {
   const diffMs = now.getTime() - date.getTime()
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
   const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
-  
+
   if (diffHours < 1) return 'Just now'
   if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`
   if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`
@@ -99,21 +104,21 @@ const filteredJobs = computed(() => {
     const excerpt = getJobExcerpt(job)
 
     const matchesSearch = !searchQuery.value ||
-                          title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-                          excerpt.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-                          job.location.toLowerCase().includes(searchQuery.value.toLowerCase())
+      title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      excerpt.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      job.location.toLowerCase().includes(searchQuery.value.toLowerCase())
 
     // Normaliser les types de job pour la comparaison
     const normalizedJobType = job.job_type.toLowerCase().replace('-', ' ')
     const normalizedSelectedType = selectedJobType.value.toLowerCase().replace('-', ' ')
-    
+
     const matchesType = selectedJobType.value === content.value!.search_section.job_types[0] ||
-                        normalizedJobType.includes(normalizedSelectedType)
+      normalizedJobType.includes(normalizedSelectedType)
 
     // Filtre par venue/location depuis le dropdown
     const matchesVenueFilter = selectedVenue.value === '' ||
-                               selectedVenue.value === 'All Sites' ||
-                               job.location.toLowerCase().includes(selectedVenue.value.toLowerCase())
+      selectedVenue.value === allSitesLabel.value ||
+      job.location.toLowerCase().includes(selectedVenue.value.toLowerCase())
 
     return matchesSearch && matchesType && matchesVenueFilter
   })
@@ -143,311 +148,293 @@ const goToPage = (page: number) => {
 <template>
   <div class="careers-page">
     <div v-if="content" class="min-vh-100 bg-brand-gray">
-    
-    <!-- ========================================== -->
-    <!-- Hero Section WITHOUT venue (Default View) -->
-    <!-- ========================================== -->
-    <section v-if="!activeVenue" class="careers-hero-default">
-      <div class="careers-hero-container">
-        <!-- Left: Image -->
-        <div class="careers-hero-image">
-          <img src="/images/enteteSansJob.jpg" alt="Join our team" />
-        </div>
-        <!-- Right: Content -->
-        <div class="careers-hero-content">
-          <div class="careers-hero-inner">
-            <h1 class="careers-hero-title">
-              Join France's<br/>
-              leading catering<br/>
-              company
-            </h1>
-            <p class="careers-hero-subtitle">
-              Discover exciting opportunities in hospitality & culinary excellence
-            </p>
-            <div class="careers-hero-stats">
-              <div class="stat-box">
-                <span class="stat-number">{{ allJobs.length }}</span>
-                <span class="stat-label">Open Positions</span>
-              </div>
-              <div class="stat-box">
-                <span class="stat-number">{{ venueOptions.length - 1 }}</span>
-                <span class="stat-label">Locations</span>
-              </div>
+
+      <!-- ========================================== -->
+      <!-- Hero Section WITHOUT venue (Default View) -->
+      <!-- ========================================== -->
+      <section v-if="!activeVenue" class="careers-hero-default">
+        <div class="careers-hero-container d-flex row">
+          <div class="careers-hero-content col-7">
+            <div class="careers-hero-inner">
+              <h1 class="careers-hero-title">
+                {{ content.hero_default.title_line_1 }}<br />
+                {{ content.hero_default.title_line_2 }}<br />
+              </h1>
+              
             </div>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ========================================== -->
-    <!-- Hero Section WITH venue (When job/venue selected) -->
-    <!-- ========================================== -->
-    <section v-else class="hero-section has-venue">
-      <!-- Background with venue image -->
-      <div
-        class="hero-background"
-        :style="{ backgroundImage: `url('${activeVenue.image}')` }"
-      >
-        <div class="hero-overlay"></div>
-      </div>
-
-      <!-- Hero Content -->
-      <div class="container hero-content">
-        <span class="hero-tag">Now Hiring</span>
-        <h1 class="hero-title">
-          Join Our Team At {{ activeVenue.name }}
-        </h1>
-        <p class="hero-subtitle">
-          <LucideMapPin style="width: 1.25rem; height: 1.25rem;" /> {{ activeVenue.location }}
-          <span class="subtitle-divider">•</span>
-          {{ filteredJobs.length }} Open Position{{ filteredJobs.length !== 1 ? 's' : '' }}
-        </p>
-      </div>
-    </section>
-
-    <!-- Search & Filter Bar -->
-    <section class="container search-bar-section position-relative">
-      <div class="bg-brand-dark border-organic p-3 d-flex flex-column flex-md-row gap-3 shadow-organic">
-        <!-- Search Input -->
-        <div class="flex-grow-1 position-relative">
-          <div class="d-flex align-items-center gap-3 px-3">
-            <LucideSearch class="text-white opacity-75" style="width: 1.25rem; height: 1.25rem;" />
-            <input
-              v-model="searchQuery"
-              type="text"
-              placeholder="Search Job title and category here"
-              class="bg-transparent text-white border-0 flex-grow-1 py-2 font-body search-input"
-            />
+          <div class="careers-hero-image col-5">
+            <img :src="content.hero_default.image" alt="Join our team"  />
           </div>
         </div>
-
-        <!-- Venue Dropdown -->
-        <div class="position-relative">
-          <button
-            @click="showVenueDropdown = !showVenueDropdown; showJobTypeDropdown = false"
-            class="bg-brand-dark border-start border-white border-opacity-25 px-4 py-2 d-flex align-items-center gap-3 text-white w-100 w-md-auto justify-content-between dropdown-btn"
-          >
-            <LucideMapPin style="width: 1rem; height: 1rem;" class="opacity-75" />
-            <span>{{ selectedVenue || 'All Sites' }}</span>
-            <LucideChevronDown style="width: 1rem; height: 1rem;" :class="{ 'rotate-180': showVenueDropdown }" />
-          </button>
-
-          <!-- Venue Dropdown Menu -->
-          <Transition
-            enter-active-class="transition-fade-in"
-            leave-active-class="transition-fade-out"
-          >
-            <div v-if="showVenueDropdown" class="position-absolute top-100 end-0 mt-2 bg-white border-organic shadow-organic-lg dropdown-menu-custom dropdown-menu-venue">
-              <button
-                v-for="venue in venueOptions"
-                :key="venue"
-                @click="selectedVenue = venue === 'All Sites' ? '' : venue; showVenueDropdown = false"
-                :class="[
-                  'w-100 text-start px-3 py-2 border-0 fw-medium dropdown-item-custom',
-                  (selectedVenue === venue || (venue === 'All Sites' && !selectedVenue)) ? 'active' : ''
-                ]"
-              >
-                {{ venue }}
-              </button>
-            </div>
-          </Transition>
+        <div id="limam" class="container d-flex flex-column justify-content-center text-center flex-wrap">
+          <h3> {{ content.join_box.title }}</h3>
+              <p class="kougar">
+                {{ content.join_box.description }}
+              </p>
         </div>
+      </section>
 
-        <!-- Job Type Dropdown -->
-        <div class="position-relative">
-          <button
-            @click="showJobTypeDropdown = !showJobTypeDropdown; showVenueDropdown = false"
-            class="bg-brand-dark border-start border-white border-opacity-25 px-4 py-2 d-flex align-items-center gap-3 text-white w-100 w-md-auto justify-content-between dropdown-btn"
-          >
-            <span>{{ selectedJobType || 'All Job Types' }}</span>
-            <LucideChevronDown style="width: 1rem; height: 1rem;" :class="{ 'rotate-180': showJobTypeDropdown }" />
-          </button>
-
-          <!-- Dropdown Menu -->
-          <Transition
-            enter-active-class="transition-fade-in"
-            leave-active-class="transition-fade-out"
-          >
-            <div v-if="showJobTypeDropdown" class="position-absolute top-100 end-0 mt-2 bg-white border-organic shadow-organic-lg dropdown-menu-custom">
-              <button
-                v-for="type in content.search_section.job_types"
-                :key="type"
-                @click="selectedJobType = type; showJobTypeDropdown = false"
-                :class="[
-                  'w-100 text-start px-3 py-2 border-0 fw-medium dropdown-item-custom',
-                  selectedJobType === type ? 'active' : ''
-                ]"
-              >
-                {{ type }}
-              </button>
-            </div>
-          </Transition>
+      <!-- ========================================== -->
+      <!-- Hero Section WITH venue (When job/venue selected) -->
+      <!-- ========================================== -->
+      <section v-else class="hero-section has-venue">
+        <!-- Background with venue image -->
+        <div class="hero-background" :style="{ backgroundImage: `url('${activeVenue.image}')` }">
+          <div class="hero-overlay"></div>
         </div>
-      </div>
-    </section>
-
-    <!-- Job Grid -->
-    <section class="container py-5">
-      <div class="d-flex align-items-center justify-content-between mb-4">
-        <h2 class="font-heading fs-4 fw-bold">
-          {{ filteredJobs.length }} {{ filteredJobs.length === 1 ? content.job_listing.positions_available_singular : content.job_listing.positions_available_plural }} {{ content.job_listing.positions_available_suffix }}
-        </h2>
-        <p v-if="totalPages > 1" class="text-muted small mb-0">
-          Page {{ currentPage }} of {{ totalPages }}
+        <p class="careers-hero-subtitle">
+          {{ content.hero_with_venue.subtitle }}
         </p>
-      </div>
+        <div class="careers-hero-stats">
+          <div class="stat-box">
+            <span class="stat-number">{{ allJobs.length }}</span>
+            <span class="stat-label">{{ content.hero_with_venue.stats.open_positions_label }}</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-number">{{ venueOptions.length - 1 }}</span>
+            <span class="stat-label">{{ content.hero_with_venue.stats.locations_label }}</span>
+          </div>
+        </div>
+        <!-- Hero Content -->
+        <div class="container hero-content">
+          <span class="hero-tag">{{ content.hero_with_venue.tag }}</span>
+          <h1 class="hero-title">
+            {{ content.hero_with_venue.title_prefix }} {{ activeVenue.name }}
+          </h1>
+          <p class="hero-subtitle">
+            <LucideMapPin style="width: 1.25rem; height: 1.25rem;" /> {{ activeVenue.location }}
+            <span class="subtitle-divider">•</span>
+            {{ filteredJobs.length }} Open Position{{ filteredJobs.length !== 1 ? 's' : '' }}
+          </p>
+        </div>
+      </section>
 
-      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        <div
-          v-for="job in paginatedJobs"
-          :key="job.id"
-          class="col"
-        >
-          <div class="bg-white border-organic p-4 h-100 job-card">
-            <div class="d-flex flex-column h-100 justify-content-between">
-              <!-- Header -->
-              <div>
-                <h3 class="font-heading fw-bold fs-5 lh-sm mb-1">{{ getJobTitle(job) }}</h3>
-                <p class="small text-muted fw-medium mb-3">{{ content.job_listing.posted_prefix }} {{ getPostedTime(job.date) }}</p>
+      <!-- Search & Filter Bar -->
+      <section class="search-bar-section position-relative" :class="{ 'has-active-venue': activeVenue }">
+        <div class="p-3 d-flex flex-column flex-md-row gap-3 shadow-organic">
+          <!-- Search Input -->
+          <div class="flex-grow-1 position-relative">
+        <div class="d-flex align-items-center gap-3 px-3">
+          <LucideSearch class="text-white opacity-75" style="width: 1.25rem; height: 1.25rem;" />
+          <input v-model="searchQuery" type="text" :placeholder="content.search_section.search_placeholder"
+            class="bg-transparent text-white border-0 flex-grow-1 py-2 font-body search-input" />
+        </div>
+          </div>
 
-                <!-- Tags Row -->
-                <div class="d-flex flex-wrap gap-2 mb-3">
-                  <span class="tag-blue">🍳 {{ job.department }}</span>
-                  <span class="tag-outline d-flex align-items-center gap-1">
-                    <LucideMapPin style="width: 0.75rem; height: 0.75rem;" /> {{ job.location }}
-                  </span>
-                </div>
-                <div class="d-flex flex-wrap gap-2 mb-3">
-                  <span class="tag-lime d-flex align-items-center gap-1">
-                    {{ job.job_type }}
-                  </span>
-                  <span class="tag-yellow d-flex align-items-center gap-1">
-                    <span class="small">💰</span> {{ job.salary }}
-                  </span>
+          <!-- Venue Dropdown -->
+          <div class="position-relative">
+        <button @click="showVenueDropdown = !showVenueDropdown; showJobTypeDropdown = false"
+          class="bg-brand-dark border-start border-white border-opacity-25 px-4 py-2 d-flex align-items-center gap-3 text-white w-100 w-md-auto justify-content-between dropdown-btn">
+          <LucideMapPin style="width: 1rem; height: 1rem;" class="opacity-75" />
+          <span>{{ selectedVenue || allSitesLabel }}</span>
+          <LucideChevronDown style="width: 1rem; height: 1rem;" :class="{ 'rotate-180': showVenueDropdown }" />
+        </button>
+
+        <!-- Venue Dropdown Menu -->
+        <Transition enter-active-class="transition-fade-in" leave-active-class="transition-fade-out">
+          <div v-if="showVenueDropdown"
+            class="position-absolute top-100 end-0 mt-2 bg-white border-organic shadow-organic-lg dropdown-menu-custom dropdown-menu-venue">
+            <button v-for="venue in venueOptions" :key="venue"
+          @click="selectedVenue = venue === allSitesLabel ? '' : venue; showVenueDropdown = false" :class="[
+            'w-100 text-start px-3 py-2 border-0 fw-medium dropdown-item-custom',
+            (selectedVenue === venue || (venue === allSitesLabel && !selectedVenue)) ? 'active' : ''
+          ]">
+          {{ venue }}
+            </button>
+          </div>
+        </Transition>
+          </div>
+
+          <!-- Job Type Dropdown -->
+          <div class="position-relative">
+        <button @click="showJobTypeDropdown = !showJobTypeDropdown; showVenueDropdown = false"
+          class="bg-brand-dark border-start border-white border-opacity-25 px-4 py-2 d-flex align-items-center gap-3 text-white w-100 w-md-auto justify-content-between dropdown-btn">
+          <span>{{ selectedJobType || 'All Job Types' }}</span>
+          <LucideChevronDown style="width: 1rem; height: 1rem;" :class="{ 'rotate-180': showJobTypeDropdown }" />
+        </button>
+
+        <!-- Dropdown Menu -->
+        <Transition enter-active-class="transition-fade-in" leave-active-class="transition-fade-out">
+          <div v-if="showJobTypeDropdown"
+            class="position-absolute top-100 end-0 mt-2 bg-white border-organic shadow-organic-lg dropdown-menu-custom">
+            <button v-for="type in content.search_section.job_types" :key="type"
+          @click="selectedJobType = type; showJobTypeDropdown = false" :class="[
+            'w-100 text-start px-3 py-2 border-0 fw-medium dropdown-item-custom',
+            selectedJobType === type ? 'active' : ''
+          ]">
+          {{ type }}
+            </button>
+          </div>
+        </Transition>
+          </div>
+        </div>
+      </section>
+
+      <!-- Job Grid -->
+      <section class="container py-5">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+          <h2 class="font-heading fs-4 fw-bold">
+            {{ filteredJobs.length }} {{ filteredJobs.length === 1 ? content.job_listing.positions_available_singular :
+              content.job_listing.positions_available_plural }} {{ content.job_listing.positions_available_suffix }}
+          </h2>
+          <p v-if="totalPages > 1" class="text-muted small mb-0">
+            Page {{ currentPage }} of {{ totalPages }}
+          </p>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+          <div v-for="job in paginatedJobs" :key="job.id" class="col">
+            <div class="bg-white border-organic p-4 h-100 job-card">
+              <div class="d-flex flex-column h-100 justify-content-between">
+                <!-- Header -->
+                <div>
+                  <h3 class="font-heading fw-bold fs-5 lh-sm mb-1">{{ getJobTitle(job) }}</h3>
+                  <p class="small text-muted fw-medium mb-3">{{ content.job_listing.posted_prefix }} {{
+                    getPostedTime(job.date) }}</p>
+
+                  <!-- Tags Row -->
+                  <div class="d-flex flex-wrap gap-2 mb-3">
+                    <span class="tag-blue">🍳 {{ job.department }}</span>
+                    <span class="tag-outline d-flex align-items-center gap-1">
+                      <LucideMapPin style="width: 0.75rem; height: 0.75rem;" /> {{ job.location }}
+                    </span>
+                  </div>
+                  <div class="d-flex flex-wrap gap-2 mb-3">
+                    <span class="tag-lime d-flex align-items-center gap-1">
+                      {{ job.job_type }}
+                    </span>
+                    <span class="tag-yellow d-flex align-items-center gap-1">
+                      <span class="small">💰</span> {{ job.salary }}
+                    </span>
+                  </div>
+
+                  <!-- Description -->
+                  <p class="small text-muted mb-4 line-clamp-3 font-body lh-lg">
+                    {{ getJobExcerpt(job) }}
+                  </p>
                 </div>
 
-                <!-- Description -->
-                <p class="small text-muted mb-4 line-clamp-3 font-body lh-lg">
-                  {{ getJobExcerpt(job) }}
-                </p>
-              </div>
-
-              <!-- Buttons -->
-              <div class="d-flex gap-3 mt-auto">
-                <NuxtLink :to="`/jobs/${job.slug}`" class="btn-primary flex-grow-1 text-center small">
-                  {{ content.job_listing.apply_button }}
-                </NuxtLink>
-                <NuxtLink :to="`/jobs/${job.slug}`" class="btn-secondary flex-grow-1 text-center small">
-                  {{ content.job_listing.view_details_button }}
-                </NuxtLink>
+                <!-- Buttons -->
+                <div class="d-flex gap-3 mt-auto">
+                  <NuxtLink :to="`/jobs/${job.slug}`" class="btn-primary flex-grow-1 text-center small">
+                    {{ content.job_listing.apply_button }}
+                  </NuxtLink>
+                  <NuxtLink :to="`/jobs/${job.slug}`" class="btn-secondary flex-grow-1 text-center small">
+                    {{ content.job_listing.view_details_button }}
+                  </NuxtLink>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- No Results -->
-      <div v-if="filteredJobs.length === 0" class="text-center py-5 bg-white border-organic">
-        <p class="fs-5 text-muted mb-2">{{ content.no_results.title }}</p>
-        <p class="text-secondary mb-3">{{ content.no_results.description }}</p>
-        <button @click="searchQuery = ''; selectedJobType = content.search_section.job_types[0] || ''; selectedVenue = ''" class="text-brand-pink fw-bold btn btn-link text-decoration-none">
-          {{ content.no_results.clear_filters_button }}
-        </button>
-      </div>
-
-      <!-- Pagination -->
-      <div v-if="totalPages > 1" class="d-flex justify-content-center align-items-center gap-2 mt-5">
-        <button 
-          @click="goToPage(currentPage - 1)" 
-          :disabled="currentPage === 1"
-          class="pagination-btn"
-          :class="{ 'disabled': currentPage === 1 }"
-        >
-          <LucideChevronLeft style="width: 1.25rem; height: 1.25rem;" />
-        </button>
-        
-        <template v-for="page in totalPages" :key="page">
-          <button 
-            v-if="page === 1 || page === totalPages || (page >= currentPage - 1 && page <= currentPage + 1)"
-            @click="goToPage(page)"
-            class="pagination-btn"
-            :class="{ 'active': currentPage === page }"
-          >
-            {{ page }}
-          </button>
-          <span v-else-if="page === currentPage - 2 || page === currentPage + 2" class="pagination-dots">...</span>
-        </template>
-        
-        <button 
-          @click="goToPage(currentPage + 1)" 
-          :disabled="currentPage === totalPages"
-          class="pagination-btn"
-          :class="{ 'disabled': currentPage === totalPages }"
-        >
-          <LucideChevronRight style="width: 1.25rem; height: 1.25rem;" />
-        </button>
-      </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="bg-brand-dark py-5 text-center">
-      <div class="container">
-        <h2 class="font-heading display-5 fw-bold text-white mb-4">
-          {{ content.cta_section.title }}
-        </h2>
-        <p class="text-secondary mx-auto mb-4 font-body" style="max-width: 42rem;">
-          {{ content.cta_section.description }}
-        </p>
-        <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
-          <button class="btn-lime fs-5 px-5 py-3">
-            {{ content.cta_section.explore_venues_button }}
-          </button>
-          <button class="btn-secondary fs-5 px-5 py-3">
-            {{ content.cta_section.general_application_button }}
+        <!-- No Results -->
+        <div v-if="filteredJobs.length === 0" class="text-center py-5 bg-white border-organic">
+          <p class="fs-5 text-muted mb-2">{{ content.no_results.title }}</p>
+          <p class="text-secondary mb-3">{{ content.no_results.description }}</p>
+          <button
+            @click="searchQuery = ''; selectedJobType = content.search_section.job_types[0] || ''; selectedVenue = ''"
+            class="text-brand-pink fw-bold btn btn-link text-decoration-none">
+            {{ content.no_results.clear_filters_button }}
           </button>
         </div>
-      </div>
-    </section>
-  </div>
 
-  <!-- Loading state -->
-  <div v-else class="min-vh-100 bg-brand-gray d-flex align-items-center justify-content-center">
-    <div class="text-center">
-      <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Loading...</span>
+        <!-- Pagination -->
+        <div v-if="totalPages > 1" class="d-flex justify-content-center align-items-center gap-2 mt-5">
+          <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1" class="pagination-btn"
+            :class="{ 'disabled': currentPage === 1 }">
+            <LucideChevronLeft style="width: 1.25rem; height: 1.25rem;" />
+          </button>
+
+          <template v-for="page in totalPages" :key="page">
+            <button v-if="page === 1 || page === totalPages || (page >= currentPage - 1 && page <= currentPage + 1)"
+              @click="goToPage(page)" class="pagination-btn" :class="{ 'active': currentPage === page }">
+              {{ page }}
+            </button>
+            <span v-else-if="page === currentPage - 2 || page === currentPage + 2" class="pagination-dots">...</span>
+          </template>
+
+          <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" class="pagination-btn"
+            :class="{ 'disabled': currentPage === totalPages }">
+            <LucideChevronRight style="width: 1.25rem; height: 1.25rem;" />
+          </button>
+        </div>
+      </section>
+
+      <!-- CTA Section -->
+      <section class="bg-brand-dark py-5 text-center">
+        <div class="container">
+          <h2 class="font-heading display-5 fw-bold text-white mb-4">
+            {{ content.cta_section.title }}
+          </h2>
+          <p class="text-secondary mx-auto mb-4 font-body" style="max-width: 42rem;">
+            {{ content.cta_section.description }}
+          </p>
+          <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+            <button class="btn-lime fs-5 px-5 py-3">
+              {{ content.cta_section.explore_venues_button }}
+            </button>
+            <button class="btn-secondary fs-5 px-5 py-3">
+              {{ content.cta_section.general_application_button }}
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Loading state -->
+    <div v-else class="min-vh-100 bg-brand-gray d-flex align-items-center justify-content-center">
+      <div class="text-center">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 /* ============================================
    CAREERS HERO DEFAULT (No venue selected)
    ============================================ */
 .careers-hero-default {
-  background-color: #F5F5F0;
+  background-color: #FFF;
   padding-top: 6rem;
+  margin:4em auto;
+  
 }
 
 .careers-hero-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  min-height: 70vh;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  background: url(/images/dida.svg);
+  background-repeat: no-repeat;
+  background-size:cover;
   max-width: 1400px;
   margin: 0 auto;
+  max-height: 400px;
+  height: 100vh;
+  width: 100vw;
+  margin: 1em auto;
 }
 
 .careers-hero-image {
   position: relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   overflow: hidden;
 }
 
 .careers-hero-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
+  max-width:340px;
+  max-height:340px;
 }
 
 .careers-hero-content {
@@ -455,11 +442,13 @@ const goToPage = (page: number) => {
   align-items: center;
   justify-content: center;
   padding: 4rem;
-  background-color: #F5F5F0;
+  marign:0 !important;
+  
 }
 
 .careers-hero-inner {
-  max-width: 520px;
+  width:100%;
+  margin:0;
 }
 
 .careers-hero-title {
@@ -469,6 +458,17 @@ const goToPage = (page: number) => {
   line-height: 1.1;
   color: #1a1a1a;
   margin: 0 0 1.5rem;
+  z-index:0;
+  position:relative;
+  &::before{
+   content:"" ;
+    background:url(/images/decoHeaderBg.svg);
+    width:400px;
+  height:80px;
+    position:absolute;
+    z-index:-1;
+    
+  }
 }
 
 .careers-hero-subtitle {
@@ -550,7 +550,7 @@ const goToPage = (page: number) => {
   position: relative;
   padding: 8rem 0 6rem;
   overflow: hidden;
-  min-height:80vh;
+  min-height: 80vh;
 }
 
 .hero-section.has-venue {
@@ -562,8 +562,8 @@ const goToPage = (page: number) => {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  display:flex;
-  justify-content:center;
+  display: flex;
+  justify-content: center;
 }
 
 .hero-section.has-venue .hero-background::before {
@@ -571,7 +571,7 @@ const goToPage = (page: number) => {
 }
 
 .hero-section.has-venue .hero-overlay {
-  background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.7) 100%);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.7) 100%);
 }
 
 .hero-section.has-venue .hero-title {
@@ -598,22 +598,23 @@ const goToPage = (page: number) => {
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.3) 100%);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
 }
 
-.hero-content {    position: relative;
-    z-index: 1;
-    color: white;
-    text-align: left;
-    justify-content: center;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    align-items: flex-start;
+.hero-content {
+  position: relative;
+  z-index: 1;
+  color: white;
+  text-align: left;
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .hero-tag {
-  padding:1em;
+  padding: 1em;
   border-radius: 30px;
   background-color: #93cbff;
   font-family: FONTSPRINGDEMO-RecoletaMedium;
@@ -625,7 +626,7 @@ const goToPage = (page: number) => {
   letter-spacing: 0.68px;
   text-align: left;
   color: #000;
-  margin-bottom:2em;
+  margin-bottom: 2em;
 }
 
 .hero-title {
@@ -692,13 +693,29 @@ const goToPage = (page: number) => {
 }
 
 .search-bar-section {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-  z-index: 20;
+     /* margin-top: 2rem; */
+    /* margin-bottom: 2rem; */
+    z-index: 20;
+    max-width: 1400px;
+    background: url(/images/le24.svg);
+    max-height: 263px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 0em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    width: 100vw;
+    height: 100vh;
+    
+    &.has-active-venue {
+      margin-top: -1.5rem;
+    }
 }
 
 /* Adjust search bar when venue is active (overlapping hero) */
-.has-venue ~ .search-bar-section {
+.has-venue~.search-bar-section {
   margin-top: -1.5rem;
 }
 
@@ -803,6 +820,7 @@ const goToPage = (page: number) => {
     opacity: 0;
     transform: scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -814,6 +832,7 @@ const goToPage = (page: number) => {
     opacity: 1;
     transform: scale(1);
   }
+
   to {
     opacity: 0;
     transform: scale(0.95);
@@ -854,4 +873,31 @@ const goToPage = (page: number) => {
     height: 1px;
   }
 }
+  #limam{
+    width:100vw;
+    max-width:1400px;
+    padding:4em 0 0 0 ;
+    h3{
+        font-family: FONTSPRINGDEMO-RecoletaBold;
+  font-size: 50px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #000;
+    }
+    p{
+        font-family: FONTSPRINGDEMO-RecoletaMedium;
+  font-size: 18px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.84;
+  letter-spacing: normal;
+  text-align: left;
+  color: #000;
+    }
+  }
 </style>

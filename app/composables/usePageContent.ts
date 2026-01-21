@@ -155,6 +155,22 @@ export interface HomepageContent {
 
 export interface CareersContent {
   map_loading: string
+  hero_default: {
+    title_line_1: string
+    title_line_2: string
+    title_line_3: string
+    image: string
+    background_image: string
+  }
+  hero_with_venue: {
+    tag: string
+    title_prefix: string
+    subtitle: string
+    stats: {
+      open_positions_label: string
+      locations_label: string
+    }
+  }
   hero_section: {
     tag: string
     title_template: string
@@ -162,6 +178,7 @@ export interface CareersContent {
   }
   search_section: {
     search_placeholder: string
+    all_sites_label: string
     job_types: string[]
   }
   job_listing: {
