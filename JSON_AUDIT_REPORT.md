@@ -348,14 +348,133 @@ export interface BlogPost {
 
 ## 🔍 Analyse en cours
 
-- [x] Vérifier `blog-posts.json` usage dans `/blog/*` - ✅ **PROBLÈME TROUVÉ**
+- [x] Vérifier `blog-posts.json` usage dans `/blog/*` - ✅ **PROBLÈME TROUVÉ** → ✅ **CORRIGÉ**
 - [x] Analyser `activities.json` usage complet - ✅ **OPTIMAL**
 - [x] Analyser `events.json` usage complet - ✅ **OPTIMAL**
-- [ ] Vérifier `jobs.json` structure et usage
-- [ ] Vérifier `venues.json` structure et usage
-- [ ] Documenter `contact.vue` (si existe)
+- [x] Vérifier `jobs.json` structure et usage - ✅ **OPTIMAL**
+- [x] Vérifier `venues.json` structure et usage - ✅ **OPTIMAL**
+- [x] Nettoyer `site-content.json` - ✅ **COMPLÉTÉ** (-10%)
+- [ ] Nettoyer `pages-content.json` - ⚠️ **BLOQUÉ** (clés dupliquées)
 - [ ] Vérifier usage des champs SEO
 - [ ] Analyser `site-content.json` → `site.contact` et `site.social`
+
+---
+
+## 6️⃣ `jobs.json`
+
+### ✅ Fichier UTILISÉ - Tous les champs pertinents
+
+**Utilisé dans:**
+- ✅ `app/pages/careers.vue` (via `useJobs()`)
+- ✅ `app/pages/jobs/[slug].vue`
+- ✅ `app/pages/apply-jobs.vue`
+- ✅ `app/components/cards/JobCard.vue`
+- ✅ `app/components/forms/JobSearchForm.vue`
+
+**Structure complète:**
+```typescript
+{
+  id: number
+  slug: string
+  title: { rendered: string }
+  excerpt: { rendered: string }
+  content: { rendered: string }
+  venue_id: string
+  department: string
+  job_type: string
+  salary: string
+  requirements: string[]
+  benefits: string[]
+  featured_media: string
+}
+```
+
+**Utilisation des champs:**
+- ✅ `id` - Identification unique
+- ✅ `slug` - URLs (/jobs/[slug])
+- ✅ `title.rendered` - Titre du poste
+- ✅ `excerpt.rendered` - Description courte
+- ✅ `content.rendered` - Description complète
+- ✅ `venue_id` - Lien avec venues.json
+- ✅ `department` - Filtrage par département
+- ✅ `job_type` - Filtrage par type (Full-time, etc.)
+- ✅ `salary` - Affichage de la rémunération
+- ✅ `requirements[]` - Liste des exigences
+- ✅ `benefits[]` - Liste des avantages
+- ✅ `featured_media` - Image du poste
+
+**Statut:** ✅ **OPTIMAL** - Tous les champs sont utilisés
+
+**Taille:** 26K (603 lignes)
+
+---
+
+## 7️⃣ `venues.json`
+
+### ✅ Fichier UTILISÉ - Structure riche et bien exploitée
+
+**Utilisé dans:**
+- ✅ `app/pages/about.vue` (carte interactive)
+- ✅ `app/pages/careers.vue` (filtrage par venue)
+- ✅ `app/composables/useJobs.ts` (jointure avec jobs)
+- ✅ `app/components/VenueMap.vue` (probablement)
+
+**Structure complète:**
+```typescript
+{
+  metadata: {
+    title: string
+    description: string
+    filter_label: string
+  }
+  event_types: Array<{
+    id: string
+    name: string
+    image: string
+  }>
+  stats: Array<{
+    value: string
+    label: string
+  }>
+  venues: Array<{
+    id: string
+    name: string
+    location: string
+    city: string
+    country: string
+    type: string
+    lat: number
+    lng: number
+    image?: string
+    image2?: string
+    logo?: string
+    capacity?: string
+    staff_members?: number
+    recent_event?: string
+    guests_served?: string
+    shops_count?: number
+    menus_count?: number
+    description?: string
+    services?: string[]
+    shops?: Shop[]
+    menu_items?: MenuItem[]
+  }>
+}
+```
+
+**Utilisation:**
+- ✅ `metadata.*` - Titres et descriptions de la carte
+- ✅ `event_types[]` - Filtres de type (Stadium, Festival, Arena)
+- ✅ `stats[]` - Statistiques affichées
+- ✅ `venues[]` - Tous les champs utilisés pour la carte et les détails
+
+**Champs potentiellement sous-utilisés:**
+- ⚠️ `shops[]` - Peut-être utilisé dans modal/détail
+- ⚠️ `menu_items[]` - Peut-être utilisé dans modal/détail
+
+**Statut:** ✅ **OPTIMAL** - Structure riche et cohérente
+
+**Taille:** 18K (498 lignes)
 
 ---
 

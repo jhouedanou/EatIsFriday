@@ -89,8 +89,8 @@ const allPosts = computed(() => posts.value?.slice(2) || [])
                 </NuxtLink>
               </h3>
               <p class="card-excerpt">{{ post.excerpt.rendered }}</p>
-              <NuxtLink :to="`/blog/${post.slug}`" class="read-more-btn">
-                Read more
+              <NuxtLink :to="`/blog/${post.slug}`" class="bg-transparent border-0 p-0 m-0 mt-1">
+                              <NuxtImg src="/images/btnReadMore.svg" alt="Read more" width="247"/>
               </NuxtLink>
             </div>
           </article>
@@ -320,8 +320,12 @@ const allPosts = computed(() => posts.value?.slice(2) || [])
 }
 
 .post-card {
-  display: flex;
-  flex-direction: column;
+      display: flex;
+    flex-direction: column;
+    background: url(/images/bgBlogList.svg);
+    background-size: cover;
+    min-height: 772px;
+    max-width: 772px;
 }
 
 .card-image {
@@ -331,7 +335,7 @@ const allPosts = computed(() => posts.value?.slice(2) || [])
 
   img {
     width: 100%;
-    height: 220px;
+    height: 400px;
     object-fit: cover;
     display: block;
     transition: transform 0.3s ease;
@@ -346,19 +350,30 @@ const allPosts = computed(() => posts.value?.slice(2) || [])
   flex: 1;
   display: flex;
   flex-direction: column;
+  padding:1em;
 }
 
 .card-title {
-  font-family: var(--font-heading, 'Recoleta', serif);
-  font-size: 1.25rem;
-  font-weight: 700;
-  line-height: 1.3;
-  margin: 0 0 0.75rem;
-
+   font-family: FONTSPRINGDEMO-RecoletaBold;
+  font-size: 34px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #000b0f;
   a {
-    color: #1a1a1a;
-    text-decoration: none;
-    transition: color 0.2s ease;
+   font-family: FONTSPRINGDEMO-RecoletaBold;
+  font-size: 34px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #000b0f;
+  text-decoration:none;
 
     &:hover {
       color: #FF4D6D;
@@ -367,17 +382,20 @@ const allPosts = computed(() => posts.value?.slice(2) || [])
 }
 
 .card-excerpt {
-  font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
-  font-size: 0.875rem;
-  color: #666;
-  line-height: 1.6;
-  margin: 0 0 1.25rem;
-  flex: 1;
-
+  font-family: FONTSPRINGDEMO-RecoletaMedium;
+  font-size: 18px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.56;
+  letter-spacing: normal;
+  text-align: left;
+  margin:2em auto;
+  color: #000;
   // Clamp to 3 lines
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
+//  display: -webkit-box;
+  //-webkit-line-clamp: 3;
+ // -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
