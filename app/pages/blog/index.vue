@@ -1,67 +1,14 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { computed } from 'vue'
 
-const { getContentByPath } = usePageContent()
-const content = ref<any>(null)
+const { getBlogPosts } = useBlog()
 
-// Sample blog data (in production, this would come from an API)
-const featuredPosts = ref([
-  {
-    id: 1,
-    slug: 'future-of-stadium-catering',
-    title: 'The Future Of Stadium Catering: 5 Trends Reshaping The Industry',
-    excerpt: 'The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today\'s fans expect quality, variety, and convenience — and technology is making it all possible.',
-    image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?q=80&w=800&auto=format&fit=crop',
-    date: '3 hours ago'
-  },
-  {
-    id: 2,
-    slug: 'sustainability-journey',
-    title: 'Our Sustainability Journey: From 5 Percent To 87 Percent Waste Diversion',
-    excerpt: 'The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today\'s fans expect quality, variety, and convenience — and technology is making it all possible.',
-    image: 'https://images.unsplash.com/photo-1567521464027-f127ff144326?q=80&w=800&auto=format&fit=crop',
-    date: '1 day ago'
-  }
-])
+// Charger les articles depuis le serveur
+const { data: posts } = await useAsyncData('blog-posts', () => getBlogPosts())
 
-const allPosts = ref([
-  {
-    id: 3,
-    slug: 'feeding-250000-fans',
-    title: 'Behind The Scenes: Feeding 250,000 Fans At The 24 Hours Of Le Mans',
-    excerpt: 'The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today\'s fans expect quality, variety, and convenience — and technology is making it all possible.',
-    image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=600&auto=format&fit=crop',
-    date: '2 days ago'
-  },
-  {
-    id: 4,
-    slug: 'stadium-catering-trends-2',
-    title: 'The Future Of Stadium Catering: 5 Trends Reshaping The Industry',
-    excerpt: 'The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today\'s fans expect quality, variety, and convenience — and technology is making it all possible.',
-    image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=600&auto=format&fit=crop',
-    date: '3 days ago'
-  },
-  {
-    id: 5,
-    slug: 'stadium-catering-trends-3',
-    title: 'The Future Of Stadium Catering: 5 Trends Reshaping The Industry',
-    excerpt: 'The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today\'s fans expect quality, variety, and convenience — and technology is making it all possible.',
-    image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=600&auto=format&fit=crop',
-    date: '4 days ago'
-  },
-  {
-    id: 6,
-    slug: 'stadium-catering-trends-4',
-    title: 'The Future Of Stadium Catering: 5 Trends Reshaping The Industry',
-    excerpt: 'The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today\'s fans expect quality, variety, and convenience — and technology is making it all possible.',
-    image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=600&auto=format&fit=crop',
-    date: '5 days ago'
-  }
-])
-
-onMounted(async () => {
-  content.value = await getContentByPath('blog.index')
-})
+// Les 2 premiers posts sont "featured", les autres dans la grille
+const featuredPosts = computed(() => posts.value?.slice(0, 2) || [])
+const allPosts = computed(() => posts.value?.slice(2) || [])
 </script>
 
 <template>
@@ -71,9 +18,7 @@ onMounted(async () => {
       <div class="hero-decoration pink-blob"></div>
       <div class="container">
         <h1 class="hero-title">
-          <span class="title-white">Insightful Stories</span>
-          <span class="title-highlight">From The</span>
-          <span class="title-black">Kitchen</span>
+          <span class="title-black">Insightful Stories From The Kitchen</span>
         </h1>
       </div>
     </section>
@@ -84,19 +29,19 @@ onMounted(async () => {
         <h2 class="section-title">Most Recent Insights</h2>
 
         <!-- Featured Post 1 - Image Left -->
-        <article class="featured-post">
+        <article v-if="featuredPosts[0]" class="featured-post">
           <div class="post-image">
             <NuxtLink :to="`/blog/${featuredPosts[0].slug}`">
-              <img :src="featuredPosts[0].image" :alt="featuredPosts[0].title" />
+              <img :src="featuredPosts[0].featured_media" :alt="featuredPosts[0].title.rendered" />
             </NuxtLink>
           </div>
           <div class="post-content">
             <h3 class="post-title">
               <NuxtLink :to="`/blog/${featuredPosts[0].slug}`">
-                {{ featuredPosts[0].title }}
+                {{ featuredPosts[0].title.rendered }}
               </NuxtLink>
             </h3>
-            <p class="post-excerpt">{{ featuredPosts[0].excerpt }}</p>
+            <p class="post-excerpt">{{ featuredPosts[0].excerpt.rendered }}</p>
             <NuxtLink :to="`/blog/${featuredPosts[0].slug}`" class="read-more-btn">
               Read more
             </NuxtLink>
@@ -104,19 +49,19 @@ onMounted(async () => {
         </article>
 
         <!-- Featured Post 2 - Image Right -->
-        <article class="featured-post reverse">
+        <article v-if="featuredPosts[1]" class="featured-post reverse">
           <div class="post-image">
             <NuxtLink :to="`/blog/${featuredPosts[1].slug}`">
-              <img :src="featuredPosts[1].image" :alt="featuredPosts[1].title" />
+              <img :src="featuredPosts[1].featured_media" :alt="featuredPosts[1].title.rendered" />
             </NuxtLink>
           </div>
           <div class="post-content">
             <h3 class="post-title">
               <NuxtLink :to="`/blog/${featuredPosts[1].slug}`">
-                {{ featuredPosts[1].title }}
+                {{ featuredPosts[1].title.rendered }}
               </NuxtLink>
             </h3>
-            <p class="post-excerpt">{{ featuredPosts[1].excerpt }}</p>
+            <p class="post-excerpt">{{ featuredPosts[1].excerpt.rendered }}</p>
             <NuxtLink :to="`/blog/${featuredPosts[1].slug}`" class="read-more-btn">
               Read more
             </NuxtLink>
@@ -134,16 +79,16 @@ onMounted(async () => {
           <article v-for="post in allPosts" :key="post.id" class="post-card">
             <div class="card-image">
               <NuxtLink :to="`/blog/${post.slug}`">
-                <img :src="post.image" :alt="post.title" />
+                <img :src="post.featured_media" :alt="post.title.rendered" />
               </NuxtLink>
             </div>
             <div class="card-content">
               <h3 class="card-title">
                 <NuxtLink :to="`/blog/${post.slug}`">
-                  {{ post.title }}
+                  {{ post.title.rendered }}
                 </NuxtLink>
               </h3>
-              <p class="card-excerpt">{{ post.excerpt }}</p>
+              <p class="card-excerpt">{{ post.excerpt.rendered }}</p>
               <NuxtLink :to="`/blog/${post.slug}`" class="read-more-btn">
                 Read more
               </NuxtLink>

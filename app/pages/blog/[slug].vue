@@ -1,24 +1,38 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { LucideX } from 'lucide-vue-next'
 
 const router = useRouter()
 const route = useRoute()
+const { getBlogPostBySlug } = useBlog()
 
-// In production, fetch article based on route.params.slug
-const article = ref({
-  title: 'The Future Of Stadium Catering: 5 Trends Reshaping The Industry',
-  date: 'Posted 3 hours ago',
-  image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?q=80&w=1200&auto=format&fit=crop',
-  content: `
-    <p>The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible.. The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible.. The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible.. The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible.</p>
+// Récupérer l'article depuis le serveur
+const slug = route.params.slug as string
+const { data: article } = await useAsyncData(`blog-post-${slug}`, () => getBlogPostBySlug(slug))
 
-    <p>The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible. The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible. The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible.. The stadium food experience has evolved dramatically over the past decade. Gone are the days when a basic hot dog and warm beer were the only options. Today's fans expect quality, variety, and convenience — and technology is making it all possible.</p>
-  `
-})
+// Redirection si article non trouvé
+if (!article.value) {
+  navigateTo('/blog')
+}
 
 const goBack = () => {
   router.back()
+}
+
+// Formater la date
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString)
+  const now = new Date()
+  const diffTime = Math.abs(now.getTime() - date.getTime())
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
+  const diffHours = Math.floor(diffTime / (1000 * 60 * 60))
+
+  if (diffHours < 24) {
+    return `Posted ${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`
+  } else if (diffDays === 1) {
+    return 'Posted 1 day ago'
+  } else {
+    return `Posted ${diffDays} days ago`
+  }
 }
 </script>
 
@@ -29,22 +43,22 @@ const goBack = () => {
       <LucideX :size="24" />
     </button>
 
-    <article class="article-container">
+    <article v-if="article" class="article-container">
       <!-- Header -->
       <header class="article-header">
         <h1 class="article-title">
-          {{ article.title }}
+          {{ article.title.rendered }}
         </h1>
-        <p class="article-date">{{ article.date }}</p>
+        <p class="article-date">{{ formatDate(article.date) }}</p>
       </header>
 
       <!-- Featured Image -->
       <div class="article-image">
-        <img :src="article.image" :alt="article.title" />
+        <img :src="article.featured_media" :alt="article.title.rendered" />
       </div>
 
       <!-- Content -->
-      <div class="article-content" v-html="article.content"></div>
+      <div class="article-content" v-html="article.content.rendered"></div>
     </article>
   </div>
 </template>

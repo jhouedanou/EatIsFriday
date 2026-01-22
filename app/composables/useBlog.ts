@@ -28,15 +28,19 @@ export interface BlogPost {
 }
 
 export const useBlog = () => {
-    const { fetchData } = useApi()
-
-    const getBlogPosts = async (): Promise<BlogPost[] | null> => {
-        return await fetchData<BlogPost[]>('blog-posts.json')
+    const getBlogPosts = async (): Promise<BlogPost[]> => {
+        try {
+            // Utiliser la route serveur qui lit le JSON
+            const data = await $fetch<BlogPost[]>('/data/blog-posts.json')
+            return data
+        } catch (error) {
+            console.error('Erreur lors du chargement des articles:', error)
+            return []
+        }
     }
 
     const getBlogPostBySlug = async (slug: string): Promise<BlogPost | null> => {
         const posts = await getBlogPosts()
-        if (!posts) return null
         return posts.find(post => post.slug === slug) || null
     }
 
