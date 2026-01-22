@@ -61,9 +61,10 @@ onMounted(async () => {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  height:103px;
-  background:url(/images/headerBg.png) no-repeat center;
-  background-size: contain;
+  height: 103px;
+  background: url(/images/headerBg.png) no-repeat center;
+  background-size: cover;
+  max-width: 1400px;
     a{
   font-family: FONTSPRINGDEMO-RecoletaMedium;
       font-size: 18px;
