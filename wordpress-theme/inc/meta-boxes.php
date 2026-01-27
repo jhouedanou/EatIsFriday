@@ -1,12 +1,12 @@
 <?php
 /**
- * Eat Is Family - Meta Boxes
- * 
+ * EIF Backend - Meta Boxes
+ *
  * This file handles all custom meta boxes for the theme.
  * Uses WYSIWYG editors instead of JSON arrays and dynamic dropdowns for relationships.
- * 
- * @package EatIsFamily
- * @version 2.0.0
+ *
+ * @package EIFBackend
+ * @version 4.0.0
  */
 
 // Exit if accessed directly
@@ -354,8 +354,11 @@ function eatisfamily_render_shops_repeater($name, $values, $description = '') {
                         <input type="text" name="<?php echo esc_attr($name); ?>[<?php echo $index; ?>][name]" value="<?php echo esc_attr($item['name'] ?? ''); ?>" class="regular-text" placeholder="<?php _e('Shop name...', 'eatisfamily'); ?>">
                     </div>
                     <div style="flex: 1;">
-                        <label><?php _e('Image URL', 'eatisfamily'); ?></label>
-                        <input type="text" name="<?php echo esc_attr($name); ?>[<?php echo $index; ?>][image]" value="<?php echo esc_attr($item['image'] ?? ''); ?>" class="regular-text shop-image-input" placeholder="<?php _e('Image URL...', 'eatisfamily'); ?>">
+                        <label><?php _e('Image', 'eatisfamily'); ?></label>
+                        <div class="eatisfamily-media-field">
+                            <input type="text" name="<?php echo esc_attr($name); ?>[<?php echo $index; ?>][image]" id="<?php echo esc_attr($name); ?>_<?php echo $index; ?>_image" value="<?php echo esc_attr($item['image'] ?? ''); ?>" class="regular-text" placeholder="<?php _e('Image URL...', 'eatisfamily'); ?>">
+                            <button type="button" class="button eatisfamily-upload-btn" data-target="<?php echo esc_attr($name); ?>_<?php echo $index; ?>_image"><?php _e('Select Image', 'eatisfamily'); ?></button>
+                        </div>
                     </div>
                     <button type="button" class="button complex-repeater-remove" style="color: #d63638;">✕</button>
                 </div>
@@ -381,7 +384,7 @@ function eatisfamily_render_menu_items_repeater($name, $values, $description = '
     <div class="eatisfamily-complex-repeater" data-name="<?php echo esc_attr($name); ?>">
         <div class="complex-repeater-items">
             <?php foreach ($values as $index => $item): ?>
-                <div class="complex-repeater-item" style="display: grid; grid-template-columns: 1fr 100px 2fr 200px auto; gap: 10px; align-items: center; margin-bottom: 10px; padding: 10px; background: #fff; border: 1px solid #ddd;">
+                <div class="complex-repeater-item" style="display: grid; grid-template-columns: 1fr 100px 2fr 200px auto auto; gap: 10px; align-items: center; margin-bottom: 10px; padding: 10px; background: #fff; border: 1px solid #ddd;">
                     <div>
                         <input type="text" name="<?php echo esc_attr($name); ?>[<?php echo $index; ?>][name]" value="<?php echo esc_attr($item['name'] ?? ''); ?>" class="regular-text" placeholder="<?php _e('Item name', 'eatisfamily'); ?>">
                     </div>
@@ -392,8 +395,9 @@ function eatisfamily_render_menu_items_repeater($name, $values, $description = '
                         <input type="text" name="<?php echo esc_attr($name); ?>[<?php echo $index; ?>][description]" value="<?php echo esc_attr($item['description'] ?? ''); ?>" class="regular-text" placeholder="<?php _e('Description', 'eatisfamily'); ?>">
                     </div>
                     <div>
-                        <input type="text" name="<?php echo esc_attr($name); ?>[<?php echo $index; ?>][thumbnail]" value="<?php echo esc_attr($item['thumbnail'] ?? ''); ?>" class="regular-text" placeholder="<?php _e('Thumbnail URL', 'eatisfamily'); ?>">
+                        <input type="text" name="<?php echo esc_attr($name); ?>[<?php echo $index; ?>][thumbnail]" id="<?php echo esc_attr($name); ?>_<?php echo $index; ?>_thumbnail" value="<?php echo esc_attr($item['thumbnail'] ?? ''); ?>" class="regular-text" placeholder="<?php _e('Thumbnail URL', 'eatisfamily'); ?>">
                     </div>
+                    <button type="button" class="button eatisfamily-upload-btn" data-target="<?php echo esc_attr($name); ?>_<?php echo $index; ?>_thumbnail"><?php _e('Select', 'eatisfamily'); ?></button>
                     <button type="button" class="button complex-repeater-remove" style="color: #d63638;">✕</button>
                 </div>
             <?php endforeach; ?>
@@ -1058,9 +1062,9 @@ function eatisfamily_blog_meta_box_callback($post) {
             </div>
             
             <div class="field-row">
-                <label for="author_avatar"><?php _e('Author Avatar URL', 'eatisfamily'); ?></label>
+                <label for="author_avatar"><?php _e('Author Avatar', 'eatisfamily'); ?></label>
                 <div>
-                    <?php eatisfamily_render_text_field('author_avatar', $author_avatar, 'https://example.com/avatar.jpg'); ?>
+                    <?php eatisfamily_render_media_field('author_avatar', $author_avatar, __('Upload or select an avatar image.', 'eatisfamily')); ?>
                 </div>
             </div>
         </div>
@@ -1121,15 +1125,25 @@ function eatisfamily_timeline_meta_box_callback($post) {
         <div class="field-row">
             <label for="event_date"><?php _e('Event Date', 'eatisfamily'); ?></label>
             <div>
-                <?php eatisfamily_render_text_field('event_date', $event_date, '13 JUNE 2015', __('Format: DD MONTH YYYY (e.g., 13 JUNE 2015)', 'eatisfamily')); ?>
+                <?php
+                // Convert stored "DD MONTH YYYY" format to YYYY-MM-DD for the date picker
+                $date_value = '';
+                if ($event_date) {
+                    $timestamp = strtotime($event_date);
+                    if ($timestamp) {
+                        $date_value = date('Y-m-d', $timestamp);
+                    }
+                }
+                ?>
+                <input type="date" name="event_date" id="event_date" value="<?php echo esc_attr($date_value); ?>" class="regular-text">
+                <p class="description"><?php _e('Select the date for this timeline event.', 'eatisfamily'); ?></p>
             </div>
         </div>
-        
+
         <div class="field-row">
             <label for="event_description"><?php _e('Event Description', 'eatisfamily'); ?></label>
             <div>
-                <textarea name="event_description" id="event_description" rows="5" class="large-text" placeholder="<?php esc_attr_e('Describe this milestone in your company history...', 'eatisfamily'); ?>"><?php echo esc_textarea($event_description); ?></textarea>
-                <p class="description"><?php _e('A detailed description of this milestone or event in your company\'s history.', 'eatisfamily'); ?></p>
+                <?php eatisfamily_render_wysiwyg('event_description', $event_description, __('A detailed description of this milestone or event in your company\'s history.', 'eatisfamily')); ?>
             </div>
         </div>
         
@@ -1162,12 +1176,19 @@ function eatisfamily_save_timeline_meta_box($post_id) {
         return;
     }
     
-    // Save fields
-    if (isset($_POST['event_date'])) {
-        update_post_meta($post_id, 'event_date', sanitize_text_field($_POST['event_date']));
+    // Save event_date: convert from YYYY-MM-DD input to "DD MONTH YYYY" for API compatibility
+    if (isset($_POST['event_date']) && !empty($_POST['event_date'])) {
+        $timestamp = strtotime(sanitize_text_field($_POST['event_date']));
+        if ($timestamp) {
+            $display_date = strtoupper(date('d F Y', $timestamp));
+            update_post_meta($post_id, 'event_date', $display_date);
+        }
+    } elseif (isset($_POST['event_date'])) {
+        update_post_meta($post_id, 'event_date', '');
     }
+    // Save event_description: use wp_kses_post to preserve HTML from WYSIWYG
     if (isset($_POST['event_description'])) {
-        update_post_meta($post_id, 'event_description', sanitize_textarea_field($_POST['event_description']));
+        update_post_meta($post_id, 'event_description', wp_kses_post($_POST['event_description']));
     }
     if (isset($_POST['display_order'])) {
         update_post_meta($post_id, 'display_order', intval($_POST['display_order']));
@@ -1287,17 +1308,20 @@ function eatisfamily_admin_scripts($hook) {
                     
                     var $newItem;
                     if (type === "shop") {
+                        var shopImageId = name + "_" + index + "_image";
                         $newItem = $("<div class=\"complex-repeater-item\" style=\"display: flex; gap: 10px; align-items: center; margin-bottom: 10px; padding: 10px; background: #fff; border: 1px solid #ddd;\">" +
                             "<div style=\"flex: 1;\"><label>Name</label><input type=\"text\" name=\"" + name + "[" + index + "][name]\" value=\"\" class=\"regular-text\" placeholder=\"Shop name...\"></div>" +
-                            "<div style=\"flex: 1;\"><label>Image URL</label><input type=\"text\" name=\"" + name + "[" + index + "][image]\" value=\"\" class=\"regular-text\" placeholder=\"Image URL...\"></div>" +
+                            "<div style=\"flex: 1;\"><label>Image</label><div class=\"eatisfamily-media-field\"><input type=\"text\" name=\"" + name + "[" + index + "][image]\" id=\"" + shopImageId + "\" value=\"\" class=\"regular-text\" placeholder=\"Image URL...\"><button type=\"button\" class=\"button eatisfamily-upload-btn\" data-target=\"" + shopImageId + "\">Select Image</button></div></div>" +
                             "<button type=\"button\" class=\"button complex-repeater-remove\" style=\"color: #d63638;\">✕</button>" +
                             "</div>");
                     } else if (type === "menu") {
-                        $newItem = $("<div class=\"complex-repeater-item\" style=\"display: grid; grid-template-columns: 1fr 100px 2fr 200px auto; gap: 10px; align-items: center; margin-bottom: 10px; padding: 10px; background: #fff; border: 1px solid #ddd;\">" +
+                        var menuThumbId = name + "_" + index + "_thumbnail";
+                        $newItem = $("<div class=\"complex-repeater-item\" style=\"display: grid; grid-template-columns: 1fr 100px 2fr 200px auto auto; gap: 10px; align-items: center; margin-bottom: 10px; padding: 10px; background: #fff; border: 1px solid #ddd;\">" +
                             "<div><input type=\"text\" name=\"" + name + "[" + index + "][name]\" value=\"\" class=\"regular-text\" placeholder=\"Item name\"></div>" +
                             "<div><input type=\"text\" name=\"" + name + "[" + index + "][price]\" value=\"\" class=\"small-text\" placeholder=\"Price\"></div>" +
                             "<div><input type=\"text\" name=\"" + name + "[" + index + "][description]\" value=\"\" class=\"regular-text\" placeholder=\"Description\"></div>" +
-                            "<div><input type=\"text\" name=\"" + name + "[" + index + "][thumbnail]\" value=\"\" class=\"regular-text\" placeholder=\"Thumbnail URL\"></div>" +
+                            "<div><input type=\"text\" name=\"" + name + "[" + index + "][thumbnail]\" id=\"" + menuThumbId + "\" value=\"\" class=\"regular-text\" placeholder=\"Thumbnail URL\"></div>" +
+                            "<button type=\"button\" class=\"button eatisfamily-upload-btn\" data-target=\"" + menuThumbId + "\">Select</button>" +
                             "<button type=\"button\" class=\"button complex-repeater-remove\" style=\"color: #d63638;\">✕</button>" +
                             "</div>");
                     }

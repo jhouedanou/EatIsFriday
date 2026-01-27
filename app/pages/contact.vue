@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { LucideX } from 'lucide-vue-next'
 
 const router = useRouter()
+const { getContactContent } = usePageContent()
+
+const contactContent = ref<any>(null)
 
 const form = ref({
   name: '',
@@ -36,6 +39,17 @@ const submitForm = async () => {
     message: ''
   }
 }
+
+onMounted(async () => {
+  contactContent.value = await getContactContent()
+})
+
+useHead(() => ({
+  title: 'Contact Us - Eat Is Family',
+  meta: [
+    { name: 'description', content: contactContent.value?.hero_section?.description || 'Get in touch with Eat Is Family. Share your vision and we\'ll bring it to life.' }
+  ]
+}))
 </script>
 
 <template>
@@ -61,18 +75,27 @@ const submitForm = async () => {
       <!-- Left: Title and Subtitle -->
       <div class="contact-header">
         <h1 class="contact-title">
-          Reach <span class="highlight">Out</span> Let's Create<br/>
-          Something Amazing
+          <template v-if="contactContent?.hero_section?.title">
+            {{ contactContent.hero_section.title.line_1 }} <span class="highlight">{{ contactContent.hero_section.title.highlight || 'Out' }}</span> {{ contactContent.hero_section.title.line_2 }}<br/>
+            {{ contactContent.hero_section.title.line_3 }}
+          </template>
+          <template v-else>
+            Reach <span class="highlight">Out</span> Let's Create<br/>
+            Something Amazing
+          </template>
         </h1>
         <p class="contact-subtitle">
-          Ready to elevate your event with exceptional catering? Share your vision and we'll bring it to life.
+          {{ contactContent?.hero_section?.description || 'Ready to elevate your event with exceptional catering? Share your vision and we\'ll bring it to life.' }}
         </p>
       </div>
 
       <!-- Right: Oval Image -->
       <div class="contact-image">
         <div class="oval-image">
-          <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=600&auto=format&fit=crop" alt="Delicious catering food" />
+          <img 
+            :src="contactContent?.hero_section?.image?.src || 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=600&auto=format&fit=crop'" 
+            :alt="contactContent?.hero_section?.image?.alt || 'Delicious catering food'" 
+          />
         </div>
       </div>
     </div>
@@ -86,7 +109,7 @@ const submitForm = async () => {
             <input
               v-model="form.name"
               type="text"
-              placeholder="Enter Name"
+              :placeholder="contactContent?.form?.name_placeholder || 'Enter Name'"
               required
             />
           </div>
@@ -94,7 +117,7 @@ const submitForm = async () => {
             <input
               v-model="form.email"
               type="email"
-              placeholder="Enter Email Adress"
+              :placeholder="contactContent?.form?.email_placeholder || 'Enter Email Address'"
               required
             />
           </div>
@@ -106,14 +129,14 @@ const submitForm = async () => {
             <input
               v-model="form.eventType"
               type="text"
-              placeholder="Event Type"
+              :placeholder="contactContent?.form?.event_type_placeholder || 'Event Type'"
             />
           </div>
           <div class="form-field">
             <input
               v-model="form.location"
               type="text"
-              placeholder="Enter Location"
+              :placeholder="contactContent?.form?.location_placeholder || 'Enter Location'"
             />
           </div>
         </div>
@@ -124,7 +147,7 @@ const submitForm = async () => {
             <input
               v-model="form.date"
               type="text"
-              placeholder="Date of Event"
+              :placeholder="contactContent?.form?.date_placeholder || 'Date of Event'"
               onfocus="(this.type='date')"
               onblur="if(!this.value)(this.type='text')"
             />
@@ -133,7 +156,7 @@ const submitForm = async () => {
             <input
               v-model="form.guests"
               type="text"
-              placeholder="Number of Guests"
+              :placeholder="contactContent?.form?.guests_placeholder || 'Number of Guests'"
             />
           </div>
         </div>
@@ -143,7 +166,7 @@ const submitForm = async () => {
           <div class="form-field textarea-field">
             <textarea
               v-model="form.message"
-              placeholder="Message"
+              :placeholder="contactContent?.form?.message_placeholder || 'Message'"
               rows="5"
               required
             ></textarea>
@@ -154,7 +177,7 @@ const submitForm = async () => {
         <div class="form-row full-width">
           <button type="submit" class="submit-btn" :disabled="isSubmitting">
             <span v-if="isSubmitting">Sending...</span>
-            <span v-else>Send Message</span>
+            <span v-else>{{ contactContent?.form?.submit_button || 'Send Message' }}</span>
           </button>
         </div>
       </form>

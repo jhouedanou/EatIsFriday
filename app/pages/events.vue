@@ -30,12 +30,12 @@ onMounted(async () => {
   loading.value = false
 })
 
-useHead({
-  title: 'Events - Eat Is Family',
+useHead(() => ({
+  title: content.value?.seo?.title || 'Events - Eat Is Family',
   meta: [
-    { name: 'description', content: 'Discover our food events and culinary experiences across France.' }
+    { name: 'description', content: content.value?.seo?.description || 'Discover our food events and culinary experiences across France.' }
   ]
-})
+}))
 </script>
 
 <template>

@@ -1,9 +1,9 @@
 <?php
 /**
- * Eat Is Family Theme Functions
- * 
- * @package EatIsFamily
- * @version 3.0.0
+ * EIF Backend Theme Functions
+ *
+ * @package EIFBackend
+ * @version 4.0.0
  */
 
 // Exit if accessed directly

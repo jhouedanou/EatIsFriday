@@ -1,10 +1,10 @@
 <?php
 /**
- * Eat Is Family - Extended Admin Pages
+ * EIF Backend - Extended Admin Pages
  * Complete content management for all pages including partners
- * 
- * @package EatIsFamily
- * @version 3.0.0
+ *
+ * @package EIFBackend
+ * @version 4.0.0
  */
 
 if (!defined('ABSPATH')) {
@@ -74,6 +74,16 @@ function eatisfamily_register_admin_menus() {
         'manage_options',
         'eatisfamily-gallery',
         'eatisfamily_gallery_page'
+    );
+
+    // Submenu - Data Management
+    add_submenu_page(
+        'eatisfamily-site-content',
+        __('Data Management', 'eatisfamily'),
+        __('Data Management', 'eatisfamily'),
+        'manage_options',
+        'eatisfamily-data-management',
+        'eatisfamily_data_management_page'
     );
 }
 add_action('admin_menu', 'eatisfamily_register_admin_menus', 5);

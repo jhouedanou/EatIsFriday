@@ -1,12 +1,12 @@
 <?php
 /**
- * Eat Is Family - Admin Pages
- * 
+ * EIF Backend - Admin Pages
+ *
  * This file handles admin pages for editing Site Content and Pages Content
  * that were previously stored in JSON files.
- * 
- * @package EatIsFamily
- * @version 3.0.0
+ *
+ * @package EIFBackend
+ * @version 4.0.0
  * 
  * NOTE: Uses AJAX with base64 encoding to bypass mod_security restrictions
  */
@@ -232,42 +232,8 @@ function eatisfamily_build_pages_content_from_data($data) {
  * ============================================================================
  */
 
-/**
- * Add admin menu pages for Site Content and Pages Content
- */
-function eatisfamily_add_content_admin_pages() {
-    // Main menu page
-    add_menu_page(
-        __('Site Content', 'eatisfamily'),
-        __('Site Content', 'eatisfamily'),
-        'manage_options',
-        'eatisfamily-site-content',
-        'eatisfamily_site_content_page',
-        'dashicons-admin-site-alt3',
-        30
-    );
-    
-    // Pages Content submenu
-    add_submenu_page(
-        'eatisfamily-site-content',
-        __('Pages Content', 'eatisfamily'),
-        __('Pages Content', 'eatisfamily'),
-        'manage_options',
-        'eatisfamily-pages-content',
-        'eatisfamily_pages_content_page'
-    );
-    
-    // Data Management submenu (for manual import)
-    add_submenu_page(
-        'eatisfamily-site-content',
-        __('Data Management', 'eatisfamily'),
-        __('Data Management', 'eatisfamily'),
-        'manage_options',
-        'eatisfamily-data-management',
-        'eatisfamily_data_management_page'
-    );
-}
-add_action('admin_menu', 'eatisfamily_add_content_admin_pages');
+// Note: Admin menus (Site Content, Pages Content, Partners, Services, Sustainability, Gallery)
+// are registered in inc/admin-pages-extended.php via eatisfamily_register_admin_menus() at priority 5.
 
 /**
  * ============================================================================

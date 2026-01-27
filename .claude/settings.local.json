@@ -8,7 +8,8 @@
       "Bash(pkill:*)",
       "Bash(git checkout:*)",
       "Bash(npm run dev:*)",
-      "Bash(dir:*)"
+      "Bash(dir:*)",
+      "Bash(grep -rn \"timeline\" \"C:\\\\Users\\\\socialmedia\\\\Documents\\\\EatIsFriday\\\\app\\\\composables\"\" --include=\"*.ts \")"
     ]
   }
 }

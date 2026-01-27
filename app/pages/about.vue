@@ -80,7 +80,7 @@
                 <div class="event-card-info">
                   <h4 class="event-card-title">{{ selectedEvent.title }}</h4>
                   <p class="event-card-date">{{ selectedEvent.year }}</p>
-                  <p class="event-card-description">{{ selectedEvent.event }}</p>
+                  <p class="event-card-description" v-html="selectedEvent.event"></p>
                   <button class="share-button">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path
