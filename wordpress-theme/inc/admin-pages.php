@@ -295,37 +295,91 @@ function eatisfamily_site_content_page() {
  * ============================================================================
  * PAGES CONTENT EDITOR
  * ============================================================================
+ * 
+ * This admin page matches the EXACT structure of pages-content.json
+ * Structure: homepage.hero_section.title.line_1, line_2, line_3
+ * Supports video backgrounds (image, YouTube, MP4)
  */
 
 /**
- * Pages Content admin page
+ * Pages Content admin page - CORRECTED TO MATCH JSON STRUCTURE
  */
 function eatisfamily_pages_content_page() {
     // Handle form submission
     if (isset($_POST['eatisfamily_pages_content_nonce']) && 
         wp_verify_nonce($_POST['eatisfamily_pages_content_nonce'], 'save_pages_content')) {
         
+        // Build pages_content with CORRECT structure matching pages-content.json
         $pages_content = array(
             'homepage' => array(
-                'hero' => array(
-                    'title' => sanitize_text_field($_POST['homepage_hero_title'] ?? ''),
-                    'subtitle' => sanitize_text_field($_POST['homepage_hero_subtitle'] ?? ''),
-                    'cta_text' => sanitize_text_field($_POST['homepage_hero_cta_text'] ?? ''),
-                    'cta_link' => esc_url_raw($_POST['homepage_hero_cta_link'] ?? ''),
-                    'background_image' => esc_url_raw($_POST['homepage_hero_bg'] ?? ''),
+                'seo' => array(
+                    'title' => sanitize_text_field($_POST['homepage_seo_title'] ?? ''),
+                    'description' => sanitize_textarea_field($_POST['homepage_seo_description'] ?? ''),
+                    'keywords' => sanitize_text_field($_POST['homepage_seo_keywords'] ?? ''),
+                    'og_title' => sanitize_text_field($_POST['homepage_seo_og_title'] ?? ''),
+                    'og_description' => sanitize_textarea_field($_POST['homepage_seo_og_description'] ?? ''),
+                    'og_image' => esc_url_raw($_POST['homepage_seo_og_image'] ?? ''),
+                ),
+                // CORRECT STRUCTURE: hero_section (not hero)
+                'hero_section' => array(
+                    'bg' => esc_url_raw($_POST['homepage_hero_bg'] ?? ''),
+                    'video_type' => sanitize_text_field($_POST['homepage_hero_video_type'] ?? 'image'),
+                    'video_url' => esc_url_raw($_POST['homepage_hero_video_url'] ?? ''),
+                    'youtube_id' => sanitize_text_field($_POST['homepage_hero_youtube_id'] ?? ''),
+                    // CORRECT STRUCTURE: title with line_1, line_2, line_3
+                    'title' => array(
+                        'line_1' => wp_kses_post($_POST['homepage_hero_title_line1'] ?? ''),
+                        'line_2' => wp_kses_post($_POST['homepage_hero_title_line2'] ?? ''),
+                        'line_3' => wp_kses_post($_POST['homepage_hero_title_line3'] ?? ''),
+                    ),
+                ),
+                'intro_section' => array(
+                    'texte' => wp_kses_post($_POST['homepage_intro_texte'] ?? ''),
+                ),
+                'services_section' => array(
+                    'tag' => sanitize_text_field($_POST['homepage_services_tag'] ?? ''),
+                    'title' => array(
+                        'line_1' => sanitize_text_field($_POST['homepage_services_title_line1'] ?? ''),
+                        'highlight' => sanitize_text_field($_POST['homepage_services_title_highlight'] ?? ''),
+                        'line_2' => sanitize_text_field($_POST['homepage_services_title_line2'] ?? ''),
+                    ),
+                ),
+                'cta_section' => array(
+                    'title' => sanitize_text_field($_POST['homepage_cta_title'] ?? ''),
+                    'description' => wp_kses_post($_POST['homepage_cta_description'] ?? ''),
+                ),
+                'sustainable_service_title' => sanitize_text_field($_POST['homepage_sustainable_title'] ?? ''),
+                'beautiful' => array(
+                    'title' => sanitize_text_field($_POST['homepage_beautiful_title'] ?? ''),
+                    'text' => wp_kses_post($_POST['homepage_beautiful_text'] ?? ''),
+                    'image' => esc_url_raw($_POST['homepage_beautiful_image'] ?? ''),
+                ),
+                'partners_title' => sanitize_text_field($_POST['homepage_partners_title'] ?? ''),
+                'homepageCTA' => array(
+                    'title' => sanitize_text_field($_POST['homepage_cta_block_title'] ?? ''),
+                    'image' => esc_url_raw($_POST['homepage_cta_block_image'] ?? ''),
+                    'description' => wp_kses_post($_POST['homepage_cta_block_description'] ?? ''),
+                    'additionalText' => wp_kses_post($_POST['homepage_cta_block_additional'] ?? ''),
                 ),
             ),
             'about' => array(
                 'hero' => array(
                     'title' => sanitize_text_field($_POST['about_hero_title'] ?? ''),
                     'subtitle' => sanitize_text_field($_POST['about_hero_subtitle'] ?? ''),
-                    'background_image' => esc_url_raw($_POST['about_hero_bg'] ?? ''),
+                    'description' => wp_kses_post($_POST['about_hero_description'] ?? ''),
+                    'image' => array(
+                        'src' => esc_url_raw($_POST['about_hero_image'] ?? ''),
+                        'alt' => sanitize_text_field($_POST['about_hero_image_alt'] ?? ''),
+                    ),
                 ),
-                'intro_section' => array(
-                    'title' => sanitize_text_field($_POST['about_intro_title'] ?? ''),
-                    'content' => wp_kses_post($_POST['about_intro_content'] ?? ''),
+                'section_titles' => array(
+                    'values' => sanitize_text_field($_POST['about_values_title'] ?? ''),
+                    'team' => sanitize_text_field($_POST['about_team_title'] ?? ''),
                 ),
-                'timeline_title' => sanitize_text_field($_POST['about_timeline_title'] ?? 'Our History'),
+                'seo' => array(
+                    'title' => sanitize_text_field($_POST['about_seo_title'] ?? ''),
+                    'description' => sanitize_textarea_field($_POST['about_seo_description'] ?? ''),
+                ),
             ),
             'contact' => array(
                 'hero' => array(
@@ -336,9 +390,19 @@ function eatisfamily_pages_content_page() {
                 'form_subtitle' => sanitize_text_field($_POST['contact_form_subtitle'] ?? ''),
             ),
             'careers' => array(
-                'hero' => array(
-                    'title' => sanitize_text_field($_POST['careers_hero_title'] ?? ''),
-                    'subtitle' => sanitize_text_field($_POST['careers_hero_subtitle'] ?? ''),
+                'seo' => array(
+                    'title' => sanitize_text_field($_POST['careers_seo_title'] ?? ''),
+                    'description' => sanitize_textarea_field($_POST['careers_seo_description'] ?? ''),
+                ),
+                'hero_default' => array(
+                    'title_line_1' => sanitize_text_field($_POST['careers_hero_title_line1'] ?? ''),
+                    'title_line_2' => sanitize_text_field($_POST['careers_hero_title_line2'] ?? ''),
+                    'image' => esc_url_raw($_POST['careers_hero_image'] ?? ''),
+                    'background_image' => esc_url_raw($_POST['careers_hero_bg'] ?? ''),
+                ),
+                'join_box' => array(
+                    'title' => sanitize_text_field($_POST['careers_join_title'] ?? ''),
+                    'description' => wp_kses_post($_POST['careers_join_description'] ?? ''),
                 ),
                 'benefits_title' => sanitize_text_field($_POST['careers_benefits_title'] ?? ''),
                 'benefits' => array_filter(array_map('sanitize_text_field', $_POST['careers_benefits'] ?? array())),
@@ -365,9 +429,9 @@ function eatisfamily_pages_content_page() {
     $events = $pages_content['events'] ?? array();
     
     ?>
-    <div class="wrap">
+    <div class="wrap eatisfamily-pages-content">
         <h1><?php _e('Pages Content Settings', 'eatisfamily'); ?></h1>
-        <p class="description"><?php _e('Edit content for each page of your website.', 'eatisfamily'); ?></p>
+        <p class="description"><?php _e('Edit content for each page of your website. Changes are reflected immediately on the Vue.js frontend.', 'eatisfamily'); ?></p>
         
         <form method="post" action="">
             <?php wp_nonce_field('save_pages_content', 'eatisfamily_pages_content_nonce'); ?>
@@ -380,55 +444,343 @@ function eatisfamily_pages_content_page() {
                 <a href="#events" class="nav-tab"><?php _e('Events', 'eatisfamily'); ?></a>
             </h2>
             
-            <!-- Homepage Tab -->
+            <!-- ============================================================ -->
+            <!-- HOMEPAGE TAB - CORRECTED STRUCTURE -->
+            <!-- ============================================================ -->
             <div id="homepage" class="tab-content" style="display: block;">
-                <table class="form-table" role="presentation">
-                    <tbody>
+                
+                <!-- Hero Section with Video Support -->
+                <div class="eatisfamily-section">
+                    <h3 class="section-title"><?php _e('🎬 Hero Section', 'eatisfamily'); ?></h3>
+                    <p class="description"><?php _e('The main hero area. You can use an image, YouTube video, or MP4 video as background.', 'eatisfamily'); ?></p>
+                    
+                    <table class="form-table">
                         <tr>
-                            <th colspan="2"><h3><?php _e('Hero Section', 'eatisfamily'); ?></h3></th>
-                        </tr>
-                        <tr>
-                            <th scope="row"><label for="homepage_hero_title"><?php _e('Title', 'eatisfamily'); ?></label></th>
+                            <th scope="row"><label for="homepage_hero_video_type"><?php _e('Background Type', 'eatisfamily'); ?></label></th>
                             <td>
-                                <input type="text" name="homepage_hero_title" id="homepage_hero_title" value="<?php echo esc_attr($homepage['hero']['title'] ?? ''); ?>" class="large-text">
+                                <select name="homepage_hero_video_type" id="homepage_hero_video_type" class="regular-text">
+                                    <option value="image" <?php selected($homepage['hero_section']['video_type'] ?? 'image', 'image'); ?>><?php _e('Image', 'eatisfamily'); ?></option>
+                                    <option value="youtube" <?php selected($homepage['hero_section']['video_type'] ?? '', 'youtube'); ?>><?php _e('YouTube Video', 'eatisfamily'); ?></option>
+                                    <option value="mp4" <?php selected($homepage['hero_section']['video_type'] ?? '', 'mp4'); ?>><?php _e('MP4 Video', 'eatisfamily'); ?></option>
+                                </select>
                             </td>
                         </tr>
-                        <tr>
-                            <th scope="row"><label for="homepage_hero_subtitle"><?php _e('Subtitle', 'eatisfamily'); ?></label></th>
-                            <td>
-                                <input type="text" name="homepage_hero_subtitle" id="homepage_hero_subtitle" value="<?php echo esc_attr($homepage['hero']['subtitle'] ?? ''); ?>" class="large-text">
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row"><label for="homepage_hero_cta_text"><?php _e('CTA Button Text', 'eatisfamily'); ?></label></th>
-                            <td>
-                                <input type="text" name="homepage_hero_cta_text" id="homepage_hero_cta_text" value="<?php echo esc_attr($homepage['hero']['cta_text'] ?? ''); ?>" class="regular-text">
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row"><label for="homepage_hero_cta_link"><?php _e('CTA Button Link', 'eatisfamily'); ?></label></th>
-                            <td>
-                                <input type="text" name="homepage_hero_cta_link" id="homepage_hero_cta_link" value="<?php echo esc_attr($homepage['hero']['cta_link'] ?? ''); ?>" class="regular-text">
-                            </td>
-                        </tr>
-                        <tr>
+                        <tr class="video-field video-field-image">
                             <th scope="row"><label for="homepage_hero_bg"><?php _e('Background Image', 'eatisfamily'); ?></label></th>
                             <td>
-                                <input type="text" name="homepage_hero_bg" id="homepage_hero_bg" value="<?php echo esc_attr($homepage['hero']['background_image'] ?? ''); ?>" class="regular-text">
+                                <input type="text" name="homepage_hero_bg" id="homepage_hero_bg" value="<?php echo esc_attr($homepage['hero_section']['bg'] ?? ''); ?>" class="regular-text">
                                 <button type="button" class="button eatisfamily-upload-media" data-target="homepage_hero_bg"><?php _e('Select Image', 'eatisfamily'); ?></button>
+                                <?php if (!empty($homepage['hero_section']['bg'])): ?>
+                                    <div class="image-preview" style="margin-top: 10px;">
+                                        <img src="<?php echo esc_url($homepage['hero_section']['bg']); ?>" style="max-width: 300px; max-height: 150px;">
+                                    </div>
+                                <?php endif; ?>
                             </td>
                         </tr>
-                    </tbody>
-                </table>
+                        <tr class="video-field video-field-youtube" style="display: none;">
+                            <th scope="row"><label for="homepage_hero_youtube_id"><?php _e('YouTube Video ID', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="homepage_hero_youtube_id" id="homepage_hero_youtube_id" value="<?php echo esc_attr($homepage['hero_section']['youtube_id'] ?? ''); ?>" class="regular-text" placeholder="dQw4w9WgXcQ">
+                                <p class="description"><?php _e('Enter only the video ID (the part after v= in the URL). Example: for https://youtube.com/watch?v=dQw4w9WgXcQ, enter dQw4w9WgXcQ', 'eatisfamily'); ?></p>
+                            </td>
+                        </tr>
+                        <tr class="video-field video-field-mp4" style="display: none;">
+                            <th scope="row"><label for="homepage_hero_video_url"><?php _e('MP4 Video URL', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="homepage_hero_video_url" id="homepage_hero_video_url" value="<?php echo esc_attr($homepage['hero_section']['video_url'] ?? ''); ?>" class="regular-text">
+                                <button type="button" class="button eatisfamily-upload-media" data-target="homepage_hero_video_url" data-type="video"><?php _e('Select Video', 'eatisfamily'); ?></button>
+                                <p class="description"><?php _e('Upload or select an MP4 video file.', 'eatisfamily'); ?></p>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <th colspan="2"><hr><h4><?php _e('Hero Title Lines', 'eatisfamily'); ?></h4>
+                            <p class="description"><?php _e('The hero title is split into 3 parts for styling purposes. Use \\n for line breaks within each part.', 'eatisfamily'); ?></p></th>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="homepage_hero_title_line1"><?php _e('Title Line 1', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <textarea name="homepage_hero_title_line1" id="homepage_hero_title_line1" rows="3" class="large-text"><?php echo esc_textarea($homepage['hero_section']['title']['line_1'] ?? ''); ?></textarea>
+                                <p class="description"><?php _e('First bold headline (e.g., "Feeding\nExperiences.")', 'eatisfamily'); ?></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="homepage_hero_title_line2"><?php _e('Title Line 2', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <textarea name="homepage_hero_title_line2" id="homepage_hero_title_line2" rows="3" class="large-text"><?php echo esc_textarea($homepage['hero_section']['title']['line_2'] ?? ''); ?></textarea>
+                                <p class="description"><?php _e('Second bold headline (e.g., "Serving\nMoments")', 'eatisfamily'); ?></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="homepage_hero_title_line3"><?php _e('Title Line 3 (Description)', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <textarea name="homepage_hero_title_line3" id="homepage_hero_title_line3" rows="4" class="large-text"><?php echo esc_textarea($homepage['hero_section']['title']['line_3'] ?? ''); ?></textarea>
+                                <p class="description"><?php _e('Descriptive paragraph below the headlines.', 'eatisfamily'); ?></p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <!-- Intro Section -->
+                <div class="eatisfamily-section">
+                    <h3 class="section-title"><?php _e('📝 Intro Section', 'eatisfamily'); ?></h3>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label><?php _e('Intro Text', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <?php 
+                                wp_editor(
+                                    $homepage['intro_section']['texte'] ?? '', 
+                                    'homepage_intro_texte', 
+                                    array(
+                                        'textarea_name' => 'homepage_intro_texte',
+                                        'textarea_rows' => 6,
+                                        'media_buttons' => false,
+                                        'teeny' => true,
+                                        'quicktags' => array('buttons' => 'strong,em,link'),
+                                    )
+                                );
+                                ?>
+                                <p class="description"><?php _e('The "We Are Eat Is Family!" intro text. Use <strong> for bold and <span> for highlights.', 'eatisfamily'); ?></p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <!-- Services Section -->
+                <div class="eatisfamily-section">
+                    <h3 class="section-title"><?php _e('🛠️ Services Section', 'eatisfamily'); ?></h3>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="homepage_services_tag"><?php _e('Section Tag', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="homepage_services_tag" id="homepage_services_tag" value="<?php echo esc_attr($homepage['services_section']['tag'] ?? 'OUR SERVICES'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="homepage_services_title_line1"><?php _e('Title Line 1', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="homepage_services_title_line1" id="homepage_services_title_line1" value="<?php echo esc_attr($homepage['services_section']['title']['line_1'] ?? ''); ?>" class="large-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="homepage_services_title_highlight"><?php _e('Highlighted Word', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="homepage_services_title_highlight" id="homepage_services_title_highlight" value="<?php echo esc_attr($homepage['services_section']['title']['highlight'] ?? ''); ?>" class="regular-text">
+                                <p class="description"><?php _e('This word will have a special underline style.', 'eatisfamily'); ?></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="homepage_services_title_line2"><?php _e('Title Line 2', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="homepage_services_title_line2" id="homepage_services_title_line2" value="<?php echo esc_attr($homepage['services_section']['title']['line_2'] ?? ''); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                    </table>
+                    <p class="description"><?php _e('Individual services are managed in the Services admin page.', 'eatisfamily'); ?></p>
+                </div>
+                
+                <!-- CTA Section -->
+                <div class="eatisfamily-section">
+                    <h3 class="section-title"><?php _e('📢 CTA Section', 'eatisfamily'); ?></h3>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="homepage_cta_title"><?php _e('Title', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="homepage_cta_title" id="homepage_cta_title" value="<?php echo esc_attr($homepage['cta_section']['title'] ?? ''); ?>" class="large-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label><?php _e('Description', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <?php 
+                                wp_editor(
+                                    $homepage['cta_section']['description'] ?? '', 
+                                    'homepage_cta_description', 
+                                    array(
+                                        'textarea_name' => 'homepage_cta_description',
+                                        'textarea_rows' => 5,
+                                        'media_buttons' => false,
+                                        'teeny' => true,
+                                    )
+                                );
+                                ?>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <!-- Sustainable Service Section -->
+                <div class="eatisfamily-section">
+                    <h3 class="section-title"><?php _e('🌱 Sustainable Service Section', 'eatisfamily'); ?></h3>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="homepage_sustainable_title"><?php _e('Section Title', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <textarea name="homepage_sustainable_title" id="homepage_sustainable_title" rows="2" class="large-text"><?php echo esc_textarea($homepage['sustainable_service_title'] ?? ''); ?></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                    <p class="description"><?php _e('Sustainability items are managed in the Sustainability admin page.', 'eatisfamily'); ?></p>
+                </div>
+                
+                <!-- Beautiful Moments Section -->
+                <div class="eatisfamily-section">
+                    <h3 class="section-title"><?php _e('✨ Beautiful Moments Section', 'eatisfamily'); ?></h3>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="homepage_beautiful_title"><?php _e('Title', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <textarea name="homepage_beautiful_title" id="homepage_beautiful_title" rows="2" class="large-text"><?php echo esc_textarea($homepage['beautiful']['title'] ?? ''); ?></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label><?php _e('Text', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <?php 
+                                wp_editor(
+                                    $homepage['beautiful']['text'] ?? '', 
+                                    'homepage_beautiful_text', 
+                                    array(
+                                        'textarea_name' => 'homepage_beautiful_text',
+                                        'textarea_rows' => 5,
+                                        'media_buttons' => false,
+                                        'teeny' => true,
+                                    )
+                                );
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="homepage_beautiful_image"><?php _e('Image', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="homepage_beautiful_image" id="homepage_beautiful_image" value="<?php echo esc_attr($homepage['beautiful']['image'] ?? ''); ?>" class="regular-text">
+                                <button type="button" class="button eatisfamily-upload-media" data-target="homepage_beautiful_image"><?php _e('Select Image', 'eatisfamily'); ?></button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <!-- Partners Section -->
+                <div class="eatisfamily-section">
+                    <h3 class="section-title"><?php _e('🤝 Partners Section', 'eatisfamily'); ?></h3>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="homepage_partners_title"><?php _e('Partners Title', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <textarea name="homepage_partners_title" id="homepage_partners_title" rows="2" class="large-text"><?php echo esc_textarea($homepage['partners_title'] ?? ''); ?></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                    <p class="description"><?php _e('Partners logos are managed in the Partners admin page.', 'eatisfamily'); ?></p>
+                </div>
+                
+                <!-- Homepage CTA Block -->
+                <div class="eatisfamily-section">
+                    <h3 class="section-title"><?php _e('🎯 Bottom CTA Block', 'eatisfamily'); ?></h3>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="homepage_cta_block_title"><?php _e('Title', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="homepage_cta_block_title" id="homepage_cta_block_title" value="<?php echo esc_attr($homepage['homepageCTA']['title'] ?? ''); ?>" class="large-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="homepage_cta_block_image"><?php _e('Image', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="homepage_cta_block_image" id="homepage_cta_block_image" value="<?php echo esc_attr($homepage['homepageCTA']['image'] ?? ''); ?>" class="regular-text">
+                                <button type="button" class="button eatisfamily-upload-media" data-target="homepage_cta_block_image"><?php _e('Select Image', 'eatisfamily'); ?></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label><?php _e('Description', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <?php 
+                                wp_editor(
+                                    $homepage['homepageCTA']['description'] ?? '', 
+                                    'homepage_cta_block_description', 
+                                    array(
+                                        'textarea_name' => 'homepage_cta_block_description',
+                                        'textarea_rows' => 4,
+                                        'media_buttons' => false,
+                                        'teeny' => true,
+                                    )
+                                );
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label><?php _e('Additional Text', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <?php 
+                                wp_editor(
+                                    $homepage['homepageCTA']['additionalText'] ?? '', 
+                                    'homepage_cta_block_additional', 
+                                    array(
+                                        'textarea_name' => 'homepage_cta_block_additional',
+                                        'textarea_rows' => 5,
+                                        'media_buttons' => false,
+                                        'teeny' => true,
+                                    )
+                                );
+                                ?>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <!-- SEO Section -->
+                <div class="eatisfamily-section eatisfamily-seo-section">
+                    <h3 class="section-title"><?php _e('🔍 SEO Settings', 'eatisfamily'); ?></h3>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="homepage_seo_title"><?php _e('Meta Title', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="homepage_seo_title" id="homepage_seo_title" value="<?php echo esc_attr($homepage['seo']['title'] ?? ''); ?>" class="large-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="homepage_seo_description"><?php _e('Meta Description', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <textarea name="homepage_seo_description" id="homepage_seo_description" rows="3" class="large-text"><?php echo esc_textarea($homepage['seo']['description'] ?? ''); ?></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="homepage_seo_keywords"><?php _e('Keywords', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="homepage_seo_keywords" id="homepage_seo_keywords" value="<?php echo esc_attr($homepage['seo']['keywords'] ?? ''); ?>" class="large-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="homepage_seo_og_title"><?php _e('OG Title', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="homepage_seo_og_title" id="homepage_seo_og_title" value="<?php echo esc_attr($homepage['seo']['og_title'] ?? ''); ?>" class="large-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="homepage_seo_og_description"><?php _e('OG Description', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <textarea name="homepage_seo_og_description" id="homepage_seo_og_description" rows="2" class="large-text"><?php echo esc_textarea($homepage['seo']['og_description'] ?? ''); ?></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="homepage_seo_og_image"><?php _e('OG Image', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="homepage_seo_og_image" id="homepage_seo_og_image" value="<?php echo esc_attr($homepage['seo']['og_image'] ?? ''); ?>" class="regular-text">
+                                <button type="button" class="button eatisfamily-upload-media" data-target="homepage_seo_og_image"><?php _e('Select Image', 'eatisfamily'); ?></button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
             
-            <!-- About Tab -->
+            <!-- ============================================================ -->
+            <!-- ABOUT TAB -->
+            <!-- ============================================================ -->
             <div id="about" class="tab-content" style="display: none;">
-                <table class="form-table" role="presentation">
-                    <tbody>
-                        <tr>
-                            <th colspan="2"><h3><?php _e('Hero Section', 'eatisfamily'); ?></h3></th>
-                        </tr>
+                <div class="eatisfamily-section">
+                    <h3 class="section-title"><?php _e('🎬 Hero Section', 'eatisfamily'); ?></h3>
+                    <table class="form-table">
                         <tr>
                             <th scope="row"><label for="about_hero_title"><?php _e('Title', 'eatisfamily'); ?></label></th>
                             <td>
@@ -442,54 +794,82 @@ function eatisfamily_pages_content_page() {
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row"><label for="about_hero_bg"><?php _e('Background Image', 'eatisfamily'); ?></label></th>
-                            <td>
-                                <input type="text" name="about_hero_bg" id="about_hero_bg" value="<?php echo esc_attr($about['hero']['background_image'] ?? ''); ?>" class="regular-text">
-                                <button type="button" class="button eatisfamily-upload-media" data-target="about_hero_bg"><?php _e('Select Image', 'eatisfamily'); ?></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th colspan="2"><h3><?php _e('Intro Section', 'eatisfamily'); ?></h3></th>
-                        </tr>
-                        <tr>
-                            <th scope="row"><label for="about_intro_title"><?php _e('Title', 'eatisfamily'); ?></label></th>
-                            <td>
-                                <input type="text" name="about_intro_title" id="about_intro_title" value="<?php echo esc_attr($about['intro_section']['title'] ?? ''); ?>" class="large-text">
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row"><label for="about_intro_content"><?php _e('Content', 'eatisfamily'); ?></label></th>
+                            <th scope="row"><label><?php _e('Description', 'eatisfamily'); ?></label></th>
                             <td>
                                 <?php 
-                                wp_editor($about['intro_section']['content'] ?? '', 'about_intro_content', array(
-                                    'textarea_name' => 'about_intro_content',
-                                    'textarea_rows' => 8,
-                                    'media_buttons' => true,
-                                ));
+                                wp_editor(
+                                    $about['hero']['description'] ?? '', 
+                                    'about_hero_description', 
+                                    array(
+                                        'textarea_name' => 'about_hero_description',
+                                        'textarea_rows' => 5,
+                                        'media_buttons' => false,
+                                        'teeny' => true,
+                                    )
+                                );
                                 ?>
                             </td>
                         </tr>
                         <tr>
-                            <th colspan="2"><h3><?php _e('Timeline Section', 'eatisfamily'); ?></h3></th>
-                        </tr>
-                        <tr>
-                            <th scope="row"><label for="about_timeline_title"><?php _e('Timeline Title', 'eatisfamily'); ?></label></th>
+                            <th scope="row"><label for="about_hero_image"><?php _e('Hero Image', 'eatisfamily'); ?></label></th>
                             <td>
-                                <input type="text" name="about_timeline_title" id="about_timeline_title" value="<?php echo esc_attr($about['timeline_title'] ?? 'Our History'); ?>" class="large-text">
-                                <p class="description"><?php _e('Timeline events are managed in the "Timeline" custom post type.', 'eatisfamily'); ?></p>
+                                <input type="text" name="about_hero_image" id="about_hero_image" value="<?php echo esc_attr($about['hero']['image']['src'] ?? ''); ?>" class="regular-text">
+                                <button type="button" class="button eatisfamily-upload-media" data-target="about_hero_image"><?php _e('Select Image', 'eatisfamily'); ?></button>
                             </td>
                         </tr>
-                    </tbody>
-                </table>
+                        <tr>
+                            <th scope="row"><label for="about_hero_image_alt"><?php _e('Image Alt Text', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="about_hero_image_alt" id="about_hero_image_alt" value="<?php echo esc_attr($about['hero']['image']['alt'] ?? ''); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="eatisfamily-section">
+                    <h3 class="section-title"><?php _e('📋 Section Titles', 'eatisfamily'); ?></h3>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="about_values_title"><?php _e('Values Section Title', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="about_values_title" id="about_values_title" value="<?php echo esc_attr($about['section_titles']['values'] ?? 'Our Values'); ?>" class="large-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="about_team_title"><?php _e('Team Section Title', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="about_team_title" id="about_team_title" value="<?php echo esc_attr($about['section_titles']['team'] ?? 'Meet Our Team'); ?>" class="large-text">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="eatisfamily-section eatisfamily-seo-section">
+                    <h3 class="section-title"><?php _e('🔍 SEO Settings', 'eatisfamily'); ?></h3>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="about_seo_title"><?php _e('Meta Title', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="about_seo_title" id="about_seo_title" value="<?php echo esc_attr($about['seo']['title'] ?? ''); ?>" class="large-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="about_seo_description"><?php _e('Meta Description', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <textarea name="about_seo_description" id="about_seo_description" rows="3" class="large-text"><?php echo esc_textarea($about['seo']['description'] ?? ''); ?></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
             
-            <!-- Contact Tab -->
+            <!-- ============================================================ -->
+            <!-- CONTACT TAB -->
+            <!-- ============================================================ -->
             <div id="contact" class="tab-content" style="display: none;">
-                <table class="form-table" role="presentation">
-                    <tbody>
-                        <tr>
-                            <th colspan="2"><h3><?php _e('Hero Section', 'eatisfamily'); ?></h3></th>
-                        </tr>
+                <div class="eatisfamily-section">
+                    <h3 class="section-title"><?php _e('🎬 Hero Section', 'eatisfamily'); ?></h3>
+                    <table class="form-table">
                         <tr>
                             <th scope="row"><label for="contact_hero_title"><?php _e('Title', 'eatisfamily'); ?></label></th>
                             <td>
@@ -502,9 +882,12 @@ function eatisfamily_pages_content_page() {
                                 <input type="text" name="contact_hero_subtitle" id="contact_hero_subtitle" value="<?php echo esc_attr($contact['hero']['subtitle'] ?? ''); ?>" class="large-text">
                             </td>
                         </tr>
-                        <tr>
-                            <th colspan="2"><h3><?php _e('Contact Form', 'eatisfamily'); ?></h3></th>
-                        </tr>
+                    </table>
+                </div>
+                
+                <div class="eatisfamily-section">
+                    <h3 class="section-title"><?php _e('📝 Contact Form', 'eatisfamily'); ?></h3>
+                    <table class="form-table">
                         <tr>
                             <th scope="row"><label for="contact_form_title"><?php _e('Form Title', 'eatisfamily'); ?></label></th>
                             <td>
@@ -517,32 +900,78 @@ function eatisfamily_pages_content_page() {
                                 <input type="text" name="contact_form_subtitle" id="contact_form_subtitle" value="<?php echo esc_attr($contact['form_subtitle'] ?? ''); ?>" class="large-text">
                             </td>
                         </tr>
-                    </tbody>
-                </table>
+                    </table>
+                </div>
             </div>
             
-            <!-- Careers Tab -->
+            <!-- ============================================================ -->
+            <!-- CAREERS TAB -->
+            <!-- ============================================================ -->
             <div id="careers" class="tab-content" style="display: none;">
-                <table class="form-table" role="presentation">
-                    <tbody>
+                <div class="eatisfamily-section">
+                    <h3 class="section-title"><?php _e('🎬 Hero Section', 'eatisfamily'); ?></h3>
+                    <table class="form-table">
                         <tr>
-                            <th colspan="2"><h3><?php _e('Hero Section', 'eatisfamily'); ?></h3></th>
-                        </tr>
-                        <tr>
-                            <th scope="row"><label for="careers_hero_title"><?php _e('Title', 'eatisfamily'); ?></label></th>
+                            <th scope="row"><label for="careers_hero_title_line1"><?php _e('Title Line 1', 'eatisfamily'); ?></label></th>
                             <td>
-                                <input type="text" name="careers_hero_title" id="careers_hero_title" value="<?php echo esc_attr($careers['hero']['title'] ?? ''); ?>" class="large-text">
+                                <input type="text" name="careers_hero_title_line1" id="careers_hero_title_line1" value="<?php echo esc_attr($careers['hero_default']['title_line_1'] ?? ''); ?>" class="large-text">
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row"><label for="careers_hero_subtitle"><?php _e('Subtitle', 'eatisfamily'); ?></label></th>
+                            <th scope="row"><label for="careers_hero_title_line2"><?php _e('Title Line 2', 'eatisfamily'); ?></label></th>
                             <td>
-                                <input type="text" name="careers_hero_subtitle" id="careers_hero_subtitle" value="<?php echo esc_attr($careers['hero']['subtitle'] ?? ''); ?>" class="large-text">
+                                <input type="text" name="careers_hero_title_line2" id="careers_hero_title_line2" value="<?php echo esc_attr($careers['hero_default']['title_line_2'] ?? ''); ?>" class="large-text">
                             </td>
                         </tr>
                         <tr>
-                            <th colspan="2"><h3><?php _e('Benefits Section', 'eatisfamily'); ?></h3></th>
+                            <th scope="row"><label for="careers_hero_image"><?php _e('Hero Image', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="careers_hero_image" id="careers_hero_image" value="<?php echo esc_attr($careers['hero_default']['image'] ?? ''); ?>" class="regular-text">
+                                <button type="button" class="button eatisfamily-upload-media" data-target="careers_hero_image"><?php _e('Select Image', 'eatisfamily'); ?></button>
+                            </td>
                         </tr>
+                        <tr>
+                            <th scope="row"><label for="careers_hero_bg"><?php _e('Background Image', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="careers_hero_bg" id="careers_hero_bg" value="<?php echo esc_attr($careers['hero_default']['background_image'] ?? ''); ?>" class="regular-text">
+                                <button type="button" class="button eatisfamily-upload-media" data-target="careers_hero_bg"><?php _e('Select Image', 'eatisfamily'); ?></button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="eatisfamily-section">
+                    <h3 class="section-title"><?php _e('📦 Join Box', 'eatisfamily'); ?></h3>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="careers_join_title"><?php _e('Title', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="careers_join_title" id="careers_join_title" value="<?php echo esc_attr($careers['join_box']['title'] ?? ''); ?>" class="large-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label><?php _e('Description', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <?php 
+                                wp_editor(
+                                    $careers['join_box']['description'] ?? '', 
+                                    'careers_join_description', 
+                                    array(
+                                        'textarea_name' => 'careers_join_description',
+                                        'textarea_rows' => 4,
+                                        'media_buttons' => false,
+                                        'teeny' => true,
+                                    )
+                                );
+                                ?>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="eatisfamily-section">
+                    <h3 class="section-title"><?php _e('✅ Benefits Section', 'eatisfamily'); ?></h3>
+                    <table class="form-table">
                         <tr>
                             <th scope="row"><label for="careers_benefits_title"><?php _e('Benefits Title', 'eatisfamily'); ?></label></th>
                             <td>
@@ -558,7 +987,7 @@ function eatisfamily_pages_content_page() {
                                         $benefits = $careers['benefits'] ?? array('');
                                         foreach ($benefits as $benefit): 
                                         ?>
-                                        <div class="repeater-item" style="display: flex; gap: 5px; margin-bottom: 8px;">
+                                        <div class="repeater-item">
                                             <input type="text" name="careers_benefits[]" value="<?php echo esc_attr($benefit); ?>" class="regular-text" placeholder="<?php esc_attr_e('Enter a benefit...', 'eatisfamily'); ?>">
                                             <button type="button" class="button repeater-remove">✕</button>
                                         </div>
@@ -568,17 +997,35 @@ function eatisfamily_pages_content_page() {
                                 </div>
                             </td>
                         </tr>
-                    </tbody>
-                </table>
+                    </table>
+                </div>
+                
+                <div class="eatisfamily-section eatisfamily-seo-section">
+                    <h3 class="section-title"><?php _e('🔍 SEO Settings', 'eatisfamily'); ?></h3>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="careers_seo_title"><?php _e('Meta Title', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="careers_seo_title" id="careers_seo_title" value="<?php echo esc_attr($careers['seo']['title'] ?? ''); ?>" class="large-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="careers_seo_description"><?php _e('Meta Description', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <textarea name="careers_seo_description" id="careers_seo_description" rows="3" class="large-text"><?php echo esc_textarea($careers['seo']['description'] ?? ''); ?></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
             
-            <!-- Events Tab -->
+            <!-- ============================================================ -->
+            <!-- EVENTS TAB -->
+            <!-- ============================================================ -->
             <div id="events" class="tab-content" style="display: none;">
-                <table class="form-table" role="presentation">
-                    <tbody>
-                        <tr>
-                            <th colspan="2"><h3><?php _e('Hero Section', 'eatisfamily'); ?></h3></th>
-                        </tr>
+                <div class="eatisfamily-section">
+                    <h3 class="section-title"><?php _e('🎬 Hero Section', 'eatisfamily'); ?></h3>
+                    <table class="form-table">
                         <tr>
                             <th scope="row"><label for="events_hero_title"><?php _e('Title', 'eatisfamily'); ?></label></th>
                             <td>
@@ -591,8 +1038,8 @@ function eatisfamily_pages_content_page() {
                                 <input type="text" name="events_hero_subtitle" id="events_hero_subtitle" value="<?php echo esc_attr($events['hero']['subtitle'] ?? ''); ?>" class="large-text">
                             </td>
                         </tr>
-                    </tbody>
-                </table>
+                    </table>
+                </div>
             </div>
             
             <?php submit_button(__('Save Pages Content', 'eatisfamily')); ?>
@@ -600,11 +1047,44 @@ function eatisfamily_pages_content_page() {
     </div>
     
     <style>
-        .nav-tab-wrapper { margin-bottom: 20px; }
-        .tab-content { padding: 20px; background: #fff; border: 1px solid #ccd0d4; border-top: none; }
-        .repeater-item { display: flex; gap: 5px; margin-bottom: 8px; }
+        .eatisfamily-pages-content .nav-tab-wrapper { margin-bottom: 0; }
+        .eatisfamily-pages-content .tab-content { 
+            padding: 20px; 
+            background: #fff; 
+            border: 1px solid #ccd0d4; 
+            border-top: none;
+            max-width: 1200px;
+        }
+        .eatisfamily-section {
+            background: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .eatisfamily-section .section-title {
+            margin: 0 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #2271b1;
+            font-size: 16px;
+        }
+        .eatisfamily-seo-section {
+            background: #f0f6fc;
+            border-color: #c3c4c7;
+        }
+        .repeater-item { 
+            display: flex; 
+            gap: 5px; 
+            margin-bottom: 8px; 
+            align-items: center;
+        }
         .repeater-item input { flex: 1; }
         .repeater-remove { color: #d63638 !important; }
+        .image-preview img {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .video-field { transition: all 0.3s ease; }
     </style>
     
     <script>
@@ -621,16 +1101,30 @@ function eatisfamily_pages_content_page() {
             $(target).show();
         });
         
+        // Video type toggle
+        function toggleVideoFields() {
+            var videoType = $('#homepage_hero_video_type').val();
+            $('.video-field').hide();
+            $('.video-field-' + videoType).show();
+        }
+        
+        $('#homepage_hero_video_type').on('change', toggleVideoFields);
+        toggleVideoFields(); // Initial state
+        
         // Media uploader
-        $('.eatisfamily-upload-media').on('click', function(e) {
+        $(document).on('click', '.eatisfamily-upload-media', function(e) {
             e.preventDefault();
             var button = $(this);
             var targetId = button.data('target');
+            var mediaType = button.data('type') || 'image';
             
             var frame = wp.media({
-                title: 'Select Image',
-                button: { text: 'Use this image' },
-                multiple: false
+                title: mediaType === 'video' ? 'Select Video' : 'Select Image',
+                button: { text: 'Use this ' + mediaType },
+                multiple: false,
+                library: {
+                    type: mediaType === 'video' ? 'video' : 'image'
+                }
             });
             
             frame.on('select', function() {
@@ -649,7 +1143,7 @@ function eatisfamily_pages_content_page() {
             var name = $firstItem.find('input').attr('name');
             var placeholder = $firstItem.find('input').attr('placeholder');
             
-            var $newItem = $('<div class="repeater-item" style="display: flex; gap: 5px; margin-bottom: 8px;">' +
+            var $newItem = $('<div class="repeater-item">' +
                 '<input type="text" name="' + name + '" value="" class="regular-text" placeholder="' + placeholder + '">' +
                 '<button type="button" class="button repeater-remove">✕</button>' +
                 '</div>');

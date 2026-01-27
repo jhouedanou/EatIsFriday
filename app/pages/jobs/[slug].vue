@@ -5,6 +5,7 @@ import type { JobWithVenue } from '~/composables/useJobs'
 const route = useRoute()
 const router = useRouter()
 const { getJobWithVenue } = useJobs()
+const { settings, getString } = useGlobalSettings()
 
 const job = ref<JobWithVenue | null>(null)
 const isLoading = ref(true)
@@ -75,6 +76,12 @@ const responsibilities = [
   'Train and mentor junior staff members'
 ]
 
+// UI Strings from global settings with fallbacks
+const loadingText = computed(() => getString('loading') || 'Loading...')
+const jobNotFoundText = computed(() => getString('job_not_found') || 'Job Not Found')
+const backToJobsText = computed(() => getString('back_to_jobs') || 'Browse All Jobs')
+const applyNowText = computed(() => getString('apply_now') || 'Apply Now')
+
 useHead(() => ({
   title: job.value ? `${getJobTitle(job.value)} - Careers | Eat Is Family` : 'Job Details',
   meta: [
@@ -88,15 +95,15 @@ useHead(() => ({
     <!-- Loading State -->
     <div v-if="isLoading" class="loading-container">
       <div class="loading-spinner"></div>
-      <p>Loading job details...</p>
+      <p>{{ loadingText }}</p>
     </div>
 
     <!-- Job Not Found -->
     <div v-else-if="!job" class="not-found-container">
-      <h1>Job Not Found</h1>
+      <h1>{{ jobNotFoundText }}</h1>
       <p>The position you're looking for doesn't exist or has been filled.</p>
       <NuxtLink to="/careers" class="btn-back">
-        Browse All Jobs
+        {{ backToJobsText }}
       </NuxtLink>
     </div>
 

@@ -1,15 +1,25 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { LucideMenu, LucideX } from 'lucide-vue-next'
-import type { NavbarContent } from '~/composables/usePageContent'
 
 const isOpen = ref(false)
-const { getNavbarContent } = usePageContent()
-const content = ref<NavbarContent | null>(null)
+const { settings, loadSettings } = useGlobalSettings()
 
+// Load settings if not already loaded
 onMounted(async () => {
-  content.value = await getNavbarContent()
+  if (!settings.value) {
+    await loadSettings()
+  }
 })
+
+// Computed values from global settings
+const brandName = computed(() => settings.value?.brand?.name || 'Eat is')
+const brandHighlight = computed(() => settings.value?.brand?.highlight || 'Family')
+const navLinks = computed(() => settings.value?.navigation?.links || [])
+const ctaText = computed(() => settings.value?.header?.cta_text || 'Get in touch')
+const ctaTextMobile = computed(() => settings.value?.header?.cta_text_mobile || 'Contact')
+const ctaLink = computed(() => settings.value?.header?.cta_link || '/contact')
+const siteLogo = computed(() => settings.value?.brand?.logo || '')
 </script>
 
 <template>
@@ -23,9 +33,9 @@ onMounted(async () => {
       </button>
 
       <!-- Left Links (Desktop) -->
-      <div v-if="content" class="hidden lg:flex items-center space-x-8">
+      <div v-if="navLinks.length" class="hidden lg:flex items-center space-x-8">
         <NuxtLink
-          v-for="link in content.nav_links.slice(0, 2)"
+          v-for="link in navLinks.slice(0, 2)"
           :key="link.text"
           :to="link.to"
           class="font-body font-medium hover:text-brand-pink transition-colors"
@@ -36,31 +46,39 @@ onMounted(async () => {
 
       <!-- Logo -->
       <NuxtLink to="/" class="absolute left-1/2 transform -translate-x-1/2 group">
-        <h1 v-if="content" class="text-2xl lg:text-3xl font-heading font-bold tracking-tight group-hover:scale-105 transition-transform">
-          {{ content.brand_name }} <span class="text-brand-pink italic">{{ content.brand_highlight }}</span>
+        <!-- Image logo if available -->
+        <img 
+          v-if="siteLogo" 
+          :src="siteLogo" 
+          :alt="brandName + ' ' + brandHighlight"
+          class="h-12 lg:h-14 group-hover:scale-105 transition-transform"
+        />
+        <!-- Text logo fallback -->
+        <h1 v-else class="text-2xl lg:text-3xl font-heading font-bold tracking-tight group-hover:scale-105 transition-transform">
+          {{ brandName }} <span class="text-brand-pink italic">{{ brandHighlight }}</span>
           <span class="absolute -right-2 -top-1 w-2 h-2 bg-brand-yellow rounded-full border border-black"></span>
         </h1>
       </NuxtLink>
 
       <!-- Right Links & CTA (Desktop) -->
-      <div v-if="content" class="hidden lg:flex items-center space-x-8">
+      <div v-if="navLinks.length" class="hidden lg:flex items-center space-x-8">
         <NuxtLink
-          v-for="link in content.nav_links.slice(2)"
+          v-for="link in navLinks.slice(2)"
           :key="link.text"
           :to="link.to"
           class="font-body font-medium hover:text-brand-pink transition-colors"
         >
           {{ link.text }}
         </NuxtLink>
-        <NuxtLink to="/contact" class="btn-primary text-sm">
-          {{ content.cta_desktop }}
+        <NuxtLink :to="ctaLink" class="btn-primary text-sm">
+          {{ ctaText }}
         </NuxtLink>
       </div>
 
       <!-- Mobile CTA -->
-      <div v-if="content" class="lg:hidden">
-        <NuxtLink to="/contact" class="btn-primary text-sm px-4 py-2">
-          {{ content.cta_mobile }}
+      <div class="lg:hidden">
+        <NuxtLink :to="ctaLink" class="btn-primary text-sm px-4 py-2">
+          {{ ctaTextMobile }}
         </NuxtLink>
       </div>
     </div>
@@ -74,10 +92,10 @@ onMounted(async () => {
       leave-from-class="transform translate-y-0 opacity-100"
       leave-to-class="transform -translate-y-4 opacity-0"
     >
-      <div v-if="isOpen && content" class="lg:hidden bg-white border-t-2 border-black p-6 shadow-lg absolute w-full">
+      <div v-if="isOpen && navLinks.length" class="lg:hidden bg-white border-t-2 border-black p-6 shadow-lg absolute w-full">
         <div class="flex flex-col space-y-4">
           <NuxtLink
-            v-for="link in content.nav_links"
+            v-for="link in navLinks"
             :key="link.text"
             :to="link.to"
             class="text-lg font-body font-medium hover:text-brand-pink transition-colors"

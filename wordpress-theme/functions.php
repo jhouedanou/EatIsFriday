@@ -3,7 +3,7 @@
  * Eat Is Family Theme Functions
  * 
  * @package EatIsFamily
- * @version 2.0.0
+ * @version 3.0.0
  */
 
 // Exit if accessed directly
@@ -20,6 +20,16 @@ require_once get_template_directory() . '/inc/meta-boxes.php';
  * Include Admin Pages (Site Content & Pages Content editors)
  */
 require_once get_template_directory() . '/inc/admin-pages.php';
+
+/**
+ * Include Extended Admin Pages (Partners, Services, Gallery, etc.)
+ */
+require_once get_template_directory() . '/inc/admin-pages-extended.php';
+
+/**
+ * Include Theme Customizer (Logo, Header, Markers, SEO, etc.)
+ */
+require_once get_template_directory() . '/inc/customizer.php';
 
 /**
  * Helper function to parse array fields (supports PHP array, JSON string, or comma-separated)
@@ -961,6 +971,13 @@ function eatisfamily_register_api_routes() {
         'callback' => 'eatisfamily_get_pages_content',
         'permission_callback' => '__return_true',
     ));
+    
+    // Global settings endpoint (Customizer + all config)
+    register_rest_route($namespace, '/settings', array(
+        'methods' => 'GET',
+        'callback' => 'eatisfamily_get_global_settings',
+        'permission_callback' => '__return_true',
+    ));
 }
 add_action('rest_api_init', 'eatisfamily_register_api_routes');
 
@@ -1348,10 +1365,119 @@ function eatisfamily_get_site_content($request) {
 
 /**
  * API Callback Functions - Pages Content
+ * Now includes partners, services, gallery, and sustainability data
  */
 function eatisfamily_get_pages_content($request) {
     $pages_content = get_option('eatisfamily_pages_content', array());
+    
+    // Merge with partners data
+    $partners_data = get_option('eatisfamily_partners', array());
+    if (!empty($partners_data)) {
+        if (!isset($pages_content['homepage'])) {
+            $pages_content['homepage'] = array();
+        }
+        $pages_content['homepage']['partners_title'] = $partners_data['title'] ?? '';
+        $pages_content['homepage']['partners'] = $partners_data['partners'] ?? array();
+    }
+    
+    // Merge with services data
+    $services_data = get_option('eatisfamily_services', array());
+    if (!empty($services_data)) {
+        if (!isset($pages_content['homepage'])) {
+            $pages_content['homepage'] = array();
+        }
+        $pages_content['homepage']['services_section'] = array(
+            'tag' => $services_data['tag'] ?? '',
+            'title' => $services_data['title'] ?? array(),
+            'services' => $services_data['services'] ?? array()
+        );
+    }
+    
+    // Merge with gallery data
+    $gallery_data = get_option('eatisfamily_gallery', array());
+    if (!empty($gallery_data)) {
+        if (!isset($pages_content['homepage'])) {
+            $pages_content['homepage'] = array();
+        }
+        $pages_content['homepage']['gallery_section'] = array(
+            'images' => $gallery_data['images'] ?? array()
+        );
+    }
+    
+    // Merge with sustainability data
+    $sustainability_data = get_option('eatisfamily_sustainability', array());
+    if (!empty($sustainability_data)) {
+        if (!isset($pages_content['homepage'])) {
+            $pages_content['homepage'] = array();
+        }
+        $pages_content['homepage']['sustainable_service_title'] = $sustainability_data['title'] ?? '';
+        $pages_content['homepage']['sustainable_service'] = $sustainability_data['items'] ?? array();
+    }
+    
     return rest_ensure_response($pages_content);
+}
+
+/**
+ * API Callback Functions - Global Settings
+ * Combines Customizer settings with site/pages content for complete config
+ */
+function eatisfamily_get_global_settings($request) {
+    // Get Customizer settings
+    $customizer_settings = eatisfamily_get_customizer_settings();
+    
+    // Get site content for additional data
+    $site_content = get_option('eatisfamily_site_content', array());
+    
+    // Build complete settings object
+    $settings = array(
+        // Brand & Identity
+        'brand' => array_merge(
+            $customizer_settings['brand'],
+            array(
+                'site_name' => $site_content['site']['name'] ?? get_bloginfo('name'),
+                'tagline' => $site_content['site']['tagline'] ?? get_bloginfo('description'),
+            )
+        ),
+        
+        // Header Configuration
+        'header' => $customizer_settings['header'],
+        
+        // Navigation
+        'navigation' => $customizer_settings['navigation'],
+        
+        // Footer
+        'footer' => array_merge(
+            $customizer_settings['footer'],
+            array(
+                'contact_email' => $customizer_settings['contact']['email'],
+                'contact_phone' => $customizer_settings['contact']['phone'],
+            )
+        ),
+        
+        // Map & Markers
+        'map' => $customizer_settings['map'],
+        'markers' => $customizer_settings['markers'],
+        
+        // SEO
+        'seo' => $customizer_settings['seo'],
+        
+        // Social Media
+        'social' => $customizer_settings['social'],
+        
+        // Contact Information
+        'contact' => $customizer_settings['contact'],
+        
+        // Global Config
+        'config' => $customizer_settings['config'],
+        
+        // UI Strings (for i18n)
+        'strings' => $customizer_settings['strings'],
+        
+        // Background Images
+        'backgrounds' => $customizer_settings['backgrounds'],
+    );
+    
+    return rest_ensure_response($settings);
 }
 
 /**

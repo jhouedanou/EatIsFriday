@@ -106,6 +106,9 @@ export interface Example {
 export interface HomepageContent {
   hero_section: {
     bg: string
+    video_type?: 'image' | 'youtube' | 'mp4'
+    video_url?: string
+    youtube_id?: string
     tag: string
     title: HeroTitle
     description: string
@@ -352,83 +355,175 @@ export const usePageContent = () => {
 
   /**
    * Map WordPress structure to Nuxt expected structure
-   * WordPress returns: { hero: { title, subtitle } }
-   * Nuxt expects: { hero_section: { title: { line_1, line_2 }, bg } }
+   * WordPress now returns complete structure from extended admin pages
    */
   const mapWordPressToNuxt = (wpData: any, localData: any): any => {
     if (!wpData) return localData
     if (!localData) return wpData
 
-    const result = { ...localData }
+    const result = deepMerge(localData, {})
 
-    // Map homepage
-    if (wpData.homepage?.hero) {
+    // ============================================
+    // HOMEPAGE
+    // ============================================
+    if (wpData.homepage) {
       result.homepage = result.homepage || {}
-      result.homepage.hero_section = result.homepage.hero_section || {}
       
-      // Map hero title - WordPress has flat title, Nuxt has structured title
-      if (wpData.homepage.hero.title) {
-        result.homepage.hero_section.title = result.homepage.hero_section.title || {}
-        result.homepage.hero_section.title.line_1 = wpData.homepage.hero.title
+      // Hero section (new structure from extended admin)
+      if (wpData.homepage.hero_section) {
+        result.homepage.hero_section = deepMerge(result.homepage.hero_section || {}, wpData.homepage.hero_section)
       }
-      if (wpData.homepage.hero.subtitle) {
-        result.homepage.hero_section.title = result.homepage.hero_section.title || {}
-        result.homepage.hero_section.title.line_3 = wpData.homepage.hero.subtitle
+      // Legacy hero mapping (old structure)
+      if (wpData.homepage.hero) {
+        result.homepage.hero_section = result.homepage.hero_section || {}
+        if (wpData.homepage.hero.title) {
+          result.homepage.hero_section.title = result.homepage.hero_section.title || {}
+          result.homepage.hero_section.title.line_1 = wpData.homepage.hero.title
+        }
+        if (wpData.homepage.hero.subtitle) {
+          result.homepage.hero_section.title = result.homepage.hero_section.title || {}
+          result.homepage.hero_section.title.line_3 = wpData.homepage.hero.subtitle
+        }
+        if (wpData.homepage.hero.background_image) {
+          result.homepage.hero_section.bg = wpData.homepage.hero.background_image
+        }
       }
-      if (wpData.homepage.hero.background_image) {
-        result.homepage.hero_section.bg = wpData.homepage.hero.background_image
+      
+      // Intro section
+      if (wpData.homepage.intro_section) {
+        result.homepage.intro_section = deepMerge(result.homepage.intro_section || {}, wpData.homepage.intro_section)
+      }
+      
+      // Services section (from WordPress)
+      if (wpData.homepage.services_section) {
+        result.homepage.services_section = deepMerge(result.homepage.services_section || {}, wpData.homepage.services_section)
+      }
+      
+      // CTA section
+      if (wpData.homepage.cta_section) {
+        result.homepage.cta_section = deepMerge(result.homepage.cta_section || {}, wpData.homepage.cta_section)
+      }
+      
+      // Gallery section (from WordPress)
+      if (wpData.homepage.gallery_section) {
+        result.homepage.gallery_section = wpData.homepage.gallery_section
+      }
+      
+      // Sustainability section (from WordPress)
+      if (wpData.homepage.sustainable_service_title) {
+        result.homepage.sustainable_service_title = wpData.homepage.sustainable_service_title
+      }
+      if (wpData.homepage.sustainable_service && wpData.homepage.sustainable_service.length > 0) {
+        result.homepage.sustainable_service = wpData.homepage.sustainable_service
+      }
+      
+      // Beautiful moments section
+      if (wpData.homepage.beautiful) {
+        result.homepage.beautiful = deepMerge(result.homepage.beautiful || {}, wpData.homepage.beautiful)
+      }
+      
+      // Examples section
+      if (wpData.homepage.examples && wpData.homepage.examples.length > 0) {
+        result.homepage.examples = wpData.homepage.examples
+      }
+      
+      // PARTNERS (from WordPress)
+      if (wpData.homepage.partners_title) {
+        result.homepage.partners_title = wpData.homepage.partners_title
+      }
+      if (wpData.homepage.partners && wpData.homepage.partners.length > 0) {
+        result.homepage.partners = wpData.homepage.partners
+      }
+      
+      // Homepage CTA (final section)
+      if (wpData.homepage.homepageCTA) {
+        result.homepage.homepageCTA = deepMerge(result.homepage.homepageCTA || {}, wpData.homepage.homepageCTA)
       }
     }
 
-    // Map about page
-    if (wpData.about?.hero) {
+    // ============================================
+    // ABOUT PAGE
+    // ============================================
+    if (wpData.about) {
       result.about = result.about || {}
-      result.about.hero_section = result.about.hero_section || {}
-      if (wpData.about.hero.title) {
-        result.about.hero_section.title = wpData.about.hero.title
+      if (wpData.about.hero) {
+        result.about.hero = deepMerge(result.about.hero || {}, wpData.about.hero)
       }
-      if (wpData.about.hero.subtitle) {
-        result.about.hero_section.subtitle = wpData.about.hero.subtitle
+      if (wpData.about.intro_section) {
+        result.about.intro_section = deepMerge(result.about.intro_section || {}, wpData.about.intro_section)
       }
-      if (wpData.about.hero.background_image) {
-        result.about.hero_section.background_image = wpData.about.hero.background_image
+      if (wpData.about.timeline_title) {
+        result.about.timeline_title = wpData.about.timeline_title
       }
     }
 
-    // Map contact page
-    if (wpData.contact?.hero) {
+    // ============================================
+    // CONTACT PAGE
+    // ============================================
+    if (wpData.contact) {
       result.contact = result.contact || {}
-      result.contact.hero_section = result.contact.hero_section || {}
-      if (wpData.contact.hero.title) {
-        result.contact.hero_section.title = result.contact.hero_section.title || {}
-        result.contact.hero_section.title.line_1 = wpData.contact.hero.title
+      if (wpData.contact.hero_section) {
+        result.contact.hero_section = deepMerge(result.contact.hero_section || {}, wpData.contact.hero_section)
       }
-      if (wpData.contact.hero.subtitle) {
-        result.contact.hero_section.subtitle = wpData.contact.hero.subtitle
+      // Legacy mapping
+      if (wpData.contact.hero) {
+        result.contact.hero_section = result.contact.hero_section || {}
+        if (wpData.contact.hero.title) {
+          result.contact.hero_section.title = result.contact.hero_section.title || {}
+          result.contact.hero_section.title.line_1 = wpData.contact.hero.title
+        }
+      }
+      if (wpData.contact.form) {
+        result.contact.form = deepMerge(result.contact.form || {}, wpData.contact.form)
       }
     }
 
-    // Map careers page
-    if (wpData.careers?.hero) {
+    // ============================================
+    // CAREERS PAGE
+    // ============================================
+    if (wpData.careers) {
       result.careers = result.careers || {}
-      result.careers.hero_default = result.careers.hero_default || {}
-      if (wpData.careers.hero.title) {
-        result.careers.hero_default.title_line_1 = wpData.careers.hero.title
+      if (wpData.careers.hero_default) {
+        result.careers.hero_default = deepMerge(result.careers.hero_default || {}, wpData.careers.hero_default)
       }
-      if (wpData.careers.hero.subtitle) {
-        result.careers.hero_default.title_line_2 = wpData.careers.hero.subtitle
+      // Legacy mapping
+      if (wpData.careers.hero) {
+        result.careers.hero_default = result.careers.hero_default || {}
+        if (wpData.careers.hero.title) {
+          result.careers.hero_default.title_line_1 = wpData.careers.hero.title
+        }
+        if (wpData.careers.hero.subtitle) {
+          result.careers.hero_default.title_line_2 = wpData.careers.hero.subtitle
+        }
+      }
+      if (wpData.careers.join_box) {
+        result.careers.join_box = deepMerge(result.careers.join_box || {}, wpData.careers.join_box)
+      }
+      if (wpData.careers.search_section) {
+        result.careers.search_section = deepMerge(result.careers.search_section || {}, wpData.careers.search_section)
+      }
+      if (wpData.careers.cta_section) {
+        result.careers.cta_section = deepMerge(result.careers.cta_section || {}, wpData.careers.cta_section)
       }
     }
 
-    // Map events page
-    if (wpData.events?.hero) {
+    // ============================================
+    // EVENTS PAGE
+    // ============================================
+    if (wpData.events) {
       result.events = result.events || {}
-      result.events.hero_section = result.events.hero_section || {}
-      if (wpData.events.hero.title) {
-        result.events.hero_section.title = wpData.events.hero.title
+      if (wpData.events.hero_section) {
+        result.events.hero_section = deepMerge(result.events.hero_section || {}, wpData.events.hero_section)
       }
-      if (wpData.events.hero.subtitle) {
-        result.events.hero_section.subtitle = wpData.events.hero.subtitle
+      // Legacy mapping
+      if (wpData.events.hero) {
+        result.events.hero_section = result.events.hero_section || {}
+        if (wpData.events.hero.title) {
+          result.events.hero_section.title = wpData.events.hero.title
+        }
+        if (wpData.events.hero.subtitle) {
+          result.events.hero_section.subtitle = wpData.events.hero.subtitle
+        }
       }
     }
 

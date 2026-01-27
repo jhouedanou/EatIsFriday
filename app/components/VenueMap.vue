@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { onMounted, onUnmounted, ref, watch, computed } from 'vue'
 
 const props = defineProps<{
   venues: Array<{
@@ -30,12 +30,44 @@ const mapContainer = ref<HTMLElement | null>(null)
 let map: any = null
 let markers: any[] = []
 
-// Centre pour voir France et sud de l'Angleterre
-const MAP_CENTER: [number, number] = [2.0, 48.5] // [lng, lat] pour MapLibre
-const MAP_ZOOM = 5
+// Get map configuration from global settings
+const { settings, loadSettings } = useGlobalSettings()
 
-// MapTiler custom style URL
-const MAPTILER_STYLE = 'https://api.maptiler.com/maps/019bc79b-b5ae-7523-a6d0-a73039e2ca18/style.json?key=ktSs6eRMmo4o70YLtDSA'
+// Computed map settings with fallbacks
+const mapCenter = computed<[number, number]>(() => {
+  const center = settings.value?.map?.center
+  if (center && Array.isArray(center) && center.length === 2) {
+    return center as [number, number]
+  }
+  return [2.0, 48.5] // Default: France
+})
+
+const mapZoom = computed(() => settings.value?.map?.zoom || 5)
+
+const maptilerStyle = computed(() => {
+  const style = settings.value?.map?.maptiler_style
+  const key = settings.value?.map?.maptiler_key
+  if (style && key) {
+    // Append key if not already in URL
+    return style.includes('key=') ? style : `${style}?key=${key}`
+  }
+  // Fallback to default style
+  return 'https://api.maptiler.com/maps/019bc79b-b5ae-7523-a6d0-a73039e2ca18/style.json?key=ktSs6eRMmo4o70YLtDSA'
+})
+
+// Get marker image for venue type from global settings
+const getMarkerIcon = (venueType?: string): string => {
+  const markers = settings.value?.markers
+  if (!markers) return '/images/stadiumIcon.svg'
+  
+  const type = venueType?.toLowerCase() || ''
+  if (type === 'stadium' && markers.stadium) return markers.stadium
+  if (type === 'arena' && markers.arena) return markers.arena
+  if (type === 'festival' && markers.festival) return markers.festival
+  if (markers.default) return markers.default
+  
+  return '/images/stadiumIcon.svg' // Fallback
+}
 
 const createMarkers = (maplibregl: any) => {
   // Supprimer les anciens marqueurs
@@ -65,13 +97,13 @@ const createMarkers = (maplibregl: any) => {
     const containerDiv = document.createElement('div')
     containerDiv.className = 'venue-marker-container'
 
-    // Icône du stade (stadiumIcon.svg)
-    const stadiumIcon = document.createElement('img')
-    stadiumIcon.className = 'venue-marker-icon'
-    stadiumIcon.src = '/images/stadiumIcon.svg'
-    stadiumIcon.alt = venue.name || 'Stadium'
+    // Icône du venue (from global settings based on type)
+    const venueIcon = document.createElement('img')
+    venueIcon.className = 'venue-marker-icon'
+    venueIcon.src = getMarkerIcon(venue.type)
+    venueIcon.alt = venue.name || 'Venue'
 
-    containerDiv.appendChild(stadiumIcon)
+    containerDiv.appendChild(venueIcon)
 
     // Logo de la venue en exposant (en haut à droite)
     if (venue.logo) {
@@ -103,6 +135,11 @@ const createMarkers = (maplibregl: any) => {
 }
 
 onMounted(async () => {
+  // Ensure settings are loaded
+  if (!settings.value) {
+    await loadSettings()
+  }
+
   if (typeof window !== 'undefined') {
     const maplibregl = await import('maplibre-gl')
     await import('maplibre-gl/dist/maplibre-gl.css')
@@ -111,9 +148,9 @@ onMounted(async () => {
       // Initialiser la carte avec MapLibre GL JS
       map = new maplibregl.default.Map({
         container: mapContainer.value,
-        style: MAPTILER_STYLE,
-        center: MAP_CENTER,
-        zoom: MAP_ZOOM,
+        style: maptilerStyle.value,
+        center: mapCenter.value,
+        zoom: mapZoom.value,
         attributionControl: false,
         scrollZoom: false,
         dragRotate: false,
@@ -142,8 +179,8 @@ watch(() => props.activeFilter, async () => {
     createMarkers(maplibregl.default)
     // Réinitialiser le zoom à la vue initiale
     map.flyTo({
-      center: MAP_CENTER,
-      zoom: MAP_ZOOM,
+      center: mapCenter.value,
+      zoom: mapZoom.value,
       duration: 500
     })
   }

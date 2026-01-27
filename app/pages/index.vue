@@ -26,6 +26,22 @@ const textColorMap: Record<string, string> = {
   'dark': 'text-brand-dark'
 }
 
+// Hero video computed properties
+const heroVideoType = computed(() => content.value?.hero_section?.video_type || 'image')
+const heroYoutubeId = computed(() => content.value?.hero_section?.youtube_id || '')
+const heroVideoUrl = computed(() => content.value?.hero_section?.video_url || '')
+const heroBackgroundStyle = computed(() => {
+  // Only show background image if video_type is 'image' or not set
+  if (heroVideoType.value === 'image' && content.value?.hero_section?.bg) {
+    return {
+      backgroundImage: `url('${content.value.hero_section.bg}')`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center'
+    }
+  }
+  return {}
+})
+
 onMounted(async () => {
   content.value = await getHomepageContent()
 
@@ -55,9 +71,33 @@ onMounted(async () => {
     <!-- Hero Section -->
     <section id="hero" class="container-fluid d-flex align-items-center v-90 px-0 w-100">
       <div class="d-flex flex-row row w-100">
-        <!-- image de la nourriture avec formulaire de recherche d'emploi -->
-        <div id="marr" class="col-lg-6 col-md-6 p-0 min-vh-100 position-relative"
-          :style="{ backgroundImage: content.hero_section?.bg ? `url('${content.hero_section.bg}')` : 'none', backgroundSize: 'cover', backgroundPosition: 'center' }">
+        <!-- Hero media container (image, YouTube or MP4 video) with job search form -->
+        <div id="marr" class="col-lg-6 col-md-6 p-0 min-vh-100 position-relative hero-media-container"
+          :style="heroBackgroundStyle"
+          :class="{ 'has-video': heroVideoType !== 'image' }">
+          
+          <!-- YouTube Video Background -->
+          <div v-if="heroVideoType === 'youtube' && heroYoutubeId" class="hero-video-wrapper">
+            <iframe 
+              :src="`https://www.youtube.com/embed/${heroYoutubeId}?autoplay=1&mute=1&loop=1&playlist=${heroYoutubeId}&controls=0&showinfo=0&modestbranding=1&rel=0&playsinline=1`"
+              frameborder="0"
+              allow="autoplay; encrypted-media"
+              allowfullscreen
+              class="hero-youtube-iframe"
+            ></iframe>
+          </div>
+          
+          <!-- MP4 Video Background -->
+          <video 
+            v-else-if="heroVideoType === 'mp4' && heroVideoUrl" 
+            class="hero-video-mp4"
+            autoplay 
+            muted 
+            loop 
+            playsinline
+          >
+            <source :src="heroVideoUrl" type="video/mp4">
+          </video>
          
           <!-- Job Search Form -->
           <div class="job-search-form-wrapper">
@@ -253,6 +293,50 @@ nuxt-link:has(img) {
   padding: 0 !important;
   position: relative;
 }
+
+/* Hero Video Styles */
+.hero-media-container {
+  overflow: hidden;
+  
+  &.has-video {
+    background: #000;
+  }
+}
+
+.hero-video-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero-youtube-iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: 100vh;
+  min-width: 100%;
+  min-height: 100%;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.hero-video-mp4 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
 .hero-blur-overlay {
   position: absolute;
   inset: 0;
