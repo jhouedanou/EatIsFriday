@@ -663,6 +663,16 @@
     }
   },
   "forms": {
+    "job_search": {
+      "title": "Find Your Perfect Role",
+      "subtitle": "Explore open positions across France",
+      "job_title_placeholder": "Select job title",
+      "site_placeholder": "Select sites",
+      "all_jobs_label": "All job titles",
+      "all_sites_label": "All sites",
+      "search_button": "Search",
+      "loading_text": "Loading..."
+    },
     "contact_form": {
       "name_label": "Name *",
       "name_placeholder": "Your name",

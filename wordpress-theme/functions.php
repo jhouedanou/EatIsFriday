@@ -1376,6 +1376,12 @@ function eatisfamily_get_site_content($request) {
 function eatisfamily_get_pages_content($request) {
     $pages_content = get_option('eatisfamily_pages_content', array());
     
+    // Merge with forms data (Job Search, Contact, Job Application, Activity Registration)
+    $forms_data = get_option('eatisfamily_forms', array());
+    if (!empty($forms_data)) {
+        $pages_content['forms'] = $forms_data;
+    }
+    
     // Merge with partners data
     $partners_data = get_option('eatisfamily_partners', array());
     if (!empty($partners_data)) {

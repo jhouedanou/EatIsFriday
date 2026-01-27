@@ -1,0 +1,49 @@
+name: Deploy WordPress Theme to FTP
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'wordpress-theme/**'
+  workflow_dispatch:
+    inputs:
+      deploy_all:
+        description: 'Deploy all theme files (not just changed)'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  deploy:
+    name: 🚀 Deploy to FTP
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 🔄 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: 📁 Sync WordPress Theme to FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./wordpress-theme/
+          server-dir: ${{ secrets.FTP_THEME_PATH }}
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/.DS_Store
+            **/Thumbs.db
+            **/*.md
+            **/*.log
+          log-level: standard
+
+      - name: ✅ Deployment complete
+        run: |
+          echo "✅ WordPress theme deployed successfully!"
+          echo "📁 Deployed to: ${{ secrets.FTP_THEME_PATH }}"

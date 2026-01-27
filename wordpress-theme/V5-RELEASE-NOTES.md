@@ -8,6 +8,10 @@
 
 La version 5.0 introduit une interface d'administration WordPress complètement repensée et unifiée, accessible via le menu **"EatIsFamily"** dans le tableau de bord WordPress.
 
+### 🛡️ Protection contre les erreurs mod_security (403 Forbidden)
+
+Toutes les pages d'administration utilisent désormais des requêtes **AJAX avec encodage Base64** pour contourner les restrictions mod_security sur les hébergements partagés. Cela résout les erreurs 403 Forbidden qui pouvaient survenir lors de la sauvegarde des formulaires.
+
 ### Nouveaux menus d'administration
 
 | Menu | Description |

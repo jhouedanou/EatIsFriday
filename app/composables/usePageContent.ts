@@ -557,6 +557,25 @@ export const usePageContent = () => {
       }
     }
 
+    // ============================================
+    // FORMS (Job Search, Contact, Job Application, Activity Registration)
+    // ============================================
+    if (wpData.forms) {
+      result.forms = result.forms || {}
+      if (wpData.forms.job_search) {
+        result.forms.job_search = deepMerge(result.forms.job_search || {}, wpData.forms.job_search)
+      }
+      if (wpData.forms.contact_form) {
+        result.forms.contact_form = deepMerge(result.forms.contact_form || {}, wpData.forms.contact_form)
+      }
+      if (wpData.forms.job_application) {
+        result.forms.job_application = deepMerge(result.forms.job_application || {}, wpData.forms.job_application)
+      }
+      if (wpData.forms.activity_registration) {
+        result.forms.activity_registration = deepMerge(result.forms.activity_registration || {}, wpData.forms.activity_registration)
+      }
+    }
+
     return result
   }
 

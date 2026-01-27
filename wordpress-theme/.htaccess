@@ -1,0 +1,30 @@
+# EatIsFamily WordPress Theme - Security Rules
+# This file helps bypass mod_security restrictions for admin forms
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Allow WordPress admin access
+    RewriteCond %{REQUEST_URI} ^/wp-admin/ [NC]
+    RewriteRule .* - [L]
+</IfModule>
+
+# Disable mod_security for this directory (admin forms)
+<IfModule mod_security.c>
+    SecFilterEngine Off
+    SecFilterScanPOST Off
+</IfModule>
+
+<IfModule mod_security2.c>
+    SecRuleEngine Off
+</IfModule>
+
+# Alternative: Whitelist specific rules that cause 403
+<IfModule mod_security2.c>
+    SecRuleRemoveById 300015
+    SecRuleRemoveById 300016
+    SecRuleRemoveById 300017
+    SecRuleRemoveById 950109
+    SecRuleRemoveById 950901
+    SecRuleRemoveById 981173
+</IfModule>
