@@ -44,13 +44,6 @@ export const useApi = () => {
             return data
         } catch (err) {
             console.error(`%c[API] ❌ Failed to fetch from API ${endpoint}:`, 'color: red;', err)
-            
-            // Fallback to local JSON if available
-            if (fallbackFile) {
-                console.warn(`%c[API] ⚠️ Falling back to local file: ${fallbackFile}`, 'color: orange;')
-                return await fetchLocalData<T>(fallbackFile)
-            }
-            
             return null
         }
     }

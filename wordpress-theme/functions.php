@@ -3,12 +3,54 @@
  * Eat Is Family Theme Functions
  * 
  * @package EatIsFamily
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 // Exit if accessed directly
 if (!defined('ABSPATH')) {
     exit;
+}
+
+/**
+ * Include Meta Boxes (WYSIWYG editors & dynamic dropdowns)
+ */
+require_once get_template_directory() . '/inc/meta-boxes.php';
+
+/**
+ * Include Admin Pages (Site Content & Pages Content editors)
+ */
+require_once get_template_directory() . '/inc/admin-pages.php';
+
+/**
+ * Helper function to parse array fields (supports PHP array, JSON string, or comma-separated)
+ * Used by format functions for requirements, benefits, services, amenities, etc.
+ */
+function eatisfamily_parse_array_field($value) {
+    if (empty($value)) return array();
+    
+    // If already an array, return it
+    if (is_array($value)) {
+        return array_values(array_filter($value));
+    }
+    
+    // Try JSON decode first (for imported data)
+    $decoded = json_decode($value, true);
+    if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+        return array_values(array_filter($decoded));
+    }
+    
+    // Try newline-separated (for WYSIWYG lists)
+    if (strpos($value, "\n") !== false) {
+        return array_values(array_filter(array_map('trim', explode("\n", $value))));
+    }
+    
+    // Try comma-separated
+    if (strpos($value, ',') !== false) {
+        return array_values(array_filter(array_map('trim', explode(',', $value))));
+    }
+    
+    // Single value
+    return array(trim($value));
 }
 
 /**
@@ -27,6 +69,7 @@ function eatisfamily_theme_setup() {
     ));
 }
 add_action('after_setup_theme', 'eatisfamily_theme_setup');
+
 
 /**
  * Register Custom Post Types
@@ -84,6 +127,29 @@ function eatisfamily_register_post_types() {
         'rewrite' => array('slug' => 'venues'),
     ));
     
+    // Timeline Events Post Type (for About page timeline)
+    register_post_type('timeline_event', array(
+        'labels' => array(
+            'name' => __('Timeline Events', 'eatisfamily'),
+            'singular_name' => __('Timeline Event', 'eatisfamily'),
+            'add_new' => __('Add Timeline Event', 'eatisfamily'),
+            'add_new_item' => __('Add New Timeline Event', 'eatisfamily'),
+            'edit_item' => __('Edit Timeline Event', 'eatisfamily'),
+            'new_item' => __('New Timeline Event', 'eatisfamily'),
+            'view_item' => __('View Timeline Event', 'eatisfamily'),
+            'search_items' => __('Search Timeline Events', 'eatisfamily'),
+            'not_found' => __('No timeline events found', 'eatisfamily'),
+            'not_found_in_trash' => __('No timeline events found in trash', 'eatisfamily'),
+            'menu_name' => __('Timeline', 'eatisfamily'),
+        ),
+        'public' => true,
+        'has_archive' => false,
+        'show_in_rest' => true,
+        'menu_icon' => 'dashicons-backup',
+        'supports' => array('title', 'thumbnail', 'custom-fields'),
+        'rewrite' => array('slug' => 'timeline'),
+    ));
+    
     // Blog Posts Custom Taxonomy (optional)
     register_taxonomy('blog_category', 'post', array(
         'labels' => array(
@@ -105,23 +171,51 @@ add_action('init', 'eatisfamily_register_post_types');
  */
 
 /**
- * Hook on theme activation to import data
+ * Hook on theme activation
+ * NOTE: Auto-import is DISABLED in v2.0 to prevent overwriting admin changes
+ * Use the admin page "Data Management" to manually import if needed
  */
 function eatisfamily_theme_activation() {
     // Flush rewrite rules
     flush_rewrite_rules();
     
-    // Check if data was already imported
-    if (get_option('eatisfamily_data_imported')) {
-        return;
+    // Initialize empty options if they don't exist
+    if (!get_option('eatisfamily_site_content')) {
+        update_option('eatisfamily_site_content', array(
+            'site' => array(
+                'name' => get_bloginfo('name'),
+                'tagline' => get_bloginfo('description'),
+                'description' => '',
+                'seo' => array(
+                    'default_title' => get_bloginfo('name'),
+                    'default_description' => get_bloginfo('description'),
+                    'keywords' => '',
+                    'og_image' => '',
+                ),
+                'contact' => array(
+                    'email' => get_option('admin_email'),
+                    'phone' => '',
+                ),
+                'social' => array(
+                    'facebook' => '',
+                    'instagram' => '',
+                    'twitter' => '',
+                    'linkedin' => '',
+                    'youtube' => '',
+                ),
+            ),
+        ));
     }
     
-    // Import all JSON data
-    eatisfamily_import_all_json_data();
-    
-    // Mark as imported
-    update_option('eatisfamily_data_imported', true);
-    update_option('eatisfamily_import_date', current_time('mysql'));
+    if (!get_option('eatisfamily_pages_content')) {
+        update_option('eatisfamily_pages_content', array(
+            'homepage' => array('hero' => array('title' => '', 'subtitle' => '', 'cta_text' => '', 'cta_link' => '', 'background_image' => '')),
+            'about' => array('hero' => array('title' => '', 'subtitle' => '', 'background_image' => ''), 'intro_section' => array('title' => '', 'content' => ''), 'timeline_title' => 'Our History'),
+            'contact' => array('hero' => array('title' => '', 'subtitle' => ''), 'form_title' => '', 'form_subtitle' => ''),
+            'careers' => array('hero' => array('title' => '', 'subtitle' => ''), 'benefits_title' => '', 'benefits' => array()),
+            'events' => array('hero' => array('title' => '', 'subtitle' => '')),
+        ));
+    }
 }
 add_action('after_switch_theme', 'eatisfamily_theme_activation');
 
@@ -1136,8 +1230,8 @@ function eatisfamily_format_job($post) {
         'department' => get_post_meta($post->ID, 'department', true),
         'job_type' => get_post_meta($post->ID, 'job_type', true),
         'salary' => get_post_meta($post->ID, 'salary', true),
-        'requirements' => json_decode(get_post_meta($post->ID, 'requirements', true), true) ?: array(),
-        'benefits' => json_decode(get_post_meta($post->ID, 'benefits', true), true) ?: array(),
+        'requirements' => eatisfamily_parse_array_field(get_post_meta($post->ID, 'requirements', true)),
+        'benefits' => eatisfamily_parse_array_field(get_post_meta($post->ID, 'benefits', true)),
         'featured_media' => get_the_post_thumbnail_url($post->ID, 'large'),
     );
 }
@@ -1221,7 +1315,8 @@ function eatisfamily_format_venue($post) {
         'lng' => (float) get_post_meta($post->ID, 'longitude', true),
         'description' => apply_filters('the_content', $post->post_content),
         'capacity' => (int) get_post_meta($post->ID, 'capacity', true),
-        'amenities' => json_decode(get_post_meta($post->ID, 'amenities', true), true) ?: array(),
+        'amenities' => eatisfamily_parse_array_field(get_post_meta($post->ID, 'amenities', true)),
+        'services' => eatisfamily_parse_array_field(get_post_meta($post->ID, 'services', true)),
         'image' => get_the_post_thumbnail_url($post->ID, 'large'),
     );
 }

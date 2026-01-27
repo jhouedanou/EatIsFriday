@@ -1,164 +1,154 @@
 # Changelog - Eat Is Family WordPress Theme
 
-Toutes les modifications notables de ce projet seront documentées dans ce fichier.
+All notable changes to this project will be documented in this file.
 
-Le format est basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/),
-et ce projet adhère au [Versionnement Sémantique](https://semver.org/lang/fr/).
+## [2.0.0] - 2026-01-27
+
+### 🎉 Major Release - Headless CMS Complete
+
+#### Added
+- ✅ **Complete Meta Boxes System** (`/inc/meta-boxes.php`)
+  - WYSIWYG editors for all text content
+  - Dynamic dropdowns for relationships (Venues, Departments, Categories)
+  - Repeater fields for lists (Requirements, Benefits, Services)
+  - Media upload integration with WordPress media library
+  - Gallery fields for multiple images
+  - Complex repeaters for structured data (Shops, Menu Items)
+
+- ✅ **Admin Pages for Content Management** (`/inc/admin-pages.php`)
+  - Site Content editor (SEO, Contact, Social Media)
+  - Pages Content editor (Hero sections, CTAs for all pages)
+  - Data Management page (Manual JSON import tools)
+
+- ✅ **New Custom Post Type: Timeline Events**
+  - For About page company history timeline
+  - Fields: event date, description, display order, featured image
+
+- ✅ **Helper Functions**
+  - `eatisfamily_parse_array_field()` - Parses arrays from multiple formats (JSON, newline-separated, comma-separated)
+
+#### Changed
+- ⚠️ **DISABLED automatic JSON import on theme activation**
+  - WordPress database is now the single source of truth
+  - JSON files only used for initial manual import via admin page
+  - Prevents overwriting admin changes
+
+- 🔄 **Updated all format functions** to use `eatisfamily_parse_array_field()`
+  - `eatisfamily_format_job()` - Requirements and Benefits
+  - `eatisfamily_format_venue()` - Amenities and Services
+
+- 📝 **Updated theme metadata** in `style.css`
+  - Version: 2.0.0
+  - Description updated to reflect headless CMS purpose
+  - Updated tags
+
+#### Improved
+- 🎨 **Enhanced Admin UI**
+  - Organized meta boxes with sections and groups
+  - Better field labels and descriptions
+  - Inline JavaScript for repeater functionality
+  - CSS styling for better UX
+
+- 📊 **Better Data Management**
+  - Dashboard page showing content statistics
+  - Manual import controls with file existence checks
+  - Import confirmation dialogs
+
+- 🔐 **Security**
+  - All inputs properly sanitized
+  - Nonce verification on all forms
+  - Permission checks on admin pages
+
+#### Removed
+- ❌ Automatic JSON import hook
+- ❌ Hardcoded JSON update on content save
+- ❌ Direct JSON file dependencies in API responses
+
+### Migration Notes from v1.0
+
+If you're upgrading from v1.0:
+
+1. **Backup your database** before upgrading
+2. **Existing content will be preserved** - no data loss
+3. **JSON files will no longer be auto-updated**
+4. **Use WordPress admin exclusively** for content editing
+5. **Update your Nuxt.js config** to point to WordPress API (already should be done)
+
+### New Admin Menu Structure
+
+```
+WordPress Admin
+├── Activities (Custom Post Type)
+├── Events (Custom Post Type)
+├── Jobs (Custom Post Type)
+├── Venues (Custom Post Type)
+├── Timeline (Custom Post Type - NEW)
+├── Posts (Blog)
+└── Site Content (NEW Menu)
+    ├── Site Content (Global Settings)
+    ├── Pages Content (Page-specific content)
+    └── Data Management (Import tools)
+```
+
+### API Endpoints (Unchanged)
+
+All API endpoints remain the same - no breaking changes:
+- `GET /eatisfamily/v1/activities`
+- `GET /eatisfamily/v1/activities/{slug}`
+- `GET /eatisfamily/v1/blog-posts`
+- `GET /eatisfamily/v1/blog-posts/{slug}`
+- `GET /eatisfamily/v1/events`
+- `GET /eatisfamily/v1/events/{id}`
+- `GET /eatisfamily/v1/jobs`
+- `GET /eatisfamily/v1/jobs/{slug}`
+- `GET /eatisfamily/v1/venues`
+- `GET /eatisfamily/v1/venues/{id}`
+- `GET /eatisfamily/v1/site-content`
+- `GET /eatisfamily/v1/pages-content`
 
 ## [1.0.0] - 2026-01-23
 
-### Ajouté
-- Version initiale du thème WordPress
-- Enregistrement de 4 Custom Post Types (Activity, Event, Job, Venue)
-- 14 endpoints REST API complets
-- Interface admin personnalisée avec meta boxes
-- Colonnes personnalisées dans les listes admin
-- Script d'import automatique des données JSON
-- Support CORS pour les requêtes cross-origin
-- Templates personnalisés pour Activities et Jobs
-- Archive template pour Activities
-- Documentation complète (README, QUICK-START, API-REFERENCE)
-- Fichier .htaccess.example avec optimisations
-- Support des images mises en avant
-- Validation et sanitization des données
-- Notice d'activation du thème
+### Initial Release
 
-### Endpoints API
-- `GET /eatisfamily/v1/activities` - Liste des activités
-- `GET /eatisfamily/v1/activities/{slug}` - Activité par slug
-- `GET /eatisfamily/v1/blog-posts` - Liste des articles
-- `GET /eatisfamily/v1/blog-posts/{slug}` - Article par slug
-- `GET /eatisfamily/v1/events` - Liste des événements
-- `GET /eatisfamily/v1/events/{id}` - Événement par ID
-- `GET /eatisfamily/v1/jobs` - Liste des emplois (avec filtres)
-- `GET /eatisfamily/v1/jobs/{slug}` - Emploi par slug
-- `GET /eatisfamily/v1/venues` - Liste des lieux avec métadonnées
-- `GET /eatisfamily/v1/venues/{id}` - Lieu par ID
-- `GET /eatisfamily/v1/site-content` - Contenu global du site
-- `GET /eatisfamily/v1/pages-content` - Contenu des pages
+#### Added
+- Basic Custom Post Types (Activity, Event, Job, Venue)
+- REST API endpoints for all content types
+- JSON import script (`import-data.php`)
+- Basic admin columns
+- CORS support
+- Simple meta boxes with JSON array fields
 
-### Custom Post Types
-- **Activity** avec 9 champs personnalisés
-- **Event** avec 3 champs personnalisés
-- **Job** avec 6 champs personnalisés
-- **Venue** avec 8 champs personnalisés
-
-### Documentation
-- README.md (guide complet, 500+ lignes)
-- QUICK-START.md (installation rapide)
-- API-REFERENCE.md (référence API complète)
-- FILES-STRUCTURE.md (structure des fichiers)
-- CHANGELOG.md (ce fichier)
-
-### Compatibilité
-- WordPress 6.0+
-- PHP 8.0+
-- MySQL 5.7+ / MariaDB 10.3+
-
-## [Unreleased]
-
-### À venir dans les futures versions
-
-#### Version 1.1.0 (Planifié)
-- [ ] Endpoint POST pour créer des activités via API
-- [ ] Authentification JWT pour les endpoints protégés
-- [ ] Endpoint pour les réservations d'activités
-- [ ] Webhooks pour notifications
-- [ ] Cache API intégré
-- [ ] Rate limiting natif
-
-#### Version 1.2.0 (Planifié)
-- [ ] Dashboard analytics
-- [ ] Export de données en CSV
-- [ ] Import CSV pour données bulk
-- [ ] Multi-langue (WPML/Polylang support)
-- [ ] Templates Gutenberg blocks
-
-#### Version 2.0.0 (Futur)
-- [ ] Système de réservation complet
-- [ ] Paiement en ligne intégré
-- [ ] Gestion des utilisateurs avancée
-- [ ] Notifications email automatiques
-- [ ] API v2 avec GraphQL
-
-### Améliorations envisagées
-- [ ] Tests unitaires PHP
-- [ ] Tests d'intégration API
-- [ ] CI/CD pipeline
-- [ ] Docker configuration
-- [ ] Performance monitoring
-- [ ] SEO optimization automatique
-- [ ] Sitemap XML automatique
-
-### Bugs connus
-Aucun bug connu à ce jour. Rapportez les bugs à hello@eatisfamily.fr
-
-## Notes de migration
-
-### Depuis JSON statique vers WordPress
-
-Si vous migrez depuis l'API JSON statique vers WordPress:
-
-1. **Mettre à jour nuxt.config.ts**
-   ```typescript
-   runtimeConfig: {
-     public: {
-       // Ancien
-       // apiBase: '/api'
-       
-       // Nouveau
-       apiBase: 'https://votresite.com/wp-json/eatisfamily/v1'
-     }
-   }
-   ```
-
-2. **Les composables restent identiques**
-   - Pas de changement dans la structure de code
-   - Seule l'URL de base change
-   - Les réponses JSON sont compatibles
-
-3. **Migration des données**
-   - Utilisez `import-data.php` pour importer automatiquement
-   - Ou importez manuellement via l'admin WordPress
-
-4. **URLs des images**
-   - Les images doivent être téléversées dans WordPress
-   - Ou pointez vers des URLs complètes
-
-## Support et contribution
-
-### Rapporter un bug
-1. Vérifiez que le bug n'existe pas déjà
-2. Créez une issue sur GitHub avec:
-   - Version de WordPress
-   - Version de PHP
-   - Description du problème
-   - Steps to reproduce
-   - Expected vs actual behavior
-
-### Demander une fonctionnalité
-1. Créez une issue avec le tag "enhancement"
-2. Décrivez le cas d'usage
-3. Expliquez les bénéfices attendus
-
-### Contribuer
-1. Fork le repository
-2. Créez une branche pour votre feature
-3. Committez vos changements
-4. Ouvrez une Pull Request
-
-## Remerciements
-
-- Équipe Eat Is Family
-- Contributeurs WordPress
-- Communauté open source
-
-## Licence
-
-GPL-2.0-or-later - voir LICENSE pour détails
+#### Features
+- WordPress 6.0+ compatibility
+- PHP 8.0+ support
+- Automatic JSON import on theme activation
+- Basic REST API documentation
 
 ---
 
-**Dernière mise à jour:** 23 janvier 2026  
-**Mainteneur:** Eat Is Family Team  
-**Contact:** hello@eatisfamily.fr
+## Upcoming Features
+
+### v2.1.0 (Planned)
+- [ ] Export functionality (WordPress to JSON)
+- [ ] Bulk editing tools
+- [ ] Advanced filtering in admin lists
+- [ ] Content duplication feature
+- [ ] SEO metadata per post type
+
+### v2.2.0 (Planned)
+- [ ] Multi-language support (WPML/Polylang)
+- [ ] Advanced search in admin
+- [ ] Content versioning
+- [ ] Scheduled publishing improvements
+
+### v3.0.0 (Future)
+- [ ] GraphQL API support
+- [ ] Real-time preview
+- [ ] Advanced analytics dashboard
+- [ ] Content templates
+
+---
+
+**Maintainer:** Eat Is Family Team  
+**Contact:** hello@eatisfamily.fr  
+**License:** GPL-2.0-or-later

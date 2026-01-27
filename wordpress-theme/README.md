@@ -1,303 +1,604 @@
-# Thème WordPress Eat Is Family
+# Eat Is Family WordPress Theme v2.0# Thème WordPress Eat Is Family
 
-Template WordPress personnalisé avec des endpoints REST API pour l'application Eat Is Family.
 
-## 📋 Table des matières
 
-- [Installation](#installation)
+**Headless CMS Backend for Nuxt.js Application**Template WordPress personnalisé avec des endpoints REST API pour l'application Eat Is Family.
+
+
+
+## 📋 Overview## 📋 Table des matières
+
+
+
+This WordPress theme serves as the **backend/CMS** for the Eat Is Family Nuxt.js website. It provides:- [Installation](#installation)
+
 - [Configuration](#configuration)
-- [Endpoints API](#endpoints-api)
-- [Custom Post Types](#custom-post-types)
-- [Import des données](#import-des-données)
-- [Structure des données](#structure-des-données)
+
+- ✅ **REST API endpoints** for all content types- [Endpoints API](#endpoints-api)
+
+- ✅ **Admin interface** with WYSIWYG editors and meta boxes- [Custom Post Types](#custom-post-types)
+
+- ✅ **No hardcoded values** - everything is editable via WordPress admin- [Import des données](#import-des-données)
+
+- ✅ **No automatic JSON updates** - WordPress is the single source of truth- [Structure des données](#structure-des-données)
+
+- ✅ **Complete content management** for Activities, Jobs, Venues, Events, Blog, and Pages
 
 ## 🚀 Installation
 
+## 🎯 Key Features
+
 ### Prérequis
-- WordPress 6.0 ou supérieur
-- PHP 8.0 ou supérieur
-- MySQL 5.7+ ou MariaDB 10.3+
 
-### Étapes d'installation
+### Content Types (Custom Post Types)- WordPress 6.0 ou supérieur
 
-1. **Télécharger le thème**
+1. **Activities** - Culinary activities and workshops- PHP 8.0 ou supérieur
+
+2. **Events** - Company events and partnerships- MySQL 5.7+ ou MariaDB 10.3+
+
+3. **Jobs** - Career opportunities and positions
+
+4. **Venues** - Locations and stadiums### Étapes d'installation
+
+5. **Blog Posts** - Articles and news
+
+6. **Timeline Events** - Company history milestones1. **Télécharger le thème**
+
    ```bash
-   cd wp-content/themes/
-   git clone [url-du-repo] eatisfamily
-   ```
-   Ou téléversez le dossier `wordpress-theme` et renommez-le en `eatisfamily`.
 
-2. **Activer le thème**
+### Admin Pages   cd wp-content/themes/
+
+1. **Site Content** - Global site settings (SEO, contact, social media)   git clone [url-du-repo] eatisfamily
+
+2. **Pages Content** - Page-specific content (hero sections, CTAs, etc.)   ```
+
+3. **Data Management** - Manual JSON import tools   Ou téléversez le dossier `wordpress-theme` et renommez-le en `eatisfamily`.
+
+
+
+### REST API Endpoints2. **Activer le thème**
+
    - Connectez-vous à l'administration WordPress
-   - Allez dans `Apparence > Thèmes`
+
+All endpoints are available at: `https://yoursite.com/wp-json/eatisfamily/v1/`   - Allez dans `Apparence > Thèmes`
+
    - Activez le thème "Eat Is Family"
 
-3. **Configurer les permaliens**
-   - Allez dans `Réglages > Permaliens`
+#### Activities
+
+- `GET /activities` - List all activities3. **Configurer les permaliens**
+
+- `GET /activities/{slug}` - Get single activity by slug   - Allez dans `Réglages > Permaliens`
+
    - Sélectionnez "Nom de l'article" ou une structure personnalisée
-   - Enregistrez les modifications
 
-4. **Vérifier les endpoints**
+#### Blog Posts   - Enregistrez les modifications
+
+- `GET /blog-posts` - List all blog posts
+
+- `GET /blog-posts/{slug}` - Get single post by slug4. **Vérifier les endpoints**
+
    - Visitez : `https://votresite.com/wp-json/eatisfamily/v1/`
-   - Vous devriez voir les routes disponibles
 
-## ⚙️ Configuration
+#### Events   - Vous devriez voir les routes disponibles
 
-### Activation des Custom Post Types
+- `GET /events` - List all events
 
-Le thème enregistre automatiquement les Custom Post Types suivants :
+- `GET /events/{id}` - Get single event by ID## ⚙️ Configuration
+
+
+
+#### Jobs### Activation des Custom Post Types
+
+- `GET /jobs` - List all jobs (supports filters: `?department=X&venue_id=Y`)
+
+- `GET /jobs/{slug}` - Get single job by slugLe thème enregistre automatiquement les Custom Post Types suivants :
+
 - **Activities** (`activity`)
-- **Events** (`event`)
-- **Jobs** (`job`)
-- **Venues** (`venue`)
 
-Ces CPT sont accessibles dans l'administration WordPress après activation du thème.
+#### Venues- **Events** (`event`)
+
+- `GET /venues` - List all venues with metadata- **Jobs** (`job`)
+
+- `GET /venues/{id}` - Get single venue by ID- **Venues** (`venue`)
+
+
+
+#### Site ContentCes CPT sont accessibles dans l'administration WordPress après activation du thème.
+
+- `GET /site-content` - Get global site content (SEO, contact, social)
 
 ### Configuration CORS
 
-Les headers CORS sont automatiquement ajoutés pour permettre les requêtes cross-origin. Pour restreindre l'accès, modifiez la fonction `eatisfamily_add_cors_headers()` dans `functions.php`.
+#### Pages Content
 
-## 📡 Endpoints API
+- `GET /pages-content` - Get all pages content (hero sections, CTAs)Les headers CORS sont automatiquement ajoutés pour permettre les requêtes cross-origin. Pour restreindre l'accès, modifiez la fonction `eatisfamily_add_cors_headers()` dans `functions.php`.
 
-Tous les endpoints sont disponibles sous le namespace `eatisfamily/v1`.
 
-### Activities
+
+## 🚀 Installation## 📡 Endpoints API
+
+
+
+### PrerequisitesTous les endpoints sont disponibles sous le namespace `eatisfamily/v1`.
+
+- WordPress 6.0+
+
+- PHP 8.0+### Activities
+
+- MySQL 5.7+ / MariaDB 10.3+
 
 **Liste toutes les activités**
-```
+
+### Steps```
+
 GET /wp-json/eatisfamily/v1/activities
-```
 
-**Récupérer une activité par slug**
-```
+1. **Upload Theme**```
+
+   ```bash
+
+   # Upload to /wp-content/themes/ or via WordPress admin**Récupérer une activité par slug**
+
+   ``````
+
 GET /wp-json/eatisfamily/v1/activities/{slug}
-```
 
-Exemple : `/wp-json/eatisfamily/v1/activities/cooking-workshop-italian-cuisine`
+2. **Activate Theme**```
 
-### Blog Posts
+   - Go to Appearance > Themes
 
-**Liste tous les articles**
-```
+   - Activate "Eat Is Family"Exemple : `/wp-json/eatisfamily/v1/activities/cooking-workshop-italian-cuisine`
+
+
+
+3. **Configure Permalinks**### Blog Posts
+
+   - Go to Settings > Permalinks
+
+   - Select "Post name"**Liste tous les articles**
+
+   - Save changes```
+
 GET /wp-json/eatisfamily/v1/blog-posts
+
+4. **Import Initial Data (Optional)**```
+
+   - Place JSON files in `/wp-content/themes/eatisfamily/data/`
+
+   - Go to Site Content > Data Management**Récupérer un article par slug**
+
+   - Select content types to import```
+
+   - Click "Import Selected Data"GET /wp-json/eatisfamily/v1/blog-posts/{slug}
+
 ```
 
-**Récupérer un article par slug**
-```
-GET /wp-json/eatisfamily/v1/blog-posts/{slug}
-```
+5. **Start Adding Content**
 
-### Events
+   - Use WordPress admin to create Activities, Jobs, Venues, etc.### Events
+
+   - Edit Site Content and Pages Content via admin pages
 
 **Liste tous les événements**
-```
+
+## 📝 Content Management```
+
 GET /wp-json/eatisfamily/v1/events
+
+### Creating Content```
+
+
+
+#### Activities**Récupérer un événement par ID**
+
+1. Go to **Activities > Add New**```
+
+2. Fill in:GET /wp-json/eatisfamily/v1/events/{id}
+
+   - Title (e.g., "Italian Cooking Workshop")```
+
+   - Content (description)
+
+   - Featured Image### Jobs
+
+   - Meta fields: date, location, price, capacity, etc.
+
+3. Publish**Liste toutes les offres d'emploi**
+
 ```
 
-**Récupérer un événement par ID**
-```
-GET /wp-json/eatisfamily/v1/events/{id}
-```
+#### JobsGET /wp-json/eatisfamily/v1/jobs
 
-### Jobs
+1. Go to **Jobs > Add New**```
 
-**Liste toutes les offres d'emploi**
-```
-GET /wp-json/eatisfamily/v1/jobs
-```
+2. Fill in:
 
-Paramètres de filtrage disponibles :
-- `department` : Filtrer par département
-- `venue_id` : Filtrer par lieu
+   - Title (e.g., "Head Chef – VIP Hospitality")Paramètres de filtrage disponibles :
 
-Exemple : `/wp-json/eatisfamily/v1/jobs?department=Culinary`
+   - Content (job description)- `department` : Filtrer par département
+
+   - Featured Image- `venue_id` : Filtrer par lieu
+
+   - Meta fields: venue, department, salary, requirements, benefits
+
+   - Life at Venue gallery (optional)Exemple : `/wp-json/eatisfamily/v1/jobs?department=Culinary`
+
+3. Publish
 
 **Récupérer une offre par slug**
-```
-GET /wp-json/eatisfamily/v1/jobs/{slug}
-```
 
-### Venues
+#### Venues```
 
-**Récupérer tous les lieux avec métadonnées**
-```
+1. Go to **Venues > Add New**GET /wp-json/eatisfamily/v1/jobs/{slug}
+
+2. Fill in:```
+
+   - Title (e.g., "Stade Jean Bouin")
+
+   - Content (venue description)### Venues
+
+   - Featured Image
+
+   - Meta fields: location, coordinates, capacity, services, shops, menu items**Récupérer tous les lieux avec métadonnées**
+
+3. Publish```
+
 GET /wp-json/eatisfamily/v1/venues
-```
 
-Retourne :
-- `metadata` : Titre, description, labels
-- `event_types` : Types d'événements
-- `stats` : Statistiques du site
-- `venues` : Liste des lieux
+#### Events```
+
+1. Go to **Events > Add New**
+
+2. Fill in:Retourne :
+
+   - Title (e.g., "The Adidas Arena Partnership")- `metadata` : Titre, description, labels
+
+   - Content (event description)- `event_types` : Types d'événements
+
+   - Featured Image- `stats` : Statistiques du site
+
+   - Meta fields: event type, related venue- `venues` : Liste des lieux
+
+3. Publish
 
 **Récupérer un lieu par ID**
-```
-GET /wp-json/eatisfamily/v1/venues/{id}
+
+#### Timeline Events (for About page)```
+
+1. Go to **Timeline > Add New**GET /wp-json/eatisfamily/v1/venues/{id}
+
+2. Fill in:```
+
+   - Title (e.g., "Company Founded")
+
+   - Event date (e.g., "13 JUNE 2015")### Site Content
+
+   - Description
+
+   - Featured Image**Récupérer le contenu global du site**
+
+   - Display order```
+
+3. PublishGET /wp-json/eatisfamily/v1/site-content
+
 ```
 
-### Site Content
-
-**Récupérer le contenu global du site**
-```
-GET /wp-json/eatisfamily/v1/site-content
-```
+### Global Content
 
 Contient :
-- Informations du site
-- Contact et réseaux sociaux
-- SEO metadata
-- Contenu des pages principales
 
-### Pages Content
+#### Site Content- Informations du site
 
-**Récupérer le contenu des pages**
-```
-GET /wp-json/eatisfamily/v1/pages-content
-```
+Go to **Site Content > Site Content** to edit:- Contact et réseaux sociaux
 
-## 📝 Custom Post Types
+- Site name, tagline, description- SEO metadata
+
+- SEO settings (default title, description, keywords, OG image)- Contenu des pages principales
+
+- Contact information (email, phone)
+
+- Social media links (Facebook, Instagram, Twitter, LinkedIn, YouTube)### Pages Content
+
+
+
+#### Pages Content**Récupérer le contenu des pages**
+
+Go to **Site Content > Pages Content** to edit:```
+
+- **Homepage**: Hero section (title, subtitle, CTA, background image)GET /wp-json/eatisfamily/v1/pages-content
+
+- **About**: Hero, intro section, timeline title```
+
+- **Contact**: Hero, form titles
+
+- **Careers**: Hero, benefits list## 📝 Custom Post Types
+
+- **Events**: Hero section
 
 ### Activity
 
+## 🔗 Nuxt.js Integration
+
 **Champs personnalisés (Custom Fields) :**
-- `description` : Description courte
+
+Update your Nuxt.js `nuxt.config.ts`:- `description` : Description courte
+
 - `activity_date` : Date de l'activité (format ISO 8601)
-- `location` : Lieu
-- `capacity` : Capacité totale (nombre)
-- `available_spots` : Places disponibles (nombre)
-- `category` : Catégorie
-- `price` : Prix
-- `duration` : Durée
-- `status` : Statut (open, closed, full)
 
-### Event
+```typescript- `location` : Lieu
 
-**Champs personnalisés :**
-- `image` : URL de l'image (si différente de l'image mise en avant)
-- `event_type` : Type d'événement
-- `event_order` : Ordre d'affichage (nombre)
+export default defineNuxtConfig({- `capacity` : Capacité totale (nombre)
 
-### Job
+  runtimeConfig: {- `available_spots` : Places disponibles (nombre)
 
-**Champs personnalisés :**
-- `venue_id` : Identifiant du lieu
-- `department` : Département
-- `job_type` : Type de contrat
-- `salary` : Salaire
-- `requirements` : Exigences (JSON array)
-- `benefits` : Avantages (JSON array)
+    public: {- `category` : Catégorie
 
-Exemple de `requirements` (stocker en JSON) :
-```json
-["5+ years experience", "Strong leadership skills", "HACCP certification"]
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'https://wordpress.yoursite.com/wp-json/eatisfamily/v1',- `price` : Prix
+
+      useLocalFallback: false // Always use WordPress API- `duration` : Durée
+
+    }- `status` : Statut (open, closed, full)
+
+  }
+
+})### Event
+
 ```
+
+**Champs personnalisés :**
+
+Your existing composables (`useActivities`, `useJobs`, `useVenues`, etc.) will work without changes!- `image` : URL de l'image (si différente de l'image mise en avant)
+
+- `event_type` : Type d'événement
+
+## 🛡️ Data Flow (v2.0)- `event_order` : Ordre d'affichage (nombre)
+
+
+
+```### Job
+
+WordPress Admin (Edit Content)
+
+        ↓**Champs personnalisés :**
+
+WordPress Database- `venue_id` : Identifiant du lieu
+
+        ↓- `department` : Département
+
+REST API Endpoints- `job_type` : Type de contrat
+
+        ↓- `salary` : Salaire
+
+Nuxt.js Application (Frontend)- `requirements` : Exigences (JSON array)
+
+```- `benefits` : Avantages (JSON array)
+
+
+
+### Important NotesExemple de `requirements` (stocker en JSON) :
+
+- ⚠️ **WordPress is the single source of truth** - all content is stored in WordPress database```json
+
+- ⚠️ **JSON files are NOT automatically updated** - they're only used for initial import["5+ years experience", "Strong leadership skills", "HACCP certification"]
+
+- ⚠️ **Always edit content via WordPress admin** - not via JSON files```
+
+- ⚠️ **Nuxt.js fetches data from WordPress API** - not from local JSON files
 
 ### Venue
 
+## 🔧 Customization
+
 **Champs personnalisés :**
-- `location` : Adresse complète
-- `city` : Ville
+
+### Adding Custom Fields- `location` : Adresse complète
+
+Edit `/inc/meta-boxes.php` to add new fields to existing post types.- `city` : Ville
+
 - `country` : Pays
-- `venue_type` : Type (stadium, festival, arena)
-- `latitude` : Latitude (float)
+
+### Adding New Endpoints- `venue_type` : Type (stadium, festival, arena)
+
+Edit `/functions.php` in the "REST API ROUTES" section:- `latitude` : Latitude (float)
+
 - `longitude` : Longitude (float)
-- `capacity` : Capacité (nombre)
-- `amenities` : Équipements (JSON array)
 
-## 📊 Import des données
+```php- `capacity` : Capacité (nombre)
 
-### Méthode 1 : Via l'administration WordPress
+register_rest_route('eatisfamily/v1', '/your-endpoint', array(- `amenities` : Équipements (JSON array)
+
+    'methods' => 'GET',
+
+    'callback' => 'your_callback_function',## 📊 Import des données
+
+    'permission_callback' => '__return_true',
+
+));### Méthode 1 : Via l'administration WordPress
+
+```
 
 1. Créez manuellement les posts dans chaque Custom Post Type
-2. Remplissez les champs personnalisés via l'interface
-3. Ajoutez les images mises en avant
 
-### Méthode 2 : Via plugin d'import
+### Modifying Data Format2. Remplissez les champs personnalisés via l'interface
 
-Utilisez un plugin comme **WP All Import** ou **Advanced Custom Fields** pour importer les données depuis vos fichiers JSON.
+Edit the format functions in `/functions.php`:3. Ajoutez les images mises en avant
 
-### Méthode 3 : Script PHP personnalisé
+- `eatisfamily_format_activity()`
 
-Un fichier `import-data.php` est inclus dans le dossier du thème. Voir ci-dessous.
+- `eatisfamily_format_job()`### Méthode 2 : Via plugin d'import
 
-### Utilisation du script d'import
+- `eatisfamily_format_venue()`
 
-1. Placez vos fichiers JSON dans `wp-content/uploads/import/`
-2. Accédez à : `https://votresite.com/?import_eatisfamily_data=1`
-3. Les données seront importées automatiquement
+- etc.Utilisez un plugin comme **WP All Import** ou **Advanced Custom Fields** pour importer les données depuis vos fichiers JSON.
+
+
+
+## 📊 Meta Boxes Features### Méthode 3 : Script PHP personnalisé
+
+
+
+All meta boxes include:Un fichier `import-data.php` est inclus dans le dossier du thème. Voir ci-dessous.
+
+- **WYSIWYG editors** for rich text content
+
+- **Dynamic dropdowns** for relationships (venues, departments, categories)### Utilisation du script d'import
+
+- **Repeater fields** for lists (requirements, benefits, services)
+
+- **Media upload** buttons integrated with WordPress media library1. Placez vos fichiers JSON dans `wp-content/uploads/import/`
+
+- **Gallery fields** for multiple images2. Accédez à : `https://votresite.com/?import_eatisfamily_data=1`
+
+- **Complex repeaters** for structured data (shops, menu items)3. Les données seront importées automatiquement
+
 4. **IMPORTANT** : Supprimez ou commentez le code d'import après utilisation pour des raisons de sécurité
+
+## 🔍 Debugging
 
 ## 🔧 Options du thème
 
-### Configurer les métadonnées des venues
+### Check API Responses
 
-Dans l'admin WordPress, utilisez un plugin comme **Advanced Custom Fields** ou ajoutez via le code :
+```bash### Configurer les métadonnées des venues
 
-```php
-update_option('eatisfamily_venues_metadata', array(
+# Test endpoints
+
+curl https://yoursite.com/wp-json/eatisfamily/v1/activitiesDans l'admin WordPress, utilisez un plugin comme **Advanced Custom Fields** ou ajoutez via le code :
+
+curl https://yoursite.com/wp-json/eatisfamily/v1/jobs
+
+curl https://yoursite.com/wp-json/eatisfamily/v1/venues```php
+
+```update_option('eatisfamily_venues_metadata', array(
+
     'title' => 'Explore Where We Operate',
-    'description' => 'Description...',
-    'filter_label' => 'Click to filter by an event type',
-));
+
+### Enable WordPress Debug    'description' => 'Description...',
+
+```php    'filter_label' => 'Click to filter by an event type',
+
+// In wp-config.php));
+
+define('WP_DEBUG', true);```
+
+define('WP_DEBUG_LOG', true);
+
+define('WP_DEBUG_DISPLAY', false);### Configurer les types d'événements
+
 ```
 
-### Configurer les types d'événements
-
 ```php
-update_option('eatisfamily_event_types', array(
-    array('id' => 'stadium', 'name' => 'Stadium', 'image' => '/images/stadium.png'),
-    array('id' => 'festival', 'name' => 'Festival', 'image' => '/images/festival.png'),
-));
+
+### Check Error Logsupdate_option('eatisfamily_event_types', array(
+
+```bash    array('id' => 'stadium', 'name' => 'Stadium', 'image' => '/images/stadium.png'),
+
+# Check WordPress debug log    array('id' => 'festival', 'name' => 'Festival', 'image' => '/images/festival.png'),
+
+tail -f wp-content/debug.log));
+
+``````
+
+
+
+## 📦 Backup & Export### Configurer les statistiques
+
+
+
+### Export Content```php
+
+Use WordPress built-in export:update_option('eatisfamily_stats', array(
+
+- Tools > Export    array('value' => '250+', 'label' => 'Food & Beverage Events in 2024'),
+
+- Select content type    array('value' => '300,000', 'label' => 'People fed in 2024'),
+
+- Download XML file));
+
 ```
 
-### Configurer les statistiques
+### Database Backup
 
-```php
-update_option('eatisfamily_stats', array(
-    array('value' => '250+', 'label' => 'Food & Beverage Events in 2024'),
-    array('value' => '300,000', 'label' => 'People fed in 2024'),
-));
-```
+Use plugins like:### Configurer le contenu du site
 
-### Configurer le contenu du site
+- UpdraftPlus
 
-```php
-update_option('eatisfamily_site_content', array(
+- BackupBuddy```php
+
+- All-in-One WP Migrationupdate_option('eatisfamily_site_content', array(
+
     'site' => array(
-        'name' => 'Eat Is Family',
+
+## 🔄 Version History        'name' => 'Eat Is Family',
+
         'tagline' => 'Celebrate Food',
-        // ...
-    ),
-));
-```
 
-## 🔒 Sécurité
+### v2.0.0 (Current)        // ...
 
-### Permissions API
+- ✅ Complete admin interface with meta boxes    ),
 
-Par défaut, tous les endpoints sont publics (`permission_callback' => '__return_true'`). Pour ajouter de l'authentification :
+- ✅ WYSIWYG editors instead of JSON arrays));
 
-```php
-register_rest_route($namespace, '/activities', array(
-    'methods' => 'GET',
-    'callback' => 'eatisfamily_get_activities',
+- ✅ Dynamic dropdowns for relationships```
+
+- ✅ Disabled automatic JSON import
+
+- ✅ Added Site Content and Pages Content admin pages## 🔒 Sécurité
+
+- ✅ Added Data Management page for manual import
+
+- ✅ Added Timeline Events custom post type### Permissions API
+
+- ✅ Removed all hardcoded values
+
+- ✅ WordPress as single source of truthPar défaut, tous les endpoints sont publics (`permission_callback' => '__return_true'`). Pour ajouter de l'authentification :
+
+
+
+### v1.0.0```php
+
+- Initial release with basic REST APIregister_rest_route($namespace, '/activities', array(
+
+- JSON-based data import    'methods' => 'GET',
+
+- Basic meta boxes    'callback' => 'eatisfamily_get_activities',
+
     'permission_callback' => function() {
-        return current_user_can('read');
-    },
-));
-```
 
-### Rate Limiting
+## 🤝 Support        return current_user_can('read');
+
+    },
+
+For issues or questions:));
+
+- Check the WordPress admin "Data Management" page for status```
+
+- Review REST API responses in browser
+
+- Check WordPress debug logs### Rate Limiting
+
+- Contact: hello@eatisfamily.fr
 
 Considérez l'ajout d'un plugin de rate limiting pour protéger vos APIs contre les abus.
 
+## 📄 License
+
 ## 🎨 Personnalisation
+
+GPL-2.0-or-later
 
 ### Modifier le format de sortie
 
+---
+
 Éditez les fonctions `eatisfamily_format_*()` dans `functions.php` pour personnaliser la structure JSON retournée.
 
-### Ajouter des endpoints
+**Last Updated:** January 27, 2026  
+
+**Version:** 2.0.0  ### Ajouter des endpoints
+
+**Status:** Production Ready ✅
 
 Exemple pour ajouter un endpoint personnalisé :
 
