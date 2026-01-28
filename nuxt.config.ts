@@ -64,8 +64,9 @@ export default defineNuxtConfig({
       // Production: https://bigfive.dev/eatisfamily/wp-json/eatisfamily/v1
       apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE || process.env.NUXT_PUBLIC_API_BASE_URL || 'http://localhost:8080/wp-json/eatisfamily/v1',
       // Fallback vers les fichiers JSON locaux si l'API est indisponible
-      // Par défaut: false pour utiliser l'API WordPress. Mettre 'true' pour utiliser les fichiers JSON locaux
-      useLocalFallback: process.env.NUXT_PUBLIC_USE_LOCAL_FALLBACK === 'true'
+      // En production (Vercel), utiliser les fichiers locaux par défaut sauf si une API est configurée
+      useLocalFallback: process.env.NUXT_PUBLIC_USE_LOCAL_FALLBACK === 'true' || 
+        (process.env.NODE_ENV === 'production' && !process.env.NUXT_PUBLIC_API_BASE && !process.env.NUXT_PUBLIC_API_BASE_URL)
     }
   },
 
