@@ -4,7 +4,9 @@
 services:
   # WordPress Application
   wordpress:
-    image: wordpress:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: eatisfamily-wordpress
     restart: unless-stopped
     ports:
@@ -18,6 +20,9 @@ services:
       WORDPRESS_CONFIG_EXTRA: |
         define('WP_DEBUG_LOG', true);
         define('WP_DEBUG_DISPLAY', false);
+        define('WP_MEMORY_LIMIT', '512M');
+        define('WP_MAX_MEMORY_LIMIT', '512M');
+        define('DUPLICATOR_PRO_SKIP_SCAN', false);
     volumes:
       # Mount the theme directory
       - ./wordpress-theme:/var/www/html/wp-content/themes/eatisfamily
@@ -27,6 +32,8 @@ services:
       - ./wordpress-uploads:/var/www/html/wp-content/uploads
       # Custom PHP config for upload limits
       - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+      # Duplicator temp directory with proper permissions
+      - duplicator_tmp:/var/www/html/wp-content/backups-dup-pro
     depends_on:
       - db
     networks:
@@ -68,6 +75,7 @@ services:
 volumes:
   wordpress_data:
   db_data:
+  duplicator_tmp:
 
 networks:
   eatisfamily-network:

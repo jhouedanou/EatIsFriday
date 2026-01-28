@@ -907,6 +907,22 @@ function eatisfamily_delete_all_imported_data() {
 }
 
 /**
+ * Helper function to decode HTML entities recursively in arrays/strings
+ * This fixes the &amp; issue when data is saved with wp_kses_post()
+ */
+function eatisfamily_decode_html_entities($data) {
+    if (is_string($data)) {
+        return html_entity_decode($data, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    }
+    if (is_array($data)) {
+        foreach ($data as $key => $value) {
+            $data[$key] = eatisfamily_decode_html_entities($value);
+        }
+    }
+    return $data;
+}
+
+/**
  * Register REST API Routes
  */
 function eatisfamily_register_api_routes() {
@@ -1524,6 +1540,8 @@ function eatisfamily_get_pages_content($request) {
         if (!isset($pages_content['homepage'])) {
             $pages_content['homepage'] = array();
         }
+        // Decode HTML entities to fix &amp; issue
+        $services_data = eatisfamily_decode_html_entities($services_data);
         $pages_content['homepage']['services_section'] = array(
             'tag' => $services_data['tag'] ?? '',
             'title' => $services_data['title'] ?? array(),
@@ -1570,17 +1588,20 @@ function eatisfamily_get_pages_content($request) {
     
     // Only override if we have data from the option
     if (!empty($sustainability_data['title'])) {
-        $pages_content['homepage']['sustainable_service_title'] = $sustainability_data['title'];
+        $pages_content['homepage']['sustainable_service_title'] = eatisfamily_decode_html_entities($sustainability_data['title']);
     }
     if (!empty($sustainability_data['items'])) {
-        $pages_content['homepage']['sustainable_service'] = $sustainability_data['items'];
+        $pages_content['homepage']['sustainable_service'] = eatisfamily_decode_html_entities($sustainability_data['items']);
     }
     
     // Merge with components data (header/footer)
     $components = get_option('eatisfamily_components', array());
     if (!empty($components)) {
-        $pages_content['components'] = $components;
+        $pages_content['components'] = eatisfamily_decode_html_entities($components);
     }
+    
+    // Decode all HTML entities in the final response to fix &amp; issues
+    $pages_content = eatisfamily_decode_html_entities($pages_content);
     
     return rest_ensure_response($pages_content);
 }
