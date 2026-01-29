@@ -186,29 +186,6 @@ function eatisfamily_register_post_types() {
         'rewrite' => array('slug' => 'venues'),
     ));
     
-    // Timeline Events Post Type (for About page timeline)
-    register_post_type('timeline_event', array(
-        'labels' => array(
-            'name' => __('Timeline Events', 'eatisfamily'),
-            'singular_name' => __('Timeline Event', 'eatisfamily'),
-            'add_new' => __('Add Timeline Event', 'eatisfamily'),
-            'add_new_item' => __('Add New Timeline Event', 'eatisfamily'),
-            'edit_item' => __('Edit Timeline Event', 'eatisfamily'),
-            'new_item' => __('New Timeline Event', 'eatisfamily'),
-            'view_item' => __('View Timeline Event', 'eatisfamily'),
-            'search_items' => __('Search Timeline Events', 'eatisfamily'),
-            'not_found' => __('No timeline events found', 'eatisfamily'),
-            'not_found_in_trash' => __('No timeline events found in trash', 'eatisfamily'),
-            'menu_name' => __('Timeline', 'eatisfamily'),
-        ),
-        'public' => true,
-        'has_archive' => false,
-        'show_in_rest' => true,
-        'menu_icon' => 'dashicons-backup',
-        'supports' => array('title', 'thumbnail', 'custom-fields'),
-        'rewrite' => array('slug' => 'timeline'),
-    ));
-    
     // Blog Posts Custom Taxonomy (optional)
     register_taxonomy('blog_category', 'post', array(
         'labels' => array(
