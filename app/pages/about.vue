@@ -762,7 +762,7 @@ useHead(() => ({
 .sound-wave-container {
   position: relative;
   width: 100%;
-  max-width: 1100px; /* Constrain width to ensure bar density */
+  max-width: 100vw; /* Constrain width to ensure bar density */
   height: 220px;
   //margin: 350px auto 0; /* Center horizontally */
 }
