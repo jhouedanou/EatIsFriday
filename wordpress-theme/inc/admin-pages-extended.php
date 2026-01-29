@@ -1087,249 +1087,239 @@ function eatisfamily_gallery_page() {
     </script>
     
     <script type="text/javascript">
-    (function($) {
+    jQuery(function($) {
         'use strict';
         
-        // Wait for DOM to be fully ready
-        $(window).on('load', function() {
-            initGalleryAdmin();
+        console.log('=== Gallery Admin Initializing ===');
+        console.log('jQuery version:', $.fn.jquery);
+        console.log('jQuery UI Sortable available:', typeof $.fn.sortable !== 'undefined');
+        
+        // Gallery indexes
+        var galleryIndexes = {
+            homepage: <?php echo count($homepage_images); ?>,
+            about1: <?php echo count($about1_images); ?>,
+            about2: <?php echo count($about2_images); ?>,
+            events: <?php echo count($events_images); ?>
+        };
+        console.log('Gallery indexes:', galleryIndexes);
+        
+        // Tab navigation - FIXED
+        $('.nav-tab-wrapper').on('click', '.nav-tab', function(e) {
+            e.preventDefault();
+            var href = $(this).attr('href');
+            console.log('Tab clicked:', href);
+            
+            // Update active tab
+            $('.nav-tab').removeClass('nav-tab-active');
+            $(this).addClass('nav-tab-active');
+            
+            // Show/hide content
+            $('.tab-content').hide();
+            $(href).show();
+            
+            return false;
         });
         
-        // Also try on document ready as backup
-        $(document).ready(function() {
-            setTimeout(initGalleryAdmin, 1000);
-        });
+        // Update visual order numbers
+        function updateOrderNumbers($gallery) {
+            console.log('Updating order numbers for:', $gallery.attr('id'));
+            $gallery.find('.gallery-row').each(function(index) {
+                $(this).find('.order-number').text(index + 1);
+            });
+        }
         
-        var initialized = false;
+        // Reindex input names after sort
+        function reindexGallery($gallery) {
+            var galleryName = $gallery.data('gallery');
+            var prefix = galleryName + '_gallery';
+            console.log('Reindexing gallery:', galleryName);
+            
+            $gallery.find('.gallery-row').each(function(index) {
+                var $row = $(this);
+                $row.attr('data-index', index);
+                
+                var $srcInput = $row.find('.gallery-src-input');
+                $srcInput.attr('name', prefix + '_src[' + index + ']');
+                $srcInput.attr('id', prefix + '_src_' + index);
+                
+                $row.find('.eatisfamily-upload-media').attr('data-target', prefix + '_src_' + index);
+                
+                var $altInput = $row.find('.gallery-alt-input');
+                $altInput.attr('name', prefix + '_alt[' + index + ']');
+            });
+            
+            galleryIndexes[galleryName] = $gallery.find('.gallery-row').length;
+        }
         
-        function initGalleryAdmin() {
-            if (initialized) return;
-            initialized = true;
+        // REMOVE IMAGE
+        $(document).on('click', '.remove-gallery', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Remove clicked!');
             
-            console.log('=== Gallery Admin Initializing ===');
-            console.log('jQuery version:', $.fn.jquery);
-            console.log('jQuery UI Sortable:', typeof $.fn.sortable);
+            var $row = $(this).closest('.gallery-row');
+            var $gallery = $row.closest('.sortable-gallery');
             
-            // Gallery indexes
-            var galleryIndexes = {
-                homepage: <?php echo count($homepage_images); ?>,
-                about1: <?php echo count($about1_images); ?>,
-                about2: <?php echo count($about2_images); ?>,
-                events: <?php echo count($events_images); ?>
-            };
-            console.log('Gallery indexes:', galleryIndexes);
-            
-            // Tab navigation
-            $(document).on('click', '.nav-tab', function(e) {
-                e.preventDefault();
-                var href = $(this).attr('href');
-                console.log('Tab clicked:', href);
-                $('.nav-tab').removeClass('nav-tab-active');
-                $(this).addClass('nav-tab-active');
-                $('.tab-content').hide();
-                $(href).show();
-            });
-            
-            // Update visual order numbers
-            function updateOrderNumbers($gallery) {
-                console.log('Updating order numbers for:', $gallery.attr('id'));
-                $gallery.find('.gallery-row').each(function(index) {
-                    $(this).find('.order-number').text(index + 1);
-                });
-            }
-            
-            // Reindex input names after sort
-            function reindexGallery($gallery) {
-                var galleryName = $gallery.data('gallery');
-                var prefix = galleryName + '_gallery';
-                console.log('Reindexing gallery:', galleryName);
-                
-                $gallery.find('.gallery-row').each(function(index) {
-                    var $row = $(this);
-                    $row.attr('data-index', index);
-                    
-                    var $srcInput = $row.find('.gallery-src-input');
-                    $srcInput.attr('name', prefix + '_src[' + index + ']');
-                    $srcInput.attr('id', prefix + '_src_' + index);
-                    
-                    $row.find('.eatisfamily-upload-media').attr('data-target', prefix + '_src_' + index);
-                    
-                    var $altInput = $row.find('.gallery-alt-input');
-                    $altInput.attr('name', prefix + '_alt[' + index + ']');
-                });
-                
-                galleryIndexes[galleryName] = $gallery.find('.gallery-row').length;
-            }
-            
-            // REMOVE IMAGE - Using event delegation on document
-            $(document).off('click.removeGallery').on('click.removeGallery', '.remove-gallery', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('Remove clicked!');
-                
-                var $row = $(this).closest('.gallery-row');
-                var $gallery = $row.closest('.sortable-gallery');
-                
-                if (confirm('<?php _e('Are you sure you want to remove this image?', 'eatisfamily'); ?>')) {
-                    $row.fadeOut(300, function() {
-                        $(this).remove();
-                        if ($gallery.length) {
-                            updateOrderNumbers($gallery);
-                            reindexGallery($gallery);
-                        }
-                    });
-                }
-            });
-            
-            // MOVE UP BUTTON
-            $(document).off('click.moveUp').on('click.moveUp', '.move-up-btn', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('Move up clicked!');
-                
-                var $row = $(this).closest('.gallery-row');
-                var $prev = $row.prev('.gallery-row');
-                var $gallery = $row.closest('.sortable-gallery');
-                
-                if ($prev.length) {
-                    $row.insertBefore($prev);
-                    updateOrderNumbers($gallery);
-                    reindexGallery($gallery);
-                }
-            });
-            
-            // MOVE DOWN BUTTON
-            $(document).off('click.moveDown').on('click.moveDown', '.move-down-btn', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('Move down clicked!');
-                
-                var $row = $(this).closest('.gallery-row');
-                var $next = $row.next('.gallery-row');
-                var $gallery = $row.closest('.sortable-gallery');
-                
-                if ($next.length) {
-                    $row.insertAfter($next);
-                    updateOrderNumbers($gallery);
-                    reindexGallery($gallery);
-                }
-            });
-            
-            // ADD SINGLE IMAGE BUTTON
-            $(document).off('click.addGallery').on('click.addGallery', '.add-gallery-btn', function(e) {
-                e.preventDefault();
-                console.log('Add image clicked!');
-                
-                var gallery = $(this).data('gallery');
-                var template = $('#' + gallery + '-gallery-template').html();
-                template = template.replace(/\{\{INDEX\}\}/g, galleryIndexes[gallery]);
-                
-                var $newRow = $(template);
-                $('#' + gallery + '-gallery-list').append($newRow);
-                galleryIndexes[gallery]++;
-                updateOrderNumbers($('#' + gallery + '-gallery-list'));
-            });
-            
-            // ADD MULTIPLE IMAGES BUTTON
-            $(document).off('click.addMultiple').on('click.addMultiple', '.add-multiple-btn', function(e) {
-                e.preventDefault();
-                console.log('Add multiple clicked!');
-                
-                var gallery = $(this).data('gallery');
-                var $galleryList = $('#' + gallery + '-gallery-list');
-                
-                if (typeof wp === 'undefined' || typeof wp.media === 'undefined') {
-                    alert('Media uploader not available');
-                    return;
-                }
-                
-                var mediaUploader = wp.media({
-                    title: '<?php _e('Select Images', 'eatisfamily'); ?>',
-                    button: { text: '<?php _e('Add to Gallery', 'eatisfamily'); ?>' },
-                    multiple: true,
-                    library: { type: 'image' }
-                });
-                
-                mediaUploader.on('select', function() {
-                    var attachments = mediaUploader.state().get('selection').toJSON();
-                    console.log('Selected', attachments.length, 'images');
-                    
-                    attachments.forEach(function(attachment) {
-                        var template = $('#' + gallery + '-gallery-template').html();
-                        template = template.replace(/\{\{INDEX\}\}/g, galleryIndexes[gallery]);
-                        var $newRow = $(template);
-                        
-                        $newRow.find('.gallery-src-input').val(attachment.url);
-                        $newRow.find('img').attr('src', attachment.url).show();
-                        if (attachment.alt) {
-                            $newRow.find('.gallery-alt-input').val(attachment.alt);
-                        }
-                        
-                        $galleryList.append($newRow);
-                        galleryIndexes[gallery]++;
-                    });
-                    
-                    updateOrderNumbers($galleryList);
-                });
-                
-                mediaUploader.open();
-            });
-            
-            // MEDIA UPLOADER FOR SINGLE IMAGE
-            $(document).off('click.uploadMedia').on('click.uploadMedia', '.eatisfamily-upload-media', function(e) {
-                e.preventDefault();
-                console.log('Upload media clicked!');
-                
-                var $button = $(this);
-                var targetId = $button.data('target');
-                var $targetInput = $('#' + targetId);
-                
-                if (typeof wp === 'undefined' || typeof wp.media === 'undefined') {
-                    alert('Media uploader not available');
-                    return;
-                }
-                
-                var mediaUploader = wp.media({
-                    title: '<?php _e('Select Image', 'eatisfamily'); ?>',
-                    button: { text: '<?php _e('Use this image', 'eatisfamily'); ?>' },
-                    multiple: false,
-                    library: { type: 'image' }
-                });
-                
-                mediaUploader.on('select', function() {
-                    var attachment = mediaUploader.state().get('selection').first().toJSON();
-                    $targetInput.val(attachment.url);
-                    
-                    var $previewImg = $button.closest('.gallery-row').find('img');
-                    if ($previewImg.length) {
-                        $previewImg.attr('src', attachment.url).show();
-                    }
-                });
-                
-                mediaUploader.open();
-            });
-            
-            // Initialize jQuery UI Sortable if available
-            if (typeof $.fn.sortable !== 'undefined') {
-                console.log('Initializing sortable...');
-                $('.sortable-gallery').sortable({
-                    items: '> .gallery-row',
-                    cursor: 'move',
-                    opacity: 0.7,
-                    placeholder: 'gallery-row ui-sortable-placeholder',
-                    update: function(event, ui) {
-                        var $gallery = $(this);
+            if (confirm('<?php _e('Are you sure you want to remove this image?', 'eatisfamily'); ?>')) {
+                $row.fadeOut(300, function() {
+                    $(this).remove();
+                    if ($gallery.length) {
                         updateOrderNumbers($gallery);
                         reindexGallery($gallery);
                     }
                 });
-                console.log('Sortable initialized');
+            }
+        });
+        
+        // MOVE UP BUTTON
+        $(document).on('click', '.move-up-btn', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Move up clicked!');
+            
+            var $row = $(this).closest('.gallery-row');
+            var $prev = $row.prev('.gallery-row');
+            var $gallery = $row.closest('.sortable-gallery');
+            
+            if ($prev.length) {
+                $row.insertBefore($prev);
+                updateOrderNumbers($gallery);
+                reindexGallery($gallery);
+            }
+        });
+        
+        // MOVE DOWN BUTTON
+        $(document).on('click', '.move-down-btn', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Move down clicked!');
+            
+            var $row = $(this).closest('.gallery-row');
+            var $next = $row.next('.gallery-row');
+            var $gallery = $row.closest('.sortable-gallery');
+            
+            if ($next.length) {
+                $row.insertAfter($next);
+                updateOrderNumbers($gallery);
+                reindexGallery($gallery);
+            }
+        });
+        
+        // ADD SINGLE IMAGE BUTTON
+        $(document).on('click', '.add-gallery-btn', function(e) {
+            e.preventDefault();
+            console.log('Add image clicked!');
+            
+            var gallery = $(this).data('gallery');
+            var template = $('#' + gallery + '-gallery-template').html();
+            template = template.replace(/\{\{INDEX\}\}/g, galleryIndexes[gallery]);
+            
+            var $newRow = $(template);
+            $('#' + gallery + '-gallery-list').append($newRow);
+            galleryIndexes[gallery]++;
+            updateOrderNumbers($('#' + gallery + '-gallery-list'));
+        });
+        
+        // ADD MULTIPLE IMAGES BUTTON
+        $(document).on('click', '.add-multiple-btn', function(e) {
+            e.preventDefault();
+            console.log('Add multiple clicked!');
+            
+            var gallery = $(this).data('gallery');
+            var $galleryList = $('#' + gallery + '-gallery-list');
+            
+            if (typeof wp === 'undefined' || typeof wp.media === 'undefined') {
+                alert('Media uploader not available');
+                return;
             }
             
-            console.log('=== Gallery Admin Ready ===');
+            var mediaUploader = wp.media({
+                title: '<?php _e('Select Images', 'eatisfamily'); ?>',
+                button: { text: '<?php _e('Add to Gallery', 'eatisfamily'); ?>' },
+                multiple: true,
+                library: { type: 'image' }
+            });
+            
+            mediaUploader.on('select', function() {
+                var attachments = mediaUploader.state().get('selection').toJSON();
+                console.log('Selected', attachments.length, 'images');
+                
+                attachments.forEach(function(attachment) {
+                    var template = $('#' + gallery + '-gallery-template').html();
+                    template = template.replace(/\{\{INDEX\}\}/g, galleryIndexes[gallery]);
+                    var $newRow = $(template);
+                    
+                    $newRow.find('.gallery-src-input').val(attachment.url);
+                    $newRow.find('img').attr('src', attachment.url).show();
+                    if (attachment.alt) {
+                        $newRow.find('.gallery-alt-input').val(attachment.alt);
+                    }
+                    
+                    $galleryList.append($newRow);
+                    galleryIndexes[gallery]++;
+                });
+                
+                updateOrderNumbers($galleryList);
+            });
+            
+            mediaUploader.open();
+        });
+        
+        // MEDIA UPLOADER FOR SINGLE IMAGE
+        $(document).on('click', '.eatisfamily-upload-media', function(e) {
+            e.preventDefault();
+            console.log('Upload media clicked!');
+            
+            var $button = $(this);
+            var targetId = $button.data('target');
+            var $targetInput = $('#' + targetId);
+            
+            if (typeof wp === 'undefined' || typeof wp.media === 'undefined') {
+                alert('Media uploader not available');
+                return;
+            }
+            
+            var mediaUploader = wp.media({
+                title: '<?php _e('Select Image', 'eatisfamily'); ?>',
+                button: { text: '<?php _e('Use this image', 'eatisfamily'); ?>' },
+                multiple: false,
+                library: { type: 'image' }
+            });
+            
+            mediaUploader.on('select', function() {
+                var attachment = mediaUploader.state().get('selection').first().toJSON();
+                $targetInput.val(attachment.url);
+                
+                var $previewImg = $button.closest('.gallery-row').find('img');
+                if ($previewImg.length) {
+                    $previewImg.attr('src', attachment.url).show();
+                }
+            });
+            
+            mediaUploader.open();
+        });
+        
+        // Initialize jQuery UI Sortable if available
+        if (typeof $.fn.sortable !== 'undefined') {
+            console.log('Initializing sortable...');
+            $('.sortable-gallery').sortable({
+                items: '> .gallery-row',
+                cursor: 'move',
+                opacity: 0.7,
+                placeholder: 'gallery-row ui-sortable-placeholder',
+                update: function(event, ui) {
+                    var $gallery = $(this);
+                    updateOrderNumbers($gallery);
+                    reindexGallery($gallery);
+                }
+            });
+            console.log('Sortable initialized');
+        } else {
+            console.warn('jQuery UI Sortable not available!');
         }
         
-    })(jQuery);
+        console.log('=== Gallery Admin Ready ===');
+    });
     </script>
     <?php
 }
@@ -1996,11 +1986,16 @@ function eatisfamily_render_example_row($index, $example) {
  * Enqueue admin scripts for media uploader and sortable
  */
 function eatisfamily_admin_scripts_extended($hook) {
-    if (strpos($hook, 'eatisfamily') !== false) {
+    // Check if we're on an EatIsFamily admin page
+    $is_eatisfamily_page = (strpos($hook, 'eatisfamily') !== false) || 
+                           (isset($_GET['page']) && strpos($_GET['page'], 'eatisfamily') !== false);
+    
+    if ($is_eatisfamily_page) {
         wp_enqueue_media();
         wp_enqueue_editor();
         
         // Enqueue jQuery UI Sortable for drag & drop galleries
+        wp_enqueue_script('jquery');
         wp_enqueue_script('jquery-ui-core');
         wp_enqueue_script('jquery-ui-widget');
         wp_enqueue_script('jquery-ui-mouse');
@@ -2010,4 +2005,4 @@ function eatisfamily_admin_scripts_extended($hook) {
         wp_enqueue_style('dashicons');
     }
 }
-add_action('admin_enqueue_scripts', 'eatisfamily_admin_scripts_extended');
+add_action('admin_enqueue_scripts', 'eatisfamily_admin_scripts_extended', 5);
