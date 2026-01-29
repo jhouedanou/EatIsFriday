@@ -476,86 +476,28 @@ export const usePageContent = () => {
     // ABOUT PAGE
     // ============================================
     if (wpData.about) {
-      result.about = result.about || {}
-      if (wpData.about.hero) {
-        result.about.hero = deepMerge(result.about.hero || {}, wpData.about.hero)
-      }
-      if (wpData.about.intro_section) {
-        result.about.intro_section = deepMerge(result.about.intro_section || {}, wpData.about.intro_section)
-      }
-      if (wpData.about.timeline_title) {
-        result.about.timeline_title = wpData.about.timeline_title
-      }
+      result.about = deepMerge(result.about || {}, wpData.about)
     }
 
     // ============================================
     // CONTACT PAGE
     // ============================================
     if (wpData.contact) {
-      result.contact = result.contact || {}
-      if (wpData.contact.hero_section) {
-        result.contact.hero_section = deepMerge(result.contact.hero_section || {}, wpData.contact.hero_section)
-      }
-      // Legacy mapping
-      if (wpData.contact.hero) {
-        result.contact.hero_section = result.contact.hero_section || {}
-        if (wpData.contact.hero.title) {
-          result.contact.hero_section.title = result.contact.hero_section.title || {}
-          result.contact.hero_section.title.line_1 = wpData.contact.hero.title
-        }
-      }
-      if (wpData.contact.form) {
-        result.contact.form = deepMerge(result.contact.form || {}, wpData.contact.form)
-      }
+      result.contact = deepMerge(result.contact || {}, wpData.contact)
     }
 
     // ============================================
     // CAREERS PAGE
     // ============================================
     if (wpData.careers) {
-      result.careers = result.careers || {}
-      if (wpData.careers.hero_default) {
-        result.careers.hero_default = deepMerge(result.careers.hero_default || {}, wpData.careers.hero_default)
-      }
-      // Legacy mapping
-      if (wpData.careers.hero) {
-        result.careers.hero_default = result.careers.hero_default || {}
-        if (wpData.careers.hero.title) {
-          result.careers.hero_default.title_line_1 = wpData.careers.hero.title
-        }
-        if (wpData.careers.hero.subtitle) {
-          result.careers.hero_default.title_line_2 = wpData.careers.hero.subtitle
-        }
-      }
-      if (wpData.careers.join_box) {
-        result.careers.join_box = deepMerge(result.careers.join_box || {}, wpData.careers.join_box)
-      }
-      if (wpData.careers.search_section) {
-        result.careers.search_section = deepMerge(result.careers.search_section || {}, wpData.careers.search_section)
-      }
-      if (wpData.careers.cta_section) {
-        result.careers.cta_section = deepMerge(result.careers.cta_section || {}, wpData.careers.cta_section)
-      }
+      result.careers = deepMerge(result.careers || {}, wpData.careers)
     }
 
     // ============================================
     // EVENTS PAGE
     // ============================================
     if (wpData.events) {
-      result.events = result.events || {}
-      if (wpData.events.hero_section) {
-        result.events.hero_section = deepMerge(result.events.hero_section || {}, wpData.events.hero_section)
-      }
-      // Legacy mapping
-      if (wpData.events.hero) {
-        result.events.hero_section = result.events.hero_section || {}
-        if (wpData.events.hero.title) {
-          result.events.hero_section.title = wpData.events.hero.title
-        }
-        if (wpData.events.hero.subtitle) {
-          result.events.hero_section.subtitle = wpData.events.hero.subtitle
-        }
-      }
+      result.events = deepMerge(result.events || {}, wpData.events)
     }
 
     // ============================================
@@ -604,21 +546,21 @@ export const usePageContent = () => {
   }
 
   /**
-   * Get all pages content - ALWAYS fetches from WordPress API first
-   * Then merges with local data for complete structure
+   * Get all pages content - fetches from WordPress API and merges with local structure
+   * Local data provides the template-compatible structure, WordPress data overrides values
    */
   const getPageContent = async (): Promise<PagesContent | null> => {
-    // Always fetch local data for complete structure
+    // Fetch local data for template-compatible structure (via /data/ path, not /api/)
     const localData = await fetchLocalData<PagesContent>('pages-content.json')
-    
+
     // Fetch from WordPress API
     const wpData = await fetchData<any>('pages-content')
-    
+
     if (wpData) {
       console.log('%c[PageContent] 🔄 Merging WordPress data with local structure', 'color: #FF4D6D;')
       return mapWordPressToNuxt(wpData, localData)
     }
-    
+
     // If WordPress API fails, use local data
     console.log('%c[PageContent] ⚠️ WordPress API unavailable, using local data', 'color: orange;')
     return localData

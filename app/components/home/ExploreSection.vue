@@ -372,10 +372,7 @@ const goToMenuPage = (page: number) => {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-
-    max-height: 690px;
-    overflow: auto;
-
+  overflow: auto;
 }
 
 .explore-title {
@@ -553,9 +550,7 @@ const goToMenuPage = (page: number) => {
 .venue-details {
   display: flex;
   flex-direction: column;
-  height: 100%;
   padding: 0;
-  overflow-y: auto;
 }
 
 .venue-images-grid {

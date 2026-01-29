@@ -31,23 +31,23 @@ export const useSiteContent = () => {
     }
 
     /**
-     * Get site content - ALWAYS fetches from WordPress API first
-     * Then merges with local data for complete structure
+     * Get site content - fetches from WordPress API and merges with local structure
+     * Local data provides the template-compatible structure, WordPress data overrides values
      */
     const getSiteContent = async (): Promise<SiteContent | null> => {
-        // Always fetch local data for complete structure
+        // Fetch local data for template-compatible structure (via /data/ path, not /api/)
         const localData = await fetchLocalData<SiteContent>('site-content.json')
-        
+
         // Fetch from WordPress API
         const wpData = await fetchData<any>('site-content')
-        
+
         if (wpData && localData) {
             console.log('%c[SiteContent] 🔄 Merging WordPress data with local structure', 'color: #FF4D6D;')
             return deepMerge(localData, wpData)
         }
-        
+
         if (wpData) return wpData as SiteContent
-        
+
         // If WordPress API fails, use local data
         console.log('%c[SiteContent] ⚠️ WordPress API unavailable, using local data', 'color: orange;')
         return localData

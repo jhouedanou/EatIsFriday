@@ -16,7 +16,7 @@ export const useApi = () => {
         console.log(`📡 API Base URL: ${apiBaseUrl}`)
         console.log(`💾 Local Fallback Mode: ${useLocalFallback ? 'ENABLED (using local JSON files)' : 'DISABLED (using WordPress API)'}`)
         if (useLocalFallback) {
-            console.log('%c⚠️ Running in OFFLINE mode - data from /public/api/*.json', 'color: orange;')
+            console.log('%c⚠️ Running in OFFLINE mode - data from /public/data/*.json', 'color: orange;')
         } else {
             console.log('%c✅ Connected to WordPress REST API', 'color: green;')
         }
@@ -30,7 +30,7 @@ export const useApi = () => {
     const fetchData = async <T>(endpoint: string, fallbackFile?: string): Promise<T | null> => {
         // If local fallback is enabled, use local JSON files
         if (useLocalFallback && fallbackFile) {
-            console.log(`%c[API] 💾 Fetching from local: /api/${fallbackFile}`, 'color: #C8F560;')
+            console.log(`%c[API] 💾 Fetching from local: /data/${fallbackFile}`, 'color: #C8F560;')
             return await fetchLocalData<T>(fallbackFile)
         }
 
@@ -57,11 +57,11 @@ export const useApi = () => {
      */
     const fetchLocalData = async <T>(filename: string): Promise<T | null> => {
         try {
-            const data = await $fetch<T>(`/api/${filename}`)
-            console.log(`%c[API] ✅ Local file loaded: ${filename}`, 'color: #C8F560;')
+            const data = await $fetch<T>(`/data/${filename}`)
+            console.log(`%c[API] ✅ Local file loaded: /data/${filename}`, 'color: #C8F560;')
             return data
         } catch (err) {
-            console.error(`%c[API] ❌ Failed to fetch local file ${filename}:`, 'color: red;', err)
+            console.error(`%c[API] ❌ Failed to fetch local file /data/${filename}:`, 'color: red;', err)
             return null
         }
     }

@@ -151,7 +151,7 @@ export default defineEventHandler(async (event: H3Event) => {
 
         try {
             // Read jobs data to find department
-            const jobsPath = join(process.cwd(), 'public', 'api', 'jobs.json')
+            const jobsPath = join(process.cwd(), 'public', 'data', 'jobs.json')
             if (existsSync(jobsPath)) {
                 const jobsData = await readFile(jobsPath, 'utf-8')
                 const jobs = JSON.parse(jobsData)
