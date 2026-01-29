@@ -1189,21 +1189,8 @@ function eatisfamily_get_events($request) {
         'post_type' => 'event',
         'posts_per_page' => -1,
         'post_status' => 'publish',
-        'orderby' => array(
-            'meta_value_num' => 'ASC',
-            'date' => 'DESC',
-        ),
-        'meta_query' => array(
-            'relation' => 'OR',
-            array(
-                'key' => 'event_order',
-                'compare' => 'EXISTS',
-            ),
-            array(
-                'key' => 'event_order',
-                'compare' => 'NOT EXISTS',
-            ),
-        ),
+        'orderby' => 'date',
+        'order' => 'DESC',
     );
     
     $query = new WP_Query($args);
