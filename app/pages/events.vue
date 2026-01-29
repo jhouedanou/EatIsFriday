@@ -55,7 +55,7 @@ useHead(() => ({
       <div class="container d-flex">
         <div class="loris">
           <h1>{{ content.page_hero.title }}</h1>
-          <p class="subtitle">{{ content.page_hero.subtitle }}</p>
+          <p class="subtitle" v-html="content.page_hero.subtitle"></p>
           <NuxtLink v-if="content.page_hero.link" :to="content.page_hero.link" class="mt-4">
             <nuxt-img :src="content.page_hero.btn" />
           </NuxtLink>
