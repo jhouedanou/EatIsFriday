@@ -1518,6 +1518,33 @@ function eatisfamily_get_site_content($request) {
         $site_content['about']['events_gallery'] = array('images' => $events_gallery['images']);
     }
     
+    // Merge events gallery 2
+    $events_gallery_2 = get_option('eatisfamily_events_gallery_2', array());
+    if (!empty($events_gallery_2['images'])) {
+        if (!isset($site_content['about'])) {
+            $site_content['about'] = array();
+        }
+        $site_content['about']['events_gallery_2'] = array('images' => $events_gallery_2['images']);
+    }
+    
+    // Merge activities gallery 1
+    $activities_gallery = get_option('eatisfamily_activities_gallery', array());
+    if (!empty($activities_gallery['images'])) {
+        if (!isset($site_content['about'])) {
+            $site_content['about'] = array();
+        }
+        $site_content['about']['activities_gallery'] = array('images' => $activities_gallery['images']);
+    }
+    
+    // Merge activities gallery 2
+    $activities_gallery_2 = get_option('eatisfamily_activities_gallery_2', array());
+    if (!empty($activities_gallery_2['images'])) {
+        if (!isset($site_content['about'])) {
+            $site_content['about'] = array();
+        }
+        $site_content['about']['activities_gallery_2'] = array('images' => $activities_gallery_2['images']);
+    }
+    
     return rest_ensure_response($site_content);
 }
 
@@ -1586,6 +1613,27 @@ function eatisfamily_get_pages_content($request) {
         if (!empty($gallery_data['events']['images'])) {
             update_option('eatisfamily_events_gallery', array(
                 'images' => $gallery_data['events']['images'] ?? array()
+            ));
+        }
+        
+        // Events page gallery 2
+        if (!empty($gallery_data['events_2']['images'])) {
+            update_option('eatisfamily_events_gallery_2', array(
+                'images' => $gallery_data['events_2']['images'] ?? array()
+            ));
+        }
+        
+        // Apply Activities page gallery 1
+        if (!empty($gallery_data['activities_1']['images'])) {
+            update_option('eatisfamily_activities_gallery', array(
+                'images' => $gallery_data['activities_1']['images'] ?? array()
+            ));
+        }
+        
+        // Apply Activities page gallery 2
+        if (!empty($gallery_data['activities_2']['images'])) {
+            update_option('eatisfamily_activities_gallery_2', array(
+                'images' => $gallery_data['activities_2']['images'] ?? array()
             ));
         }
     }

@@ -1130,6 +1130,16 @@ body {
   }
 }
 #ludacris {
+  a{
+      display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 70px;
+    margin: 4em auto;
+    img{
+    height:70px;
+    }
+  }
   p {
     &:nth-of-type(1) {
       color: #f9375b !important;
@@ -1149,6 +1159,7 @@ body {
 #baks {
   margin-bottom: 7em !important;
   h3 {
+        top: 75px;
     position: relative;
     z-index: 0;
     &::before {
@@ -1171,12 +1182,12 @@ body {
 #weHelpwith {
   position: relative;
   #seeAboutYa {
-    background: url(/images/bgContainer.svg);
+      background: url(/images/bgContainer.svg);
     background-repeat: no-repeat;
     position: absolute;
     right: 10px;
     top: 11px;
-    min-height: 614px;
+    height: 650px;
     padding: 2em;
     width: 100%;
     max-width: 463px;
@@ -1202,6 +1213,8 @@ body {
       list-style: none;
       padding-left: 0;
       border-bottom: solid 2px #d1d5dc;
+      max-height:610px;
+      overflow-y:scroll;
       li {
         font-family: FONTSPRINGDEMO-Recoleta-Regular;
         font-size: 18px;

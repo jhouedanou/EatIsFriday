@@ -11,12 +11,17 @@ const { getEvents } = useEvents()
 const events = ref<Event[]>([])
 const loading = ref(true)
 
-// Computed property for events gallery with fallback
+// Computed property for events gallery 1 with fallback
 const eventsGalleryImages = computed(() => {
   // Try events-specific gallery first, then fallback to about.gallery_section2
   return siteContent.value?.about?.events_gallery?.images
     || siteContent.value?.about?.gallery_section2?.images
     || []
+})
+
+// Computed property for events gallery 2
+const eventsGalleryImages2 = computed(() => {
+  return siteContent.value?.about?.events_gallery_2?.images || []
 })
 
 onMounted(async () => {
@@ -108,10 +113,9 @@ useHead(() => ({
       <PartnersSection v-if="homepageContent" :title="homepageContent.partners_title"
         :partners="(homepageContent.partners || []).map((p: any) => ({ ...p, name: p.alt }))" />
     </section>
-    <section class="mt-4">
-      <!-- Second gallery for events page - uses events-specific gallery with fallback -->
-      <GalleryGrid v-if="eventsGalleryImages.length > 0"
-        :images="eventsGalleryImages" />
+    <section v-if="eventsGalleryImages2.length > 0" class="mt-4">
+      <!-- Second gallery for events page -->
+      <GalleryGrid :images="eventsGalleryImages2" />
     </section>
   </div>
 </template>

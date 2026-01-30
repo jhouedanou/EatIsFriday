@@ -2787,7 +2787,7 @@ function eatisfamily_pages_content_page_v5() {
                             <td><input type="text" name="apply_activities_help_sous" id="apply_activities_help_sous" value="<?php echo esc_attr($apply_activities['weHelpWith']['sous'] ?? ''); ?>" class="large-text"></td>
                         </tr>
                         <tr>
-                            <th scope="row"><label><?php _e('Help Items', 'eatisfamily'); ?></label></th>
+                            <th scope="row"><label><?php _e('Help Items (HTML)', 'eatisfamily'); ?></label></th>
                             <td>
                                 <div id="apply_activities_help_items_container">
                                     <?php 
@@ -2795,13 +2795,35 @@ function eatisfamily_pages_content_page_v5() {
                                     if (empty($help_items)) $help_items = array('');
                                     foreach ($help_items as $index => $item): 
                                     ?>
-                                    <div class="help-item-row" style="margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
-                                        <input type="text" name="apply_activities_help_items[]" value="<?php echo esc_attr($item); ?>" class="regular-text" placeholder="<?php _e('Enter help item', 'eatisfamily'); ?>">
-                                        <button type="button" class="button" onclick="this.closest('.help-item-row').remove();"><?php _e('Remove', 'eatisfamily'); ?></button>
+                                    <div class="help-item-row" style="margin-bottom: 15px; padding: 15px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 4px;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                            <strong><?php printf(__('Item %d', 'eatisfamily'), $index + 1); ?></strong>
+                                            <button type="button" class="button button-link-delete" onclick="this.closest('.help-item-row').remove();"><?php _e('Remove', 'eatisfamily'); ?></button>
+                                        </div>
+                                        <textarea name="apply_activities_help_items[]" rows="3" class="large-text" style="width:100%;"><?php echo esc_textarea($item); ?></textarea>
+                                        <p class="description"><?php _e('Supports HTML: &lt;strong&gt;, &lt;em&gt;, &lt;a href=""&gt;, &lt;br&gt;', 'eatisfamily'); ?></p>
                                     </div>
                                     <?php endforeach; ?>
                                 </div>
-                                <button type="button" class="button" onclick="var c=document.getElementById('apply_activities_help_items_container');var r=document.createElement('div');r.className='help-item-row';r.style.cssText='margin-bottom:8px;display:flex;align-items:center;gap:8px;';r.innerHTML='<input type=text name=apply_activities_help_items[] class=regular-text placeholder=Enter help item><button type=button class=button onclick=this.closest(\'.help-item-row\').remove();>Remove</button>';c.appendChild(r);"><?php _e('+ Add Item', 'eatisfamily'); ?></button>
+                                <button type="button" class="button button-primary" id="add_help_item_simple"><?php _e('+ Add Item', 'eatisfamily'); ?></button>
+                                <script>
+                                (function($) {
+                                    var helpItemCount = <?php echo count($help_items); ?>;
+                                    $('#add_help_item_simple').on('click', function() {
+                                        helpItemCount++;
+                                        var container = $('#apply_activities_help_items_container');
+                                        var newRow = $('<div class="help-item-row" style="margin-bottom: 15px; padding: 15px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 4px;">' +
+                                            '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">' +
+                                            '<strong>Item ' + helpItemCount + '</strong>' +
+                                            '<button type="button" class="button button-link-delete" onclick="this.closest(\'.help-item-row\').remove();">Remove</button>' +
+                                            '</div>' +
+                                            '<textarea name="apply_activities_help_items[]" rows="3" class="large-text" style="width:100%;"></textarea>' +
+                                            '<p class="description">Supports HTML: &lt;strong&gt;, &lt;em&gt;, &lt;a href=""&gt;, &lt;br&gt;</p>' +
+                                            '</div>');
+                                        container.append(newRow);
+                                    });
+                                })(jQuery);
+                                </script>
                             </td>
                         </tr>
                     </table>
@@ -2943,6 +2965,9 @@ function eatisfamily_pages_content_page_v5() {
 
                     // Handle array-style field names like example_title_v5[0]
                     var arrayMatch = name.match(/^(.+)\[(\d+)\]$/);
+                    // Handle simple array field names like apply_activities_help_items[]
+                    var simpleArrayMatch = name.match(/^(.+)\[\]$/);
+                    
                     if (arrayMatch) {
                         var arrayName = arrayMatch[1];
                         var arrayIndex = parseInt(arrayMatch[2], 10);
@@ -2950,6 +2975,15 @@ function eatisfamily_pages_content_page_v5() {
                             formData[arrayName] = {};
                         }
                         formData[arrayName][arrayIndex] = value;
+                    } else if (simpleArrayMatch) {
+                        // Handle name[] format - collect all values into array
+                        var arrayName = simpleArrayMatch[1];
+                        if (!formData[arrayName]) {
+                            formData[arrayName] = [];
+                        }
+                        if (value && value.trim() !== '') {
+                            formData[arrayName].push(value);
+                        }
                     } else {
                         formData[name] = value;
                     }
@@ -3280,11 +3314,30 @@ function eatisfamily_build_pages_content_v5($data) {
             'weHelpWith' => array(
                 'image' => esc_url_raw($data['apply_activities_help_image'] ?? ''),
                 'title' => sanitize_text_field($data['apply_activities_help_title'] ?? ''),
-                'items' => isset($data['apply_activities_help_items']) ? array_filter(array_map('sanitize_text_field', (array)$data['apply_activities_help_items'])) : array(),
+                'items' => eatisfamily_process_help_items($data),
                 'sous' => sanitize_text_field($data['apply_activities_help_sous'] ?? ''),
             ),
         ),
     );
+}
+
+/**
+ * Process Apply Activities help items from form data (Simple array)
+ */
+function eatisfamily_process_help_items($data) {
+    $items = array();
+    
+    // Simple array format: apply_activities_help_items[]
+    if (isset($data['apply_activities_help_items']) && is_array($data['apply_activities_help_items'])) {
+        foreach ($data['apply_activities_help_items'] as $item) {
+            $cleaned = trim($item);
+            if (!empty($cleaned)) {
+                $items[] = wp_kses_post($cleaned);
+            }
+        }
+    }
+    
+    return $items;
 }
 
 /**

@@ -803,7 +803,7 @@ function eatisfamily_render_sustainability_row_template() {
 function eatisfamily_gallery_page() {
     // Get current tab from URL
     $current_tab = isset($_GET['tab']) ? sanitize_key($_GET['tab']) : 'homepage';
-    $valid_tabs = array('homepage', 'about1', 'about2', 'events');
+    $valid_tabs = array('homepage', 'about1', 'about2', 'events', 'events2', 'activities1', 'activities2');
     if (!in_array($current_tab, $valid_tabs)) {
         $current_tab = 'homepage';
     }
@@ -816,13 +816,19 @@ function eatisfamily_gallery_page() {
             'homepage' => array('images' => array()),
             'about_1' => array('images' => array()),
             'about_2' => array('images' => array()),
-            'events' => array('images' => array())
+            'events' => array('images' => array()),
+            'events_2' => array('images' => array()),
+            'activities_1' => array('images' => array()),
+            'activities_2' => array('images' => array())
         ));
         
         // Process the current tab's gallery
         $tab_key = $current_tab;
         if ($current_tab === 'about1') $tab_key = 'about_1';
         if ($current_tab === 'about2') $tab_key = 'about_2';
+        if ($current_tab === 'events2') $tab_key = 'events_2';
+        if ($current_tab === 'activities1') $tab_key = 'activities_1';
+        if ($current_tab === 'activities2') $tab_key = 'activities_2';
         
         $gallery_data[$tab_key]['images'] = array();
         
@@ -848,6 +854,9 @@ function eatisfamily_gallery_page() {
     $tab_key = $current_tab;
     if ($current_tab === 'about1') $tab_key = 'about_1';
     if ($current_tab === 'about2') $tab_key = 'about_2';
+    if ($current_tab === 'events2') $tab_key = 'events_2';
+    if ($current_tab === 'activities1') $tab_key = 'activities_1';
+    if ($current_tab === 'activities2') $tab_key = 'activities_2';
     if ($current_tab === 'homepage' && !isset($gallery_data['homepage'])) {
         // Legacy support
         $current_images = $gallery_data['images'] ?? array();
@@ -877,7 +886,19 @@ function eatisfamily_gallery_page() {
             </a>
             <a href="<?php echo esc_url($base_url . '&tab=events'); ?>" 
                class="nav-tab <?php echo $current_tab === 'events' ? 'nav-tab-active' : ''; ?>">
-                🎉 Events
+                🎉 Events (Gallery 1)
+            </a>
+            <a href="<?php echo esc_url($base_url . '&tab=events2'); ?>" 
+               class="nav-tab <?php echo $current_tab === 'events2' ? 'nav-tab-active' : ''; ?>">
+                🎉 Events (Gallery 2)
+            </a>
+            <a href="<?php echo esc_url($base_url . '&tab=activities1'); ?>" 
+               class="nav-tab <?php echo $current_tab === 'activities1' ? 'nav-tab-active' : ''; ?>">
+                🎯 Activities (Gallery 1)
+            </a>
+            <a href="<?php echo esc_url($base_url . '&tab=activities2'); ?>" 
+               class="nav-tab <?php echo $current_tab === 'activities2' ? 'nav-tab-active' : ''; ?>">
+                🎯 Activities (Gallery 2)
             </a>
         </h2>
         
@@ -938,9 +959,12 @@ function eatisfamily_gallery_page() {
                     'homepage' => __('Homepage Gallery', 'eatisfamily'),
                     'about1' => __('About Page - Gallery 1', 'eatisfamily'),
                     'about2' => __('About Page - Gallery 2', 'eatisfamily'),
-                    'events' => __('Events Page Gallery', 'eatisfamily'),
+                    'events' => __('Events Page - Gallery 1', 'eatisfamily'),
+                    'events2' => __('Events Page - Gallery 2', 'eatisfamily'),
+                    'activities1' => __('Activities Page - Gallery 1', 'eatisfamily'),
+                    'activities2' => __('Activities Page - Gallery 2', 'eatisfamily'),
                 );
-                echo esc_html($titles[$current_tab]);
+                echo esc_html($titles[$current_tab] ?? __('Gallery', 'eatisfamily'));
                 ?>
             </h3>
             
