@@ -125,6 +125,9 @@ function eatisfamily_build_pages_content_from_data($data) {
                 'image' => esc_url_raw($data['homepage_cta_block_image'] ?? ''),
                 'description' => wp_kses_post($data['homepage_cta_block_description'] ?? ''),
                 'additionalText' => wp_kses_post($data['homepage_cta_block_additional'] ?? ''),
+                'link' => sanitize_text_field($data['homepage_cta_block_link'] ?? ''),
+                'button' => esc_url_raw($data['homepage_cta_block_button'] ?? ''),
+                'button2' => esc_url_raw($data['homepage_cta_block_button2'] ?? ''),
             ),
         ),
         'about' => array(
@@ -135,6 +138,15 @@ function eatisfamily_build_pages_content_from_data($data) {
                 'image' => array(
                     'src' => esc_url_raw($data['about_hero_image'] ?? ''),
                     'alt' => sanitize_text_field($data['about_hero_image_alt'] ?? ''),
+                ),
+            ),
+            'consulting' => array(
+                'title' => sanitize_text_field($data['about_consulting_title'] ?? ''),
+                'description' => wp_kses_post($data['about_consulting_description'] ?? ''),
+                'cta' => array(
+                    'text' => sanitize_text_field($data['about_consulting_cta_text'] ?? 'Nous contacter'),
+                    'link' => sanitize_text_field($data['about_consulting_cta_link'] ?? '/contact'),
+                    'button' => esc_url_raw($data['about_consulting_cta_button'] ?? ''),
                 ),
             ),
             'section_titles' => array(
@@ -549,6 +561,9 @@ function eatisfamily_pages_content_page() {
                     'image' => esc_url_raw($_POST['homepage_cta_block_image'] ?? ''),
                     'description' => wp_kses_post($_POST['homepage_cta_block_description'] ?? ''),
                     'additionalText' => wp_kses_post($_POST['homepage_cta_block_additional'] ?? ''),
+                    'link' => sanitize_text_field($_POST['homepage_cta_block_link'] ?? ''),
+                    'button' => esc_url_raw($_POST['homepage_cta_block_button'] ?? ''),
+                    'button2' => esc_url_raw($_POST['homepage_cta_block_button2'] ?? ''),
                 ),
             ),
             'about' => array(
@@ -559,6 +574,15 @@ function eatisfamily_pages_content_page() {
                     'image' => array(
                         'src' => esc_url_raw($_POST['about_hero_image'] ?? ''),
                         'alt' => sanitize_text_field($_POST['about_hero_image_alt'] ?? ''),
+                    ),
+                ),
+                'consulting' => array(
+                    'title' => sanitize_text_field($_POST['about_consulting_title'] ?? ''),
+                    'description' => wp_kses_post($_POST['about_consulting_description'] ?? ''),
+                    'cta' => array(
+                        'text' => sanitize_text_field($_POST['about_consulting_cta_text'] ?? 'Nous contacter'),
+                        'link' => sanitize_text_field($_POST['about_consulting_cta_link'] ?? '/contact'),
+                        'button' => esc_url_raw($_POST['about_consulting_cta_button'] ?? ''),
                     ),
                 ),
                 'section_titles' => array(
@@ -980,6 +1004,38 @@ function eatisfamily_pages_content_page() {
                                 ?>
                             </td>
                         </tr>
+                        <tr>
+                            <th scope="row"><label for="homepage_cta_block_link"><?php _e('Link URL', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="homepage_cta_block_link" id="homepage_cta_block_link" value="<?php echo esc_attr($homepage['homepageCTA']['link'] ?? ''); ?>" class="regular-text" placeholder="/contact">
+                                <p class="description"><?php _e('URL where the CTA buttons link to (e.g., /contact)', 'eatisfamily'); ?></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="homepage_cta_block_button"><?php _e('Button 1 Image', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="homepage_cta_block_button" id="homepage_cta_block_button" value="<?php echo esc_attr($homepage['homepageCTA']['button'] ?? ''); ?>" class="regular-text">
+                                <button type="button" class="button eatisfamily-upload-media" data-target="homepage_cta_block_button"><?php _e('Select Image', 'eatisfamily'); ?></button>
+                                <?php if (!empty($homepage['homepageCTA']['button'])): ?>
+                                <div class="image-preview" style="margin-top: 10px;">
+                                    <img src="<?php echo esc_url($homepage['homepageCTA']['button']); ?>" style="max-width: 200px; height: auto;">
+                                </div>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="homepage_cta_block_button2"><?php _e('Button 2 Image', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="homepage_cta_block_button2" id="homepage_cta_block_button2" value="<?php echo esc_attr($homepage['homepageCTA']['button2'] ?? ''); ?>" class="regular-text">
+                                <button type="button" class="button eatisfamily-upload-media" data-target="homepage_cta_block_button2"><?php _e('Select Image', 'eatisfamily'); ?></button>
+                                <?php if (!empty($homepage['homepageCTA']['button2'])): ?>
+                                <div class="image-preview" style="margin-top: 10px;">
+                                    <img src="<?php echo esc_url($homepage['homepageCTA']['button2']); ?>" style="max-width: 200px; height: auto;">
+                                </div>
+                                <?php endif; ?>
+                                <p class="description"><?php _e('This button image is used on the About page CTA block.', 'eatisfamily'); ?></p>
+                            </td>
+                        </tr>
                     </table>
                 </div>
                 
@@ -1075,6 +1131,64 @@ function eatisfamily_pages_content_page() {
                             <th scope="row"><label for="about_hero_image_alt"><?php _e('Image Alt Text', 'eatisfamily'); ?></label></th>
                             <td>
                                 <input type="text" name="about_hero_image_alt" id="about_hero_image_alt" value="<?php echo esc_attr($about['hero']['image']['alt'] ?? ''); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <!-- Consulting Section -->
+                <div class="eatisfamily-section">
+                    <h3 class="section-title"><?php _e('💼 Consulting Section (About Page CTA)', 'eatisfamily'); ?></h3>
+                    <p class="description"><?php _e('This section appears on the About page as a CTA block.', 'eatisfamily'); ?></p>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="about_consulting_title"><?php _e('Title', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="about_consulting_title" id="about_consulting_title" value="<?php echo esc_attr($about['consulting']['title'] ?? ''); ?>" class="large-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label><?php _e('Description (WYSIWYG)', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <?php 
+                                wp_editor(
+                                    $about['consulting']['description'] ?? '', 
+                                    'about_consulting_description', 
+                                    array(
+                                        'textarea_name' => 'about_consulting_description',
+                                        'textarea_rows' => 6,
+                                        'media_buttons' => true,
+                                        'teeny' => false,
+                                        'quicktags' => true
+                                    )
+                                );
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="about_consulting_cta_text"><?php _e('CTA Button Text', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="about_consulting_cta_text" id="about_consulting_cta_text" value="<?php echo esc_attr($about['consulting']['cta']['text'] ?? 'Nous contacter'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="about_consulting_cta_link"><?php _e('CTA Link', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="about_consulting_cta_link" id="about_consulting_cta_link" value="<?php echo esc_attr($about['consulting']['cta']['link'] ?? '/contact'); ?>" class="regular-text">
+                                <p class="description"><?php _e('URL where the button links to (e.g., /contact)', 'eatisfamily'); ?></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="about_consulting_cta_button"><?php _e('CTA Button Image', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="about_consulting_cta_button" id="about_consulting_cta_button" value="<?php echo esc_attr($about['consulting']['cta']['button'] ?? ''); ?>" class="regular-text">
+                                <button type="button" class="button eatisfamily-upload-media" data-target="about_consulting_cta_button"><?php _e('Select Image', 'eatisfamily'); ?></button>
+                                <?php if (!empty($about['consulting']['cta']['button'])): ?>
+                                <div class="image-preview" style="margin-top: 10px;">
+                                    <img src="<?php echo esc_url($about['consulting']['cta']['button']); ?>" style="max-width: 200px; height: auto;">
+                                </div>
+                                <?php endif; ?>
+                                <p class="description"><?php _e('Optional: Image to use as CTA button instead of text', 'eatisfamily'); ?></p>
                             </td>
                         </tr>
                     </table>

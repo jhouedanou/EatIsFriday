@@ -2218,6 +2218,19 @@ function eatisfamily_pages_content_page_v5() {
                             <th scope="row"><label for="about_consulting_cta_link"><?php _e('CTA Link', 'eatisfamily'); ?></label></th>
                             <td><input type="text" name="about_consulting_cta_link" id="about_consulting_cta_link" value="<?php echo esc_attr($about['consulting']['cta']['link'] ?? '/contact'); ?>" class="regular-text"></td>
                         </tr>
+                        <tr>
+                            <th scope="row"><label for="about_consulting_cta_button"><?php _e('CTA Button Image', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="about_consulting_cta_button" id="about_consulting_cta_button" value="<?php echo esc_attr($about['consulting']['cta']['button'] ?? ''); ?>" class="regular-text">
+                                <button type="button" class="button eatisfamily-upload-media" data-target="about_consulting_cta_button"><?php _e('Select Image', 'eatisfamily'); ?></button>
+                                <?php if (!empty($about['consulting']['cta']['button'])): ?>
+                                <div class="image-preview" style="margin-top: 10px;">
+                                    <img src="<?php echo esc_url($about['consulting']['cta']['button']); ?>" style="max-width: 200px; height: auto;">
+                                </div>
+                                <?php endif; ?>
+                                <p class="description"><?php _e('Image used as CTA button (e.g., "Contact Us" button image)', 'eatisfamily'); ?></p>
+                            </td>
+                        </tr>
                     </table>
                 </div>
                 
@@ -2987,6 +3000,7 @@ function eatisfamily_build_pages_content_v5($data) {
                 'cta' => array(
                     'text' => sanitize_text_field($data['about_consulting_cta_text'] ?? 'Nous contacter'),
                     'link' => sanitize_text_field($data['about_consulting_cta_link'] ?? '/contact'),
+                    'button' => esc_url_raw($data['about_consulting_cta_button'] ?? ''),
                 ),
             ),
             'section_titles' => array(

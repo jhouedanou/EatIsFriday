@@ -150,11 +150,24 @@
     </section>
     <section v-if="siteContent?.about?.vision" id="vision" class="my-5">
       <div class="container-fluid">
-        <TwoColumnText :title="siteContent.about.vision.title" :text="siteContent.about.vision.content" />
-        <img :src="siteContent.about.vision.image" :alt="siteContent.about.vision.title || 'Vision'"
-          class="img-fluid my-4 rounded w-100" />
-        <CtaBlock :text="homepageContent?.homepageCTA.additionalText" :link="homepageContent?.homepageCTA.link"
-          :button-image="homepageContent?.homepageCTA.button2" :button-alt="homepageContent?.homepageCTA.title" />
+        <h3 class="font-header text-align-center text-center d-flex justify-content-center align-items-center"> {{ siteContent.about.vision.title }} </h3>
+        <!-- Consulting section from pages-content -->
+        <div v-if="pageContent?.consulting" class="consulting-section text-center p-4 cta-block d-flex flex-column justify-content-center align-items-center text-center p-4 mx-auto mt-4"> 
+          <p v-html="pageContent.consulting.description" class="preserve-lines mb-4"></p>
+          <NuxtLink 
+            v-if="pageContent.consulting.cta?.link" 
+            :to="pageContent.consulting.cta.link"
+            class="mof"
+          >
+            <img 
+              v-if="pageContent.consulting.cta?.button" 
+              :src="pageContent.consulting.cta.button" 
+              :alt="pageContent.consulting.cta?.text || 'Nous contacter'"
+              class="img-fluid"
+            />
+            <span v-else>{{ pageContent.consulting.cta?.text || 'Nous contacter' }}</span>
+          </NuxtLink>
+        </div>
       </div>
     </section>
     <GalleryGrid v-if="siteContent?.about?.gallery_section?.images"
