@@ -1308,14 +1308,22 @@ body {
     }
   }
  .header-grid{
-  a{
-    height:58px !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  .logo-container{
+    justify-self: center !important;
+  }
+  a.contact-wrapper{
+    height:100% !important;
+    display: flex !important;
     img{
-          width:100% !important;
+    height:31px !important;
     }
   }
   }
-  
+  #heroTitle, #heroTitleAlt{
+    font-size: 50px !important;
+}
   .job-search-form{
     max-width:95vw !important;
     bottom:5vh !important;
@@ -1358,17 +1366,23 @@ body {
       padding:0 !important;
     }
    #marr{
-      height:100vh !important;
+      height:78vh !important;
       width:100vw !important;
             min-height:0 !important;
 
     }
     #blusy{
-      height:100vh !important;
-      max-height:40vh !important;
-      width:100vw !important;
-      min-height:0 !important;
+        height: 60vh !important;
+    width: 100vw !important;
+    min-height: 0 !important;
+    background-size: 128vw;
+    background-position: 87% 104%;
     }
+  }
+  #btnExplore{
+    width:100% !important;
+    max-width:100% !important;
+    height:69px !important;
   }
 }
 // ----- TABLET LANDSCAPE (max-width: 1200px) -----
