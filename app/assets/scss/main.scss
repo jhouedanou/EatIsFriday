@@ -1285,6 +1285,11 @@ body {
       height:100vh !important;
       max-height:600px !important;
 }
+@mixin mobileHeightFull(){
+  
+      height:100vh !important;
+      max-height:100vh !important;
+}
 @media (min-width: 1024px){
  
   .mobile-only{
@@ -1372,13 +1377,13 @@ body {
     }
    #marr{
     
-      @include mobileHeight();
+      @include mobileHeightFull();
             min-height:0 !important;
 
     }
     #blusy{
    
-      @include mobileHeight();
+      @include mobileHeightFull();
     min-height: 0 !important;
     background-size: 128vw;
     background-position: 87% 104%;
