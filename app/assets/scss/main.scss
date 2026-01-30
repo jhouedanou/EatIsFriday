@@ -1293,14 +1293,63 @@ body {
   .mobile-only{
     display:block !important;
   }
+ .menu-toggle{
+    border:none !important;
+     background:none !important;
+    span{
+      color:black !important;
+      background:black !important;
+    }
+  }
  .header-grid{
   a{
     height:58px !important;
-img{
-      height:58px !important;
-
-}
+    img{
+          width:100% !important;
+    }
   }
+  }
+  .hero-video-wrapper{
+    display:flex;
+    align-items:flex-end;
+    position:relative !important;
+  }
+  .job-search-form{
+    max-width:95vw !important;
+    bottom:5vh !important;
+    max-height:44vh !important;
+    position:absolute !important;
+    margin:auto !important;
+    left:0 !important;
+    right:0 !important;
+    margin:auto !important;
+    h2{
+  font-size: 24px !important;
+    }
+  }
+  #hero{
+    margin:0 !important;
+    padding:0 !important;
+    width:100vw !important;
+    min-width:100vw !important;
+    .row{
+      
+    width:100vw !important;
+      margin:0 !important;
+      padding:0 !important;
+    }
+   #marr{
+      height:100vh !important;
+      width:100vw !important;
+            min-height:0 !important;
+
+    }
+    #blusy{
+      height:100vh !important;
+      max-height:40vh !important;
+      width:100vw !important;
+      min-height:0 !important;
+    }
   }
 }
 // ----- TABLET LANDSCAPE (max-width: 1200px) -----
