@@ -495,6 +495,12 @@ function rewriteInternalLinks(html: string): string {
         return `href="/${cleanSlug}${hashOrQuery}">`
       }
 
+      // Un chemin multi-segments ne peut pas être un article (/blog/[slug] est mono-segment)
+      // → c'est une page WordPress hiérarchique, servie par /pages/[...slug]
+      if (cleanSlug.includes('/')) {
+        return `href="/pages/${cleanSlug}${hashOrQuery}">`
+      }
+
       // Everything else is a blog post slug
       return `href="/blog/${cleanSlug}${hashOrQuery}">`
     }

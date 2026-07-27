@@ -1,0 +1,73 @@
+[
+  {
+    "id": 101,
+    "slug": "notre-histoire",
+    "path": "notre-histoire",
+    "title": { "rendered": "Notre histoire" },
+    "excerpt": { "rendered": "Depuis 2015, Eat Is Family réinvente la restauration collective en remettant le goût et le lien humain au centre de chaque service." },
+    "content": {
+      "rendered": "<p>Eat Is Family est née d'une conviction simple : bien manger ne devrait jamais être un privilège. Depuis 2015, nous concevons des expériences culinaires pour les entreprises, les événements et les collectivités.</p><h2>Nos débuts</h2><p>Tout a commencé avec une cuisine de quartier et six couverts par service. Aujourd'hui, nos équipes servent plus de 12 000 repas par semaine sur l'ensemble de nos sites.</p><ul><li>2015 — ouverture du premier atelier</li><li>2019 — premier site événementiel permanent</li><li>2024 — 100 % des approvisionnements en circuit court</li></ul><h2>Ce qui nous guide</h2><blockquote>Un bon repas, c'est d'abord une équipe qui a envie de le cuisiner.</blockquote><p>Cette phrase résume notre approche : investir dans les personnes avant d'investir dans les process.</p>"
+    },
+    "featured_media": "/images/Blogs.jpg",
+    "parent": 0,
+    "parent_path": null,
+    "menu_order": 0,
+    "template": "",
+    "date": "2026-01-10T09:00:00+01:00",
+    "modified": "2026-01-10T09:00:00+01:00",
+    "ancestors": [],
+    "children": [
+      {
+        "id": 102,
+        "slug": "nos-equipes",
+        "path": "notre-histoire/nos-equipes",
+        "title": { "rendered": "Nos équipes" }
+      }
+    ]
+  },
+  {
+    "id": 102,
+    "slug": "nos-equipes",
+    "path": "notre-histoire/nos-equipes",
+    "title": { "rendered": "Nos équipes" },
+    "excerpt": { "rendered": "Les femmes et les hommes derrière chaque service : cuisiniers, pâtissiers, chefs de site et coordinateurs événementiels." },
+    "content": {
+      "rendered": "<p>Plus de 240 personnes composent aujourd'hui les équipes Eat Is Family, réparties sur l'ensemble de nos sites.</p><h2>Se former en interne</h2><p>Chaque nouvelle recrue suit un parcours d'intégration de trois semaines, encadré par un chef de site référent.</p><p>Nous recrutons toute l'année : <a href=\"/careers\">consulter nos offres</a>.</p>"
+    },
+    "featured_media": false,
+    "parent": 101,
+    "parent_path": "notre-histoire",
+    "menu_order": 1,
+    "template": "",
+    "date": "2026-01-11T09:00:00+01:00",
+    "modified": "2026-01-11T09:00:00+01:00",
+    "ancestors": [
+      {
+        "id": 101,
+        "slug": "notre-histoire",
+        "path": "notre-histoire",
+        "title": { "rendered": "Notre histoire" }
+      }
+    ],
+    "children": []
+  },
+  {
+    "id": 103,
+    "slug": "engagements-rse",
+    "path": "engagements-rse",
+    "title": { "rendered": "Nos engagements RSE" },
+    "excerpt": { "rendered": "Circuits courts, réduction du gaspillage et insertion professionnelle : nos trois axes d'engagement mesurés chaque trimestre." },
+    "content": {
+      "rendered": "<p>Nos engagements ne sont pas déclaratifs : ils sont chiffrés, audités et publiés chaque trimestre.</p><h2>Trois axes</h2><ol><li>Approvisionnement en circuit court dans un rayon de 150 km</li><li>Réduction du gaspillage alimentaire de 40 % d'ici 2027</li><li>20 % des recrutements issus de parcours d'insertion</li></ol>"
+    },
+    "featured_media": "/images/Careers.jpg",
+    "parent": 0,
+    "parent_path": null,
+    "menu_order": 2,
+    "template": "",
+    "date": "2026-01-12T09:00:00+01:00",
+    "modified": "2026-01-12T09:00:00+01:00",
+    "ancestors": [],
+    "children": []
+  }
+]

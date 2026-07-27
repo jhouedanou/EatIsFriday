@@ -78,6 +78,14 @@ if [ -d "config" ]; then
     cp -r config "$STAGING_DIR/config"
     echo "  ✓ config/"
 fi
+# public/data/ (JSON de repli lus au runtime par les routes serveur via
+# process.cwd()/public/data/*.json — .output/public/ ne suffit PAS pour eux)
+if [ -d "public/data" ]; then
+    mkdir -p "$STAGING_DIR/public/data"
+    cp public/data/*.json "$STAGING_DIR/public/data/"
+    echo "  + public/data/ (JSON de repli : pages, blog-posts, jobs…)"
+fi
+
 # server/data/ (recipients.json, etc. - requis par les API routes)
 if [ -d "server/data" ]; then
     mkdir -p "$STAGING_DIR/server/data"
